@@ -124,6 +124,7 @@ function renderPlayers() {
           </div>
         </div>
         <p class="club-line">${escapeHtml(player.club)}</p>
+        ${moneyChip(player)}
         <p class="source-note">${escapeHtml(player.clubRole)}</p>
         <div class="scouting-grid">
           ${scoutingPill("공격", player.scouting.attack)}
@@ -447,8 +448,8 @@ function teamCardOverview(team) {
       ${ratingBar("중원", team.ratings.midfield)}
       ${ratingBar("수비", team.ratings.defense)}
     </div>
-    <ul class="compact-list">
-      <li><strong>강점:</strong> ${escapeHtml(team.strength)}</li>
+        <ul class="compact-list">
+          <li><strong>강점:</strong> ${escapeHtml(team.strength)}</li>
       <li><strong>리스크:</strong> ${escapeHtml(team.weakness)}</li>
       <li><strong>주목 경기:</strong> ${escapeHtml(team.watchMatch || "업데이트 예정")}</li>
     </ul>
@@ -469,6 +470,7 @@ function teamCardSquad(team) {
             <strong>${escapeHtml(player.nameKo || player.name)}</strong>
             <span>${escapeHtml(player.position)} · ${escapeHtml(player.club)}</span>
             <small>${escapeHtml(player.tag || player.category || "핵심")}</small>
+            ${moneyChip(player, "mini")}
           </div>
         </article>
       `).join("")}
@@ -504,6 +506,7 @@ function playerShowcase(player) {
         <h4>${escapeHtml(player.nameKo || player.name)}</h4>
         <p class="team-meta">${escapeHtml(player.name)} · ${escapeHtml(player.position)} · ${escapeHtml(player.club)}</p>
       </div>
+      ${moneyChip(player)}
       <p>${escapeHtml(player.nationalRole)}</p>
       <div class="scouting-grid">
         ${scoutingPill("공격", player.scouting.attack)}
@@ -523,6 +526,7 @@ function playerRow(player) {
         <strong>${escapeHtml(player.nameKo || player.name)}</strong>
         <span>${escapeHtml(player.position)} · ${escapeHtml(player.club)}</span>
         <small>${escapeHtml(player.clubRole)}</small>
+        ${moneyChip(player, "mini")}
       </div>
       <div class="squad-stat">
         <span>${escapeHtml(player.seasonStats.season)}</span>
@@ -876,6 +880,44 @@ function seasonStats(player) {
       <small>출장 ${escapeHtml(stats.apps)} · 골 ${escapeHtml(stats.goals)} · 도움 ${escapeHtml(stats.assists)}</small>
     </div>
   `;
+}
+
+function moneyChip(player, size = "normal") {
+  const salary = player.salary;
+  if (!salary) return "";
+  if (!salary.annualUsd) {
+    return `
+      <div class="money-chip ${size === "mini" ? "mini" : ""}">
+        <strong>연봉 업데이트 필요</strong>
+        <span>${escapeHtml(salary.source || "추정 데이터 대기")}</span>
+      </div>
+    `;
+  }
+  return `
+    <div class="money-chip ${size === "mini" ? "mini" : ""}" title="${escapeAttr(`${salary.season} ${salary.basis} · ${salary.source}`)}">
+      <strong>${formatUsd(salary.annualUsd)}</strong>
+      <span>${formatKrw(salary.annualKrw)} · 주급 ${formatUsd(salary.weeklyUsd)}</span>
+      <small>${escapeHtml(salary.basis)} · ${escapeHtml(salary.source)}</small>
+    </div>
+  `;
+}
+
+function formatUsd(value) {
+  if (!value) return "-";
+  if (value >= 1000000) return `$${trimNumber(value / 1000000)}M`;
+  if (value >= 1000) return `$${trimNumber(value / 1000)}K`;
+  return `$${value}`;
+}
+
+function formatKrw(value) {
+  if (!value) return "-";
+  const eok = value / 100000000;
+  if (eok >= 1) return `약 ${trimNumber(eok)}억 원`;
+  return `약 ${Math.round(value / 10000).toLocaleString("ko-KR")}만 원`;
+}
+
+function trimNumber(value) {
+  return Number.isInteger(value) ? String(value) : value.toFixed(1).replace(/\.0$/, "");
 }
 
 function statusBadge(status) {

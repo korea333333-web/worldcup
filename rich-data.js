@@ -150,6 +150,7 @@
       category: item.category || "핵심",
       scouting: item.scouting || { attack: 60, creation: 60, press: 60, defense: 60, form: 60 },
       seasonStats: item.seasonStats || defaultSeasonStats(),
+      salary: item.salary || defaultSalary(item),
       videos: item.videos || [
         video(`${item.name} highlights`, `${item.name} highlights`, "highlight", `${item.name} football highlights`)
       ]
@@ -174,6 +175,7 @@
       role: tag,
       scouting,
       seasonStats: defaultSeasonStats(),
+      salary: estimatedSalary(name),
       videos: [
         video(`${name} highlights`, `${name} highlights`, "highlight", `${name} football highlights`),
         video(`${name} tactical analysis`, `${name} tactical analysis`, "tactical", `${name} tactical analysis football`)
@@ -189,6 +191,56 @@
       goals: "업데이트",
       assists: "업데이트",
       form: "최근 5경기 조사 필요"
+    };
+  }
+
+  function estimatedSalary(name) {
+    const salaryMap = {
+      "Son Heung-min": salary(12000000, 230000, "Capology/언론 추정", "medium"),
+      "Lee Kang-in": salary(4300000, 83000, "Capology/언론 추정", "low"),
+      "Kim Min-jae": salary(12500000, 240000, "Capology/언론 추정", "medium"),
+      "Hwang Hee-chan": salary(3900000, 75000, "Capology/언론 추정", "low"),
+      "Vinicius Junior": salary(40000000, 770000, "Forbes/언론 추정", "medium"),
+      "Rodrygo": salary(13000000, 250000, "Capology/언론 추정", "medium"),
+      "Raphinha": salary(12500000, 240000, "Capology/언론 추정", "medium"),
+      "Bruno Guimaraes": salary(8300000, 160000, "Capology/언론 추정", "low"),
+      "Lucas Paqueta": salary(7800000, 150000, "Capology/언론 추정", "low"),
+      "Casemiro": salary(18200000, 350000, "Capology/언론 추정", "medium"),
+      "Kylian Mbappe": salary(70000000, 1350000, "Forbes/언론 추정", "medium"),
+      "Ousmane Dembele": salary(18000000, 346000, "Capology/언론 추정", "low"),
+      "Antoine Griezmann": salary(12500000, 240000, "Capology/언론 추정", "low"),
+      "Christian Pulisic": salary(5200000, 100000, "Capology/언론 추정", "low"),
+      "Takefusa Kubo": salary(3000000, 58000, "Capology/언론 추정", "low")
+    };
+    return salaryMap[name] || defaultSalary();
+  }
+
+  function salary(annualUsd, weeklyUsd, source, confidence) {
+    const usdKrw = 1380;
+    return {
+      annualUsd,
+      weeklyUsd,
+      annualKrw: Math.round(annualUsd * usdKrw),
+      exchangeRate: usdKrw,
+      season: "2025-26",
+      basis: "세전 추정",
+      source,
+      confidence,
+      updatedAt: "2026-06-03"
+    };
+  }
+
+  function defaultSalary() {
+    return {
+      annualUsd: null,
+      weeklyUsd: null,
+      annualKrw: null,
+      exchangeRate: 1380,
+      season: "2025-26",
+      basis: "업데이트 필요",
+      source: "추정 데이터 대기",
+      confidence: "pending",
+      updatedAt: "2026-06-03"
     };
   }
 

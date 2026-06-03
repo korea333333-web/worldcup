@@ -605,6 +605,48 @@ select option {
   font-weight: 950;
 }
 
+.money-chip {
+  display: grid;
+  gap: 2px;
+  width: fit-content;
+  max-width: 100%;
+  padding: 8px 10px;
+  background:
+    linear-gradient(135deg, rgba(245, 199, 94, 0.18), rgba(30, 232, 200, 0.10)),
+    rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(245, 199, 94, 0.32);
+  border-radius: 8px;
+  box-shadow: 0 0 22px rgba(245, 199, 94, 0.10);
+}
+
+.money-chip strong {
+  color: var(--gold);
+  font-size: 16px;
+  font-weight: 950;
+}
+
+.money-chip span,
+.money-chip small {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 850;
+  line-height: 1.35;
+}
+
+.money-chip.mini {
+  margin-top: 5px;
+  padding: 5px 7px;
+}
+
+.money-chip.mini strong {
+  font-size: 12px;
+}
+
+.money-chip.mini span,
+.money-chip.mini small {
+  font-size: 10px;
+}
+
 .tag-row,
 .player-face-stack {
   display: flex;
