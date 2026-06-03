@@ -6,6 +6,7 @@ const state = {
   matchupA: "korea",
   matchupB: "mexico"
 };
+const photoCache = new Map();
 
 const views = {
   groups: document.querySelector("#groupsView"),
@@ -50,6 +51,7 @@ function renderApp() {
   renderMatchups();
   renderBracket();
   renderSources();
+  hydrateWikiPhotos();
 }
 
 function renderSummary() {
@@ -93,33 +95,44 @@ function renderTeams() {
   const cards = allTeams()
     .filter(matchesFilters)
     .map((team) => `
-      <article class="team-card">
+      <article class="team-card team-card-rich">
         <div class="team-card-header">
           ${flag(team, "big-flag")}
           <div>
             <h3 class="card-title">${escapeHtml(team.nameKo)}</h3>
-            <p class="team-meta">${escapeHtml(team.nameEn)} · ${escapeHtml(team.confederation)} · FIFA ${team.rank}</p>
+            <p class="team-meta">${escapeHtml(groupFor(team.id).name)} · ${escapeHtml(team.confederation)} · FIFA ${team.rank}</p>
           </div>
         </div>
+        <div class="player-face-stack" aria-label="${escapeHtml(team.nameKo)} 핵심 선수">
+          ${team.players.slice(0, 5).map((player) => playerPortrait(player, "small")).join("")}
+        </div>
+        <div class="tag-row">${(team.styleTags || []).slice(0, 4).map(tag).join("")}</div>
         <ul class="compact-list">
-          <li><strong>핵심:</strong> ${escapeHtml(team.players[0].name)} (${escapeHtml(team.players[0].position)})</li>
-          <li><strong>강점:</strong> ${escapeHtml(team.strength)}</li>
-          <li><strong>리스크:</strong> ${escapeHtml(team.weakness)}</li>
+          ${team.players.slice(0, 3).map((player) => `
+            <li><strong>${escapeHtml(player.nameKo || player.name)}</strong> · ${escapeHtml(player.position)} · ${escapeHtml(player.club)}</li>
+          `).join("")}
+          <li><strong>주목 경기:</strong> ${escapeHtml(team.watchMatch || "업데이트 예정")}</li>
         </ul>
+        <div class="rating-mini">
+          ${ratingBar("공격", team.ratings.attack)}
+          ${ratingBar("중원", team.ratings.midfield)}
+          ${ratingBar("수비", team.ratings.defense)}
+        </div>
         <div class="probability" aria-label="${escapeHtml(team.nameKo)} 진출 확률">
-          <span class="team-meta">32강 시나리오 ${team.advance}%</span>
+          <span class="team-meta">32강 시나리오 ${team.advance}% · ${escapeHtml(team.dataStatus)}</span>
           ${bar(team.advance)}
         </div>
-        <button class="primary-button open-team" data-team-id="${team.id}" type="button">팀 상세</button>
+        <button class="primary-button open-team" data-team-id="${team.id}" type="button">스카우팅 리포트</button>
       </article>
     `)
     .join("");
 
   views.teams.innerHTML = `
-    ${sectionHeading("팀 탐색", "48개 팀을 카드로 훑고, 핵심 선수와 진출 시나리오를 빠르게 확인합니다.")}
+    ${sectionHeading("팀 탐색", "핵심 선수, 소속 클럽, 역할, 능력치, 32강 시나리오를 한 카드에서 확인합니다.")}
     <div class="team-grid">${cards || `<div class="empty-state">조건에 맞는 팀이 없습니다.</div>`}</div>
   `;
   bindTeamButtons(views.teams);
+  hydrateWikiPhotos();
 }
 
 function renderPlayers() {
@@ -127,29 +140,35 @@ function renderPlayers() {
     .filter(matchesFilters)
     .flatMap((team) => team.players.map((player) => ({ team, player })))
     .map(({ team, player }) => `
-      <article class="player-card">
+      <article class="player-card player-card-rich">
         <div class="player-card-header">
-          ${flag(team, "flag-img")}
+          ${playerPortrait(player, "medium")}
           <div>
-            <h3 class="card-title">${escapeHtml(player.name)}</h3>
-            <p class="team-meta">${escapeHtml(team.nameKo)} · ${escapeHtml(player.club)} · ${escapeHtml(player.position)}</p>
+            <span class="badge sample">${escapeHtml(player.tag || player.category || "핵심")}</span>
+            <h3 class="card-title">${escapeHtml(player.nameKo || player.name)}</h3>
+            <p class="team-meta">${escapeHtml(player.name)} · ${escapeHtml(team.nameKo)} · ${escapeHtml(player.position)}</p>
           </div>
         </div>
-        <p class="source-note">${escapeHtml(player.summary)}</p>
-        <ul class="compact-list">
-          <li><strong>역할:</strong> ${escapeHtml(player.role)}</li>
-          <li><strong>영상:</strong> ${player.videos.length}개 큐레이션 링크</li>
-        </ul>
-        <button class="ghost-button open-team" data-team-id="${team.id}" type="button">팀에서 보기</button>
+        <p class="club-line">${escapeHtml(player.club)}</p>
+        <p class="source-note">${escapeHtml(player.clubRole)}</p>
+        <div class="scouting-grid">
+          ${scoutingPill("공격", player.scouting.attack)}
+          ${scoutingPill("창의", player.scouting.creation)}
+          ${scoutingPill("압박", player.scouting.press)}
+          ${scoutingPill("수비", player.scouting.defense)}
+        </div>
+        ${seasonStats(player)}
+        <button class="ghost-button open-team" data-team-id="${team.id}" type="button">팀 리포트에서 보기</button>
       </article>
     `)
     .join("");
 
   views.players.innerHTML = `
-    ${sectionHeading("스타 플레이어", "각 대표팀의 첫 번째 핵심 선수를 중심으로 영상과 전력 메모를 연결합니다.")}
+    ${sectionHeading("선수단 보드", "선수 얼굴, 소속 클럽, 클럽 역할, 대표팀 역할, 성적표 슬롯을 선수별로 보여줍니다.")}
     <div class="player-grid">${cards || `<div class="empty-state">조건에 맞는 선수가 없습니다.</div>`}</div>
   `;
   bindTeamButtons(views.players);
+  hydrateWikiPhotos();
 }
 
 function renderMatchups() {
@@ -160,7 +179,7 @@ function renderMatchups() {
   const options = teams.map((team) => `<option value="${team.id}">${escapeHtml(team.nameKo)}</option>`).join("");
 
   views.matchups.innerHTML = `
-    ${sectionHeading("매치업 분석", "두 팀을 선택하면 샘플/랭킹 기반 승률, 핵심 선수 대결, 근거를 분리해서 보여줍니다.")}
+    ${sectionHeading("매치업 분석", "두 팀을 선택하면 승률, 핵심 선수 대결, 전술 포인트를 분리해서 보여줍니다.")}
     <div class="match-layout">
       <aside class="panel selector-stack">
         <label class="select-box">
@@ -171,7 +190,7 @@ function renderMatchups() {
           <span>팀 B</span>
           <select id="matchupB">${options}</select>
         </label>
-        <p class="source-note">숫자는 출처 유형과 함께 표시됩니다. sample은 화면 검증용입니다.</p>
+        <p class="source-note">sample은 화면 검증용이며, 실제 승률 데이터가 나오면 출처와 함께 교체합니다.</p>
       </aside>
       <article class="match-card">
         <div class="team-card-header">
@@ -191,7 +210,7 @@ function renderMatchups() {
         <ul class="compact-list">
           <li><strong>${escapeHtml(teamA.nameKo)} 포인트:</strong> ${escapeHtml(teamA.strength)} / 리스크 ${escapeHtml(teamA.weakness)}</li>
           <li><strong>${escapeHtml(teamB.nameKo)} 포인트:</strong> ${escapeHtml(teamB.strength)} / 리스크 ${escapeHtml(teamB.weakness)}</li>
-          <li><strong>스타 대결:</strong> ${escapeHtml(teamA.players[0].name)} vs ${escapeHtml(teamB.players[0].name)}</li>
+          <li><strong>스타 대결:</strong> ${escapeHtml(teamA.players[0].nameKo || teamA.players[0].name)} vs ${escapeHtml(teamB.players[0].nameKo || teamB.players[0].name)}</li>
         </ul>
       </article>
     </div>
@@ -238,7 +257,7 @@ function renderBracket() {
 
 function renderSources() {
   views.sources.innerHTML = `
-    ${sectionHeading("자료 출처", "공식 형식과 참가팀 정보는 FIFA 자료를 우선으로 두고, 영상은 큐레이션 링크로 시작합니다.")}
+    ${sectionHeading("자료 출처", "공식 형식과 참가팀 정보는 FIFA 자료를 우선으로 두고, 선수 사진은 Wikipedia/Wikimedia 썸네일을 우선 사용합니다.")}
     <div class="source-grid">
       ${DATA.sources.map((source) => `
         <article class="source-card">
@@ -255,11 +274,14 @@ function renderSources() {
 function openTeamDialog(teamId) {
   const team = DATA.teams[teamId];
   const dialog = document.querySelector("#teamDialog");
-  const videos = team.players.flatMap((player) => player.videos.map((video) => ({ player, video })));
+  const videos = [
+    ...(team.videos || []),
+    ...team.players.slice(0, 4).flatMap((player) => player.videos || [])
+  ];
 
   dialog.innerHTML = `
     <div class="dialog-inner">
-      <header class="dialog-head">
+      <header class="dialog-head scouting-head">
         <div class="dialog-title">
           ${flag(team, "big-flag")}
           <div>
@@ -270,34 +292,65 @@ function openTeamDialog(teamId) {
         </div>
         <button class="close-button" type="button">닫기</button>
       </header>
-      <div class="dialog-grid">
-        <section class="panel">
+
+      <section class="scouting-hero">
+        <div class="panel">
           <h3>전력 요약</h3>
           <ul class="compact-list">
             <li><strong>감독:</strong> ${escapeHtml(team.coach)}</li>
             <li><strong>FIFA 랭킹:</strong> ${team.rank}</li>
             <li><strong>32강 시나리오:</strong> ${team.advance}% · ${statusBadge(team.status)}</li>
-            <li><strong>강점:</strong> ${escapeHtml(team.strength)}</li>
-            <li><strong>리스크:</strong> ${escapeHtml(team.weakness)}</li>
+            <li><strong>주목 경기:</strong> ${escapeHtml(team.watchMatch)}</li>
+            <li><strong>데이터 상태:</strong> ${escapeHtml(team.dataStatus)} · ${escapeHtml(team.lastChecked)}</li>
           </ul>
+          <div class="tag-row">${(team.styleTags || []).map(tag).join("")}</div>
           <div class="probability">
             <span class="team-meta">진출 확률 시나리오</span>
             ${bar(team.advance)}
           </div>
-        </section>
-        <section class="panel">
-          <h3>스타 플레이어</h3>
-          ${team.players.map((player) => `
-            <article>
-              <h4>${escapeHtml(player.name)}</h4>
-              <p class="team-meta">${escapeHtml(player.position)} · ${escapeHtml(player.club)}</p>
-              <p>${escapeHtml(player.summary)}</p>
-            </article>
-          `).join("")}
-        </section>
-      </div>
+        </div>
+
+        <div class="panel">
+          <h3>팀 능력치</h3>
+          <div class="rating-board">
+            ${ratingBar("공격", team.ratings.attack)}
+            ${ratingBar("중원", team.ratings.midfield)}
+            ${ratingBar("수비", team.ratings.defense)}
+            ${ratingBar("속도", team.ratings.speed)}
+            ${ratingBar("경험", team.ratings.experience)}
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-heading compact-heading">
+          <div>
+            <h3>대표 스타 라인</h3>
+            <p>얼굴, 소속 클럽, 클럽 역할, 대표팀 역할을 함께 표시합니다.</p>
+          </div>
+        </div>
+        <div class="star-line">
+          ${team.players.slice(0, 3).map(playerShowcase).join("")}
+        </div>
+      </section>
+
+      <section class="dialog-grid">
+        <div class="panel">
+          <h3>전체 선수단 보드</h3>
+          <div class="squad-board">
+            ${team.players.map(playerRow).join("")}
+          </div>
+        </div>
+        <div class="panel">
+          <h3>전술 메모</h3>
+          <ul class="compact-list">
+            ${(team.tacticalNotes || []).map((note) => `<li>${escapeHtml(note)}</li>`).join("")}
+          </ul>
+        </div>
+      </section>
+
       <section class="video-grid" aria-label="관련 유튜브 영상">
-        ${videos.map(({ player, video }) => videoCard(player, video)).join("") || `<div class="empty-state">영상 큐레이션이 아직 없습니다.</div>`}
+        ${videos.slice(0, 6).map(videoCard).join("") || `<div class="empty-state">영상 큐레이션이 아직 없습니다.</div>`}
       </section>
     </div>
   `;
@@ -308,6 +361,44 @@ function openTeamDialog(teamId) {
   } else {
     dialog.setAttribute("open", "");
   }
+  hydrateWikiPhotos();
+}
+
+function playerShowcase(player) {
+  return `
+    <article class="star-card">
+      ${playerPortrait(player, "large")}
+      <div>
+        <span class="badge top">${escapeHtml(player.tag || "핵심")}</span>
+        <h4>${escapeHtml(player.nameKo || player.name)}</h4>
+        <p class="team-meta">${escapeHtml(player.name)} · ${escapeHtml(player.position)} · ${escapeHtml(player.club)}</p>
+      </div>
+      <p>${escapeHtml(player.nationalRole)}</p>
+      <div class="scouting-grid">
+        ${scoutingPill("공격", player.scouting.attack)}
+        ${scoutingPill("창의", player.scouting.creation)}
+        ${scoutingPill("압박", player.scouting.press)}
+        ${scoutingPill("수비", player.scouting.defense)}
+      </div>
+    </article>
+  `;
+}
+
+function playerRow(player) {
+  return `
+    <article class="squad-row">
+      ${playerPortrait(player, "small")}
+      <div class="squad-main">
+        <strong>${escapeHtml(player.nameKo || player.name)}</strong>
+        <span>${escapeHtml(player.position)} · ${escapeHtml(player.club)}</span>
+        <small>${escapeHtml(player.clubRole)}</small>
+      </div>
+      <div class="squad-stat">
+        <span>${escapeHtml(player.seasonStats.season)}</span>
+        <strong>${escapeHtml(player.seasonStats.status)}</strong>
+      </div>
+    </article>
+  `;
 }
 
 function bindTeamButtons(root) {
@@ -321,9 +412,10 @@ function allTeams() {
 }
 
 function matchesFilters(team) {
-  const playerText = team.players.map((player) => `${player.name} ${player.club}`).join(" ");
+  const playerText = team.players.map((player) => `${player.name} ${player.nameKo || ""} ${player.club} ${player.position}`).join(" ");
   const groupText = groupFor(team.id).name;
-  const haystack = `${team.nameKo} ${team.nameEn} ${team.confederation} ${playerText} ${groupText}`.toLowerCase();
+  const tags = (team.styleTags || []).join(" ");
+  const haystack = `${team.nameKo} ${team.nameEn} ${team.confederation} ${playerText} ${groupText} ${tags}`.toLowerCase();
   const queryOk = !state.query || haystack.includes(state.query);
   const statusOk = state.status === "all" || team.status === state.status;
   return queryOk && statusOk;
@@ -359,7 +451,7 @@ function thirdRaceStrip() {
           ${flag(team, "flag-img")}
           <div>
             <strong>${index < 8 ? "진출권" : "추격"} · ${escapeHtml(team.nameKo)}</strong>
-            <span class="team-meta">${team.advance}%</span>
+            <span class="team-meta">${team.advance}% · ${escapeHtml(team.players[0].nameKo || team.players[0].name)}</span>
           </div>
         </div>
       `).join("")}
@@ -423,7 +515,7 @@ function teamRow(team) {
       ${flag(team, "flag-img")}
       <span>
         <span class="team-name">${escapeHtml(team.nameKo)}${team.koreaFocus ? " · 한국팀" : ""}</span>
-        <span class="team-meta">${escapeHtml(team.players[0].name)} · FIFA ${team.rank} · ${team.advance}%</span>
+        <span class="team-meta">${escapeHtml(team.players.slice(0, 3).map((p) => p.nameKo || p.name).join(" / "))} · ${team.advance}%</span>
       </span>
       ${statusBadge(team.status)}
     </button>
@@ -443,14 +535,18 @@ function miniTeam(team) {
   `;
 }
 
-function videoCard(player, video) {
+function videoCard(video) {
+  const label = video.type === "tactical" ? "전술 분석" : video.type === "interview" ? "인터뷰" : "하이라이트";
   return `
     <article class="video-card">
-      <div class="video-thumb" aria-hidden="true">PLAY</div>
+      <a class="video-thumb video-thumb-generated" href="${escapeAttr(video.url)}" target="_blank" rel="noreferrer" aria-label="${escapeHtml(video.title)} 보기">
+        <span>${escapeHtml(label)}</span>
+        <strong>${escapeHtml(video.title)}</strong>
+      </a>
       <span class="badge sample">${escapeHtml(video.type)}</span>
       <h3 class="card-title">${escapeHtml(video.title)}</h3>
-      <p class="team-meta">${escapeHtml(player.name)} · ${escapeHtml(video.channel)} · ${escapeHtml(video.language)}</p>
-      <a href="${video.url}" target="_blank" rel="noreferrer">유튜브에서 보기</a>
+      <p class="team-meta">${escapeHtml(video.channel)} · YouTube search</p>
+      <a href="${escapeAttr(video.url)}" target="_blank" rel="noreferrer">유튜브에서 보기</a>
     </article>
   `;
 }
@@ -465,10 +561,44 @@ function probBox(label, value) {
   `;
 }
 
+function seasonStats(player) {
+  const stats = player.seasonStats;
+  return `
+    <div class="season-card">
+      <span>${escapeHtml(stats.season)}</span>
+      <strong>${escapeHtml(stats.status)}</strong>
+      <small>출장 ${escapeHtml(stats.apps)} · 골 ${escapeHtml(stats.goals)} · 도움 ${escapeHtml(stats.assists)}</small>
+    </div>
+  `;
+}
+
 function statusBadge(status) {
   const className = status === "Top 2" ? "top" : status === "3rd race" ? "race" : "risk";
   const label = status === "Top 2" ? "Top 2" : status === "3rd race" ? "3위 경쟁" : "위험";
   return `<span class="badge ${className}">${label}</span>`;
+}
+
+function tag(value) {
+  return `<span class="style-tag">${escapeHtml(value)}</span>`;
+}
+
+function ratingBar(label, value) {
+  return `
+    <div class="rating-row">
+      <span>${escapeHtml(label)}</span>
+      ${bar(value)}
+      <strong>${value}</strong>
+    </div>
+  `;
+}
+
+function scoutingPill(label, value) {
+  return `
+    <div class="scout-pill">
+      <span>${escapeHtml(label)}</span>
+      <strong>${value}</strong>
+    </div>
+  `;
 }
 
 function bar(value) {
@@ -480,6 +610,65 @@ function flag(team, className) {
   return `<img class="${className}" src="https://flagcdn.com/w80/${code}.png" alt="${escapeHtml(team.nameKo)} 국기" loading="lazy" />`;
 }
 
+function playerPortrait(player, size = "medium") {
+  const initials = getInitials(player.nameKo || player.name);
+  const slug = player.wikiSlug ? ` data-wiki-slug="${escapeAttr(player.wikiSlug)}"` : "";
+  const source = player.wikiSlug ? ` data-photo-source="Wikipedia"` : "";
+  return `
+    <div class="player-portrait ${size}"${slug}${source} title="${escapeAttr(player.name)}">
+      <span>${escapeHtml(initials)}</span>
+    </div>
+  `;
+}
+
+async function hydrateWikiPhotos() {
+  const targets = Array.from(document.querySelectorAll(".player-portrait[data-wiki-slug]:not(.photo-ready):not(.photo-loading)"));
+  await Promise.all(targets.map(loadWikiPhoto));
+}
+
+async function loadWikiPhoto(target) {
+  const slug = target.dataset.wikiSlug;
+  if (!slug) return;
+  target.classList.add("photo-loading");
+  try {
+    const source = await getWikiThumbnail(slug);
+    if (!source) return;
+    target.innerHTML = `<img src="${escapeAttr(source)}" alt="${escapeAttr(target.title)} 얼굴 사진" loading="lazy" referrerpolicy="no-referrer" />`;
+    target.classList.add("photo-ready");
+  } catch (error) {
+    target.dataset.photoError = "true";
+  } finally {
+    target.classList.remove("photo-loading");
+  }
+}
+
+async function getWikiThumbnail(slug) {
+  if (photoCache.has(slug)) return photoCache.get(slug);
+  const url = `https://en.wikipedia.org/api/rest_v1/page/summary/${slug}`;
+  const response = await fetch(url);
+  if (!response.ok) {
+    photoCache.set(slug, "");
+    return "";
+  }
+  const json = await response.json();
+  const source = json?.thumbnail?.source || "";
+  photoCache.set(slug, source);
+  return source;
+}
+
+function getInitials(value) {
+  const text = String(value).trim();
+  if (!text) return "P";
+  if (/[\uac00-\ud7af]/.test(text)) return text.slice(0, 2);
+  return text
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join("")
+    .toUpperCase();
+}
+
 function escapeHtml(value) {
   return String(value)
     .replace(/&/g, "&amp;")
@@ -487,4 +676,8 @@ function escapeHtml(value) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
+}
+
+function escapeAttr(value) {
+  return escapeHtml(value);
 }
