@@ -510,6 +510,10 @@ select option {
   gap: 14px;
 }
 
+.team-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .team-card,
 .player-card,
 .video-card,
@@ -524,6 +528,52 @@ select option {
 .player-card-rich {
   display: grid;
   gap: 13px;
+}
+
+.team-hub-card {
+  min-height: 560px;
+  animation: cardEnter 0.55s ease both;
+}
+
+.team-hub-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(245, 199, 94, 0.48);
+  transition: transform 0.18s ease, border-color 0.18s ease;
+}
+
+.team-card-tabs {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 7px;
+  padding: 6px;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+}
+
+.team-card-tab {
+  min-height: 34px;
+  padding: 7px 8px;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 950;
+}
+
+.team-card-tab.is-active {
+  color: #0b120f;
+  background: linear-gradient(135deg, var(--gold), var(--teal));
+  box-shadow: 0 0 20px rgba(245, 199, 94, 0.18);
+}
+
+.team-card-panel {
+  display: grid;
+  align-content: start;
+  gap: 13px;
+  min-height: 360px;
+  animation: panelSwitch 0.22s ease both;
 }
 
 .team-card-header,
@@ -757,6 +807,133 @@ select option {
   display: grid;
   gap: 2px;
   text-align: right;
+}
+
+.mini-squad-list,
+.mini-schedule-list {
+  display: grid;
+  gap: 8px;
+}
+
+.mini-player-line {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+}
+
+.mini-player-line strong,
+.mini-player-line span,
+.mini-player-line small {
+  display: block;
+}
+
+.mini-player-line strong {
+  color: #fff;
+}
+
+.mini-player-line span,
+.mini-player-line small {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.round-odds {
+  display: grid;
+  gap: 9px;
+}
+
+.round-odds.detail {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.round-odds-row {
+  display: grid;
+  gap: 7px;
+  padding: 9px;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+}
+
+.round-odds-row > strong {
+  color: #fff;
+}
+
+.odds-lines {
+  display: grid;
+  gap: 5px;
+}
+
+.odds-line {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 38px;
+  gap: 7px;
+  align-items: center;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.odds-line strong {
+  color: #fff;
+  text-align: right;
+}
+
+.odds-line.home .bar span {
+  background: linear-gradient(90deg, var(--gold), #ff8f54);
+}
+
+.odds-line.global .bar span {
+  background: linear-gradient(90deg, var(--blue), var(--violet));
+}
+
+.match-record-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.match-record-card {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+}
+
+.match-record-card h4 {
+  margin: 0;
+  color: #fff;
+  font-size: 20px;
+}
+
+.record-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.record-columns div {
+  padding: 9px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 8px;
+}
+
+.record-columns span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.record-columns p {
+  margin: 4px 0 0;
+  color: #fff;
 }
 
 .schedule-summary {
@@ -1058,6 +1235,28 @@ select option {
   }
 }
 
+@keyframes cardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes panelSwitch {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @media (max-width: 1120px) {
   .topbar,
   .match-layout,
@@ -1077,7 +1276,9 @@ select option {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .schedule-strip {
+  .schedule-strip,
+  .round-odds.detail,
+  .match-record-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -1108,7 +1309,10 @@ select option {
   .prob-grid,
   .star-line,
   .scouting-grid,
-  .schedule-strip {
+  .schedule-strip,
+  .round-odds.detail,
+  .match-record-grid,
+  .record-columns {
     grid-template-columns: 1fr;
   }
 

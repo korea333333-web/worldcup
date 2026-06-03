@@ -11,6 +11,7 @@
       dataStatus: "선수단 리서치 초안",
       lastChecked: "2026-06-03",
       ratings: { attack: 78, midfield: 74, defense: 76, speed: 82, experience: 73 },
+      roundOdds: odds([63, 34, 14, 6, 3, 1], [78, 46, 22, 10, 5, 2], [55, 28, 10, 4, 2, 1], "한국 팬 기대와 모델 전망을 분리한 샘플입니다."),
       tacticalNotes: [
         "손흥민의 뒷공간 침투와 이강인의 전진 패스가 연결될 때 공격 효율이 크게 올라갑니다.",
         "김민재가 센터백 라인을 안정시키지만, 강한 압박을 받을 때 후방 전개 선택지가 중요합니다.",
@@ -37,6 +38,7 @@
       dataStatus: "강팀 확장 리포트",
       lastChecked: "2026-06-03",
       ratings: { attack: 92, midfield: 84, defense: 83, speed: 91, experience: 86 },
+      roundOdds: odds([91, 74, 54, 35, 22, 13], [96, 84, 67, 47, 31, 20], [90, 71, 50, 32, 20, 12], "브라질은 팬 기대치가 모델보다 높은 강팀 샘플입니다."),
       tacticalNotes: [
         "비니시우스와 호드리구가 좌우/중앙을 오가며 수비 라인을 흔드는 구조가 가장 위협적입니다.",
         "브루노 기마랑이스와 파케타가 전진 패스와 압박 회피를 담당하면 공격 전환 속도가 살아납니다.",
@@ -66,6 +68,7 @@
       watchMatch: "vs 콜롬비아",
       dataStatus: "강팀 확장 리포트",
       lastChecked: "2026-06-03",
+      roundOdds: odds([92, 75, 56, 37, 24, 15], [95, 82, 63, 43, 29, 18], [91, 73, 53, 34, 21, 13], "프랑스 우승권 전망 샘플입니다."),
       tacticalNotes: ["음바페의 속도와 그리즈만의 연결 능력이 프랑스 공격의 핵심 축입니다."],
       players: [
         player("Kylian Mbappe", "킬리안 음바페", "FW/LW", "Real Madrid", "대표 스타", "클럽에서는 왼쪽과 중앙을 오가며 뒷공간 침투와 마무리를 담당합니다.", "대표팀에서는 가장 높은 파괴력을 가진 전환 공격의 중심입니다.", "공격", { attack: 96, creation: 82, press: 68, defense: 35, form: 89 }, "Kylian_Mbapp%C3%A9"),
@@ -82,6 +85,7 @@
       watchMatch: "vs 스위스",
       dataStatus: "선수단 리서치 초안",
       lastChecked: "2026-06-03",
+      roundOdds: odds([68, 39, 17, 7, 3, 1], [78, 48, 23, 10, 5, 2], [66, 36, 15, 6, 2, 1], "일본의 조직력과 아시아 강호 기대치를 반영한 샘플입니다."),
       tacticalNotes: ["구보와 미토마가 양쪽에서 개인 능력을 만들고, 엔도가 중원 균형을 잡습니다."],
       players: [
         player("Takefusa Kubo", "구보 다케후사", "AM/RW", "Real Sociedad", "창의성 핵심", "클럽에서는 오른쪽과 중앙을 오가며 찬스 메이킹을 맡습니다.", "대표팀에서는 낮은 블록을 깨는 전진 패스와 드리블의 중심입니다.", "중원", { attack: 78, creation: 86, press: 70, defense: 45, form: 80 }, "Takefusa_Kubo"),
@@ -98,6 +102,7 @@
       watchMatch: "vs 크로아티아",
       dataStatus: "선수단 리서치 초안",
       lastChecked: "2026-06-03",
+      roundOdds: odds([74, 43, 19, 8, 4, 2], [84, 55, 27, 13, 6, 3], [70, 39, 16, 7, 3, 1], "개최국 기대치가 반영된 미국 전망 샘플입니다."),
       tacticalNotes: ["풀리식과 발로건이 공격의 깊이를 만들고, 맥케니와 무사가 중원 에너지를 공급합니다."],
       players: [
         player("Christian Pulisic", "크리스천 풀리식", "RW/LW", "AC Milan", "대표 스타", "클럽에서는 측면 돌파와 박스 안 마무리로 공격 포인트를 만듭니다.", "대표팀에서는 가장 믿을 수 있는 1대1 공격 옵션입니다.", "공격", { attack: 82, creation: 78, press: 72, defense: 45, form: 80 }, "Christian_Pulisic"),
@@ -149,6 +154,8 @@
         video(`${item.name} highlights`, `${item.name} highlights`, "highlight", `${item.name} football highlights`)
       ]
     }));
+    team.roundOdds ||= defaultOdds(team);
+    team.matchRecords ||= defaultMatchRecords(team);
   });
 
   function player(name, nameKo, position, club, tag, clubRole, nationalRole, category, scouting, wikiSlug) {
@@ -195,6 +202,53 @@
       url: `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`,
       thumbnailMode: "generated"
     };
+  }
+
+  function odds(model, home, global, note) {
+    return {
+      model: oddsShape(model),
+      home: oddsShape(home),
+      global: oddsShape(global),
+      note
+    };
+  }
+
+  function oddsShape(values) {
+    return {
+      r32: values[0],
+      r16: values[1],
+      qf: values[2],
+      sf: values[3],
+      final: values[4],
+      champion: values[5]
+    };
+  }
+
+  function defaultOdds(team) {
+    const base = Math.max(8, Math.min(94, team.advance || 40));
+    const values = [
+      base,
+      Math.max(2, Math.round(base * 0.58)),
+      Math.max(1, Math.round(base * 0.30)),
+      Math.max(1, Math.round(base * 0.14)),
+      Math.max(1, Math.round(base * 0.07)),
+      Math.max(1, Math.round(base * 0.03))
+    ];
+    return odds(values, values.map((value) => Math.min(98, Math.round(value * 1.12))), values.map((value) => Math.max(1, Math.round(value * 0.92))), "샘플 전망입니다. 실제 여론/배당/모델 데이터로 교체 가능합니다.");
+  }
+
+  function defaultMatchRecords(team) {
+    return [
+      {
+        status: "pending",
+        matchLabel: `${team.nameKo} 조별 1차전`,
+        score: "",
+        startingXI: [],
+        substitutions: [],
+        stats: { shots: "", possession: "", xg: "" },
+        mom: ""
+      }
+    ];
   }
 
   function slug(value) {

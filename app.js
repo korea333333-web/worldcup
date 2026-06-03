@@ -4,7 +4,8 @@ const state = {
   query: "",
   status: "all",
   matchupA: "korea",
-  matchupB: "mexico"
+  matchupB: "mexico",
+  teamCardTabs: {}
 };
 const photoCache = new Map();
 
@@ -96,44 +97,15 @@ function renderGroups() {
 function renderTeams() {
   const cards = allTeams()
     .filter(matchesFilters)
-    .map((team) => `
-      <article class="team-card team-card-rich">
-        <div class="team-card-header">
-          ${flag(team, "big-flag")}
-          <div>
-            <h3 class="card-title">${escapeHtml(team.nameKo)}</h3>
-            <p class="team-meta">${escapeHtml(groupFor(team.id).name)} · ${escapeHtml(team.confederation)} · FIFA ${team.rank}</p>
-          </div>
-        </div>
-        <div class="player-face-stack" aria-label="${escapeHtml(team.nameKo)} 핵심 선수">
-          ${team.players.slice(0, 5).map((player) => playerPortrait(player, "small")).join("")}
-        </div>
-        <div class="tag-row">${(team.styleTags || []).slice(0, 4).map(tag).join("")}</div>
-        <ul class="compact-list">
-          ${team.players.slice(0, 3).map((player) => `
-            <li><strong>${escapeHtml(player.nameKo || player.name)}</strong> · ${escapeHtml(player.position)} · ${escapeHtml(player.club)}</li>
-          `).join("")}
-          <li><strong>주목 경기:</strong> ${escapeHtml(team.watchMatch || "업데이트 예정")}</li>
-        </ul>
-        <div class="rating-mini">
-          ${ratingBar("공격", team.ratings.attack)}
-          ${ratingBar("중원", team.ratings.midfield)}
-          ${ratingBar("수비", team.ratings.defense)}
-        </div>
-        <div class="probability" aria-label="${escapeHtml(team.nameKo)} 진출 확률">
-          <span class="team-meta">32강 시나리오 ${team.advance}% · ${escapeHtml(team.dataStatus)}</span>
-          ${bar(team.advance)}
-        </div>
-        <button class="primary-button open-team" data-team-id="${team.id}" type="button">스카우팅 리포트</button>
-      </article>
-    `)
+    .map(teamHubCard)
     .join("");
 
   views.teams.innerHTML = `
-    ${sectionHeading("팀 탐색", "핵심 선수, 소속 클럽, 역할, 능력치, 32강 시나리오를 한 카드에서 확인합니다.")}
+    ${sectionHeading("국가 허브", "카드 안에서 개요, 선수단, 일정, 전망을 탭으로 넘겨보는 팀별 미니 대시보드입니다.")}
     <div class="team-grid">${cards || `<div class="empty-state">조건에 맞는 팀이 없습니다.</div>`}</div>
   `;
   bindTeamButtons(views.teams);
+  bindTeamCardTabs(views.teams);
   hydrateWikiPhotos();
 }
 
@@ -355,6 +327,16 @@ function openTeamDialog(teamId) {
       <section class="panel">
         <div class="section-heading compact-heading">
           <div>
+            <h3>Road to Final</h3>
+            <p>모델, 자국 팬 기대, 전세계 시각을 나눠서 라운드별 전망을 표시합니다.</p>
+          </div>
+        </div>
+        ${roundOddsPanel(team, "detail")}
+      </section>
+
+      <section class="panel">
+        <div class="section-heading compact-heading">
+          <div>
             <h3>다가오는 경기</h3>
             <p>경기장, 개최 도시, 현지 시간과 한국 시간을 함께 확인합니다.</p>
           </div>
@@ -391,6 +373,18 @@ function openTeamDialog(teamId) {
         </div>
       </section>
 
+      <section class="panel">
+        <div class="section-heading compact-heading">
+          <div>
+            <h3>경기 기록 센터</h3>
+            <p>경기 종료 후 선발, 교체, 득점, 카드, 슈팅, xG, 하이라이트가 이 영역에 쌓입니다.</p>
+          </div>
+        </div>
+        <div class="match-record-grid">
+          ${(team.matchRecords || []).map(matchRecordCard).join("")}
+        </div>
+      </section>
+
       <section class="video-grid" aria-label="관련 유튜브 영상">
         ${videos.slice(0, 6).map(videoCard).join("") || `<div class="empty-state">영상 큐레이션이 아직 없습니다.</div>`}
       </section>
@@ -404,6 +398,101 @@ function openTeamDialog(teamId) {
     dialog.setAttribute("open", "");
   }
   hydrateWikiPhotos();
+}
+
+function teamHubCard(team) {
+  const active = state.teamCardTabs[team.id] || "overview";
+  return `
+    <article class="team-card team-card-rich team-hub-card" data-team-id="${team.id}">
+      <div class="team-card-header">
+        ${flag(team, "big-flag")}
+        <div>
+          <h3 class="card-title">${escapeHtml(team.nameKo)}</h3>
+          <p class="team-meta">${escapeHtml(groupFor(team.id).name)} · ${escapeHtml(team.confederation)} · FIFA ${team.rank}</p>
+        </div>
+      </div>
+      <div class="team-card-tabs" role="tablist" aria-label="${escapeHtml(team.nameKo)} 카드 정보">
+        ${teamCardTabButton(team, active, "overview", "개요")}
+        ${teamCardTabButton(team, active, "squad", "선수단")}
+        ${teamCardTabButton(team, active, "schedule", "일정")}
+        ${teamCardTabButton(team, active, "odds", "전망")}
+      </div>
+      <div class="team-card-panel">
+        ${teamCardPanel(team, active)}
+      </div>
+      <button class="primary-button open-team" data-team-id="${team.id}" type="button">전체 리포트 열기</button>
+    </article>
+  `;
+}
+
+function teamCardTabButton(team, active, tabId, label) {
+  return `<button class="team-card-tab ${active === tabId ? "is-active" : ""}" data-team-card-tab="${tabId}" data-team-id="${team.id}" type="button">${escapeHtml(label)}</button>`;
+}
+
+function teamCardPanel(team, active) {
+  if (active === "squad") return teamCardSquad(team);
+  if (active === "schedule") return teamCardSchedule(team);
+  if (active === "odds") return roundOddsPanel(team, "card");
+  return teamCardOverview(team);
+}
+
+function teamCardOverview(team) {
+  return `
+    <div class="player-face-stack" aria-label="${escapeHtml(team.nameKo)} 핵심 선수">
+      ${team.players.slice(0, 6).map((player) => playerPortrait(player, "small")).join("")}
+    </div>
+    <div class="tag-row">${(team.styleTags || []).slice(0, 5).map(tag).join("")}</div>
+    <div class="rating-mini">
+      ${ratingBar("공격", team.ratings.attack)}
+      ${ratingBar("중원", team.ratings.midfield)}
+      ${ratingBar("수비", team.ratings.defense)}
+    </div>
+    <ul class="compact-list">
+      <li><strong>강점:</strong> ${escapeHtml(team.strength)}</li>
+      <li><strong>리스크:</strong> ${escapeHtml(team.weakness)}</li>
+      <li><strong>주목 경기:</strong> ${escapeHtml(team.watchMatch || "업데이트 예정")}</li>
+    </ul>
+    <div class="probability" aria-label="${escapeHtml(team.nameKo)} 진출 확률">
+      <span class="team-meta">32강 시나리오 ${team.advance}% · ${escapeHtml(team.dataStatus)}</span>
+      ${bar(team.advance)}
+    </div>
+  `;
+}
+
+function teamCardSquad(team) {
+  return `
+    <div class="mini-squad-list">
+      ${team.players.slice(0, 7).map((player) => `
+        <article class="mini-player-line">
+          ${playerPortrait(player, "small")}
+          <div>
+            <strong>${escapeHtml(player.nameKo || player.name)}</strong>
+            <span>${escapeHtml(player.position)} · ${escapeHtml(player.club)}</span>
+            <small>${escapeHtml(player.tag || player.category || "핵심")}</small>
+          </div>
+        </article>
+      `).join("")}
+    </div>
+  `;
+}
+
+function teamCardSchedule(team) {
+  const matches = teamSchedule(team.id);
+  return `
+    <div class="mini-schedule-list">
+      ${matches.slice(0, 3).map(scheduleCardCompact).join("") || `<div class="empty-state">연결된 일정이 아직 없습니다.</div>`}
+    </div>
+  `;
+}
+
+function bindTeamCardTabs(root) {
+  root.querySelectorAll(".team-card-tab").forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.stopPropagation();
+      state.teamCardTabs[button.dataset.teamId] = button.dataset.teamCardTab;
+      renderTeams();
+    });
+  });
 }
 
 function playerShowcase(player) {
@@ -441,6 +530,90 @@ function playerRow(player) {
       </div>
     </article>
   `;
+}
+
+function roundOddsPanel(team, mode = "card") {
+  const odds = team.roundOdds || defaultRoundOdds(team);
+  const rows = [
+    ["32강", "r32"],
+    ["16강", "r16"],
+    ["8강", "qf"],
+    ["4강", "sf"],
+    ["결승", "final"],
+    ["우승", "champion"]
+  ];
+  return `
+    <div class="round-odds ${mode === "detail" ? "detail" : ""}">
+      ${rows.map(([label, key]) => `
+        <div class="round-odds-row">
+          <strong>${label}</strong>
+          <div class="odds-lines">
+            ${oddsLine("모델", odds.model[key], "model")}
+            ${oddsLine("자국", odds.home[key], "home")}
+            ${oddsLine("세계", odds.global[key], "global")}
+          </div>
+        </div>
+      `).join("")}
+      <p class="team-meta">${escapeHtml(odds.note || "샘플 전망입니다. 실제 배당/여론/모델 데이터가 나오면 교체됩니다.")}</p>
+    </div>
+  `;
+}
+
+function oddsLine(label, value, tone) {
+  return `
+    <div class="odds-line ${tone}">
+      <span>${escapeHtml(label)}</span>
+      ${bar(value)}
+      <strong>${value}%</strong>
+    </div>
+  `;
+}
+
+function matchRecordCard(record) {
+  return `
+    <article class="match-record-card">
+      <div class="schedule-card-top">
+        <span class="badge ${record.status === "played" ? "top" : "sample"}">${record.status === "played" ? "경기 종료" : "경기 후 업데이트"}</span>
+        <strong>${escapeHtml(record.matchLabel)}</strong>
+      </div>
+      <h4>${escapeHtml(record.score || "스코어 대기")}</h4>
+      <div class="record-columns">
+        <div>
+          <span>선발</span>
+          <p>${escapeHtml((record.startingXI || []).join(", ") || "경기 종료 후 입력")}</p>
+        </div>
+        <div>
+          <span>교체</span>
+          <p>${escapeHtml((record.substitutions || []).join(", ") || "경기 종료 후 입력")}</p>
+        </div>
+      </div>
+      <div class="schedule-info">
+        <div><span>슈팅</span><strong>${escapeHtml(record.stats?.shots || "대기")}</strong></div>
+        <div><span>점유율</span><strong>${escapeHtml(record.stats?.possession || "대기")}</strong></div>
+        <div><span>xG</span><strong>${escapeHtml(record.stats?.xg || "대기")}</strong></div>
+        <div><span>MOM</span><strong>${escapeHtml(record.mom || "대기")}</strong></div>
+      </div>
+    </article>
+  `;
+}
+
+function defaultRoundOdds(team) {
+  const base = Math.max(8, Math.min(94, team.advance || 40));
+  const r16 = Math.max(2, Math.round(base * 0.58));
+  const qf = Math.max(1, Math.round(r16 * 0.52));
+  const sf = Math.max(1, Math.round(qf * 0.45));
+  const final = Math.max(1, Math.round(sf * 0.42));
+  const champion = Math.max(1, Math.round(final * 0.42));
+  return {
+    model: { r32: base, r16, qf, sf, final, champion },
+    home: boostOdds({ r32: base, r16, qf, sf, final, champion }, 1.16),
+    global: boostOdds({ r32: base, r16, qf, sf, final, champion }, 0.92),
+    note: "랭킹과 현재 진출 시나리오를 기반으로 한 샘플 전망입니다."
+  };
+}
+
+function boostOdds(source, factor) {
+  return Object.fromEntries(Object.entries(source).map(([key, value]) => [key, Math.max(1, Math.min(98, Math.round(value * factor)))]));
 }
 
 function bindTeamButtons(root) {
