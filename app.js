@@ -5,7 +5,8 @@ const state = {
   status: "all",
   matchupA: "korea",
   matchupB: "mexico",
-  teamCardTabs: {}
+  teamCardTabs: {},
+  votes: {}
 };
 const photoCache = new Map();
 
@@ -46,6 +47,7 @@ function wireControls() {
 }
 
 function renderApp() {
+  renderMatchHero();
   renderSummary();
   renderGroups();
   renderTeams();
@@ -55,6 +57,229 @@ function renderApp() {
   renderBracket();
   renderSources();
   hydrateWikiPhotos();
+}
+
+function renderMatchHero() {
+  const target = document.querySelector("#matchHero");
+  const hub = DATA.dailyMatchHub;
+  if (!target || !hub) return;
+
+  const featured = hub.matches.find((matchItem) => matchItem.id === hub.featuredMatchId) || hub.matches[0];
+  const sideMatches = hub.matches.filter((matchItem) => matchItem.id !== featured.id).slice(0, 3);
+  const teamA = DATA.teams[featured.teamA];
+  const teamB = featured.teamB ? DATA.teams[featured.teamB] : null;
+
+  target.innerHTML = `
+    <div class="match-hero-copy">
+      <span class="eyebrow">${escapeHtml(hub.kicker)}</span>
+      <h2>${escapeHtml(hub.title)}</h2>
+      <p>${escapeHtml(hub.summary)}</p>
+      <div class="hero-source-line">
+        <span>${escapeHtml(featured.phaseLabel)}</span>
+        <a href="${escapeAttr(featured.source.url)}" target="_blank" rel="noreferrer">${escapeHtml(featured.source.label)}</a>
+      </div>
+    </div>
+    <article class="feature-match-card" data-match-id="${escapeAttr(featured.id)}">
+      <div class="match-status-row">
+        <span class="badge ${featured.status === "result" ? "top" : featured.status === "scheduled" ? "race" : "sample"}">${escapeHtml(featured.phaseLabel)}</span>
+        <strong>${escapeHtml(featured.competition)}</strong>
+      </div>
+      <div class="feature-scoreboard">
+        ${heroFixtureTeam(teamA, featured.teamAName, featured.teamAFlag)}
+        <div class="score-core">
+          <span>${escapeHtml(featured.dateLabel)}</span>
+          <strong>${escapeHtml(featured.score)}</strong>
+          <small>${escapeHtml(featured.venue)} · ${escapeHtml(featured.city)}</small>
+        </div>
+        ${heroFixtureTeam(teamB, featured.teamBName, featured.teamBFlag)}
+      </div>
+      <h3>${escapeHtml(featured.headline)}</h3>
+      <p>${escapeHtml(featured.recap)}</p>
+      <div class="match-chip-row">
+        ${(featured.scorers || []).map((item) => `<span>${escapeHtml(item)}</span>`).join("")}
+      </div>
+      ${votePanel(featured)}
+      <div class="hero-actions">
+        <a class="primary-button hero-link" href="${escapeAttr(featured.highlightUrl)}" target="_blank" rel="noreferrer">하이라이트 보기</a>
+        <span>${escapeHtml(featured.localTimeLabel)}</span>
+      </div>
+    </article>
+    <aside class="hero-match-queue" aria-label="추가 경기 로그">
+      ${sideMatches.map(heroQueueCard).join("")}
+    </aside>
+  `;
+
+  bindVoteButtons(target);
+  loadVoteSummary(featured.id, featured);
+}
+
+function heroFixtureTeam(team, fallbackName, fallbackFlag) {
+  if (team) {
+    return `
+      <div class="hero-team">
+        ${flag(team, "big-flag")}
+        <strong>${escapeHtml(team.nameKo)}</strong>
+        <span>${escapeHtml(team.nameEn)}</span>
+      </div>
+    `;
+  }
+  const code = fallbackFlag || "un";
+  return `
+    <div class="hero-team">
+      <img class="big-flag" src="https://flagcdn.com/w80/${escapeAttr(code)}.png" alt="${escapeAttr(fallbackName || "상대 팀")} 국기" loading="lazy" />
+      <strong>${escapeHtml(fallbackName || "상대 팀")}</strong>
+      <span>Opponent</span>
+    </div>
+  `;
+}
+
+function heroQueueCard(matchItem) {
+  const teamA = DATA.teams[matchItem.teamA];
+  const teamB = matchItem.teamB ? DATA.teams[matchItem.teamB] : null;
+  return `
+    <article class="queue-card">
+      <span class="badge ${matchItem.status === "scheduled" ? "race" : "sample"}">${escapeHtml(matchItem.phaseLabel)}</span>
+      <strong>${escapeHtml(matchTitleFromHub(matchItem, teamA, teamB))}</strong>
+      <small>${escapeHtml(matchItem.score)} · ${escapeHtml(matchItem.dateLabel)}</small>
+      <p>${escapeHtml(matchItem.headline)}</p>
+    </article>
+  `;
+}
+
+function matchTitleFromHub(matchItem, teamA, teamB) {
+  const left = teamA?.nameKo || matchItem.teamAName || "TBD";
+  const right = teamB?.nameKo || matchItem.teamBName || "TBD";
+  return `${left} vs ${right}`;
+}
+
+function votePanel(matchItem) {
+  const summary = state.votes[matchItem.id] || fallbackVoteSummary(matchItem);
+  const teamA = DATA.teams[matchItem.teamA];
+  const teamB = matchItem.teamB ? DATA.teams[matchItem.teamB] : null;
+  const labels = {
+    teamA: `${teamA?.nameKo || matchItem.teamAName || "A팀"} 승`,
+    draw: "무승부",
+    teamB: `${teamB?.nameKo || matchItem.teamBName || "B팀"} 승`
+  };
+  const userVote = getStoredVote(matchItem.id);
+  const status = summary.loading ? "투표 집계 불러오는 중" : summary.storage === "fallback" ? "샘플 집계" : "실시간 팬 투표";
+
+  return `
+    <div class="vote-console" data-match-id="${escapeAttr(matchItem.id)}">
+      <div class="vote-console-head">
+        <div>
+          <strong>누가 이길까?</strong>
+          <span>${escapeHtml(status)} · ${summary.counts.total}명 참여</span>
+        </div>
+        <small>모델 ${matchItem.modelPick.teamA}% / ${matchItem.modelPick.draw}% / ${matchItem.modelPick.teamB}%</small>
+      </div>
+      <div class="vote-options">
+        ${voteButton(matchItem.id, "teamA", labels.teamA, summary, userVote)}
+        ${voteButton(matchItem.id, "draw", labels.draw, summary, userVote)}
+        ${voteButton(matchItem.id, "teamB", labels.teamB, summary, userVote)}
+      </div>
+      <p class="vote-help">${userVote ? "투표가 저장됐습니다. 같은 브라우저에서는 선택을 바꿔 다시 저장할 수 있어요." : "회원가입 없이 익명 ID로 저장됩니다."}</p>
+    </div>
+  `;
+}
+
+function voteButton(matchId, option, label, summary, userVote) {
+  const percent = summary.percentages[option] || 0;
+  const count = summary.counts[option] || 0;
+  return `
+    <button class="vote-button ${userVote === option ? "is-selected" : ""}" data-vote-match="${escapeAttr(matchId)}" data-vote-option="${option}" type="button">
+      <span>${escapeHtml(label)}</span>
+      <strong>${percent}%</strong>
+      <small>${count}표</small>
+      ${bar(percent)}
+    </button>
+  `;
+}
+
+function fallbackVoteSummary(matchItem) {
+  const pick = matchItem.modelPick || { teamA: 34, draw: 33, teamB: 33 };
+  return {
+    loading: true,
+    storage: "loading",
+    counts: { teamA: pick.teamA, draw: pick.draw, teamB: pick.teamB, total: pick.teamA + pick.draw + pick.teamB },
+    percentages: { teamA: pick.teamA, draw: pick.draw, teamB: pick.teamB }
+  };
+}
+
+function bindVoteButtons(root) {
+  root.querySelectorAll(".vote-button").forEach((button) => {
+    button.addEventListener("click", () => submitVote(button.dataset.voteMatch, button.dataset.voteOption));
+  });
+}
+
+async function loadVoteSummary(matchId, matchItem) {
+  const current = state.votes[matchId];
+  if (current?.loaded || current?.loadingRequest) return;
+  state.votes[matchId] = { ...(current || fallbackVoteSummary(matchItem)), loadingRequest: true };
+
+  try {
+    const response = await fetch(`/api/votes?matchId=${encodeURIComponent(matchId)}`);
+    if (!response.ok) throw new Error("vote summary failed");
+    const summary = await response.json();
+    state.votes[matchId] = { ...summary, loaded: true };
+  } catch (_error) {
+    state.votes[matchId] = { ...fallbackVoteSummary(matchItem), storage: "fallback", loaded: true, loading: false };
+  }
+
+  renderMatchHero();
+}
+
+async function submitVote(matchId, voteOption) {
+  const matchItem = DATA.dailyMatchHub?.matches.find((item) => item.id === matchId);
+  if (!matchItem) return;
+  state.votes[matchId] = { ...(state.votes[matchId] || fallbackVoteSummary(matchItem)), loading: true };
+  renderMatchHero();
+
+  try {
+    const response = await fetch("/api/votes", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ matchId, voteOption, voterKey: getVoterKey() })
+    });
+    if (!response.ok) throw new Error("vote failed");
+    const summary = await response.json();
+    localStorage.setItem(`wc_vote_${matchId}`, voteOption);
+    state.votes[matchId] = { ...summary, loaded: true };
+  } catch (_error) {
+    const fallback = fallbackVoteSummary(matchItem);
+    const counts = { ...fallback.counts, [voteOption]: fallback.counts[voteOption] + 1, total: fallback.counts.total + 1 };
+    localStorage.setItem(`wc_vote_${matchId}`, voteOption);
+    state.votes[matchId] = {
+      storage: "fallback",
+      loaded: true,
+      counts,
+      percentages: votePercentages(counts)
+    };
+  }
+
+  renderMatchHero();
+}
+
+function votePercentages(counts) {
+  const total = counts.total || 1;
+  return {
+    teamA: Math.round((counts.teamA / total) * 100),
+    draw: Math.round((counts.draw / total) * 100),
+    teamB: Math.round((counts.teamB / total) * 100)
+  };
+}
+
+function getVoterKey() {
+  const key = "wc_voter_key";
+  const existing = localStorage.getItem(key);
+  if (existing) return existing;
+  const next = `wc_${crypto.randomUUID().replace(/-/g, "")}`;
+  localStorage.setItem(key, next);
+  return next;
+}
+
+function getStoredVote(matchId) {
+  return localStorage.getItem(`wc_vote_${matchId}`) || "";
 }
 
 function renderSummary() {
