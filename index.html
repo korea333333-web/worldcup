@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>2026 월드컵 팀 인텔리전스</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div class="title-block">
+          <p class="eyebrow">FIFA World Cup 2026</p>
+          <h1>월드컵 팀 인텔리전스</h1>
+          <p class="subhead">조별 현황, 스타 플레이어, 영상, 매치업 승률을 한 화면에서 확인합니다.</p>
+        </div>
+        <div class="summary-strip" id="summaryStrip" aria-label="대회 요약"></div>
+      </header>
+
+      <nav class="tabs" aria-label="주요 보기">
+        <button class="tab is-active" data-tab="groups" type="button">조별 현황</button>
+        <button class="tab" data-tab="teams" type="button">팀 탐색</button>
+        <button class="tab" data-tab="players" type="button">스타 플레이어</button>
+        <button class="tab" data-tab="matchups" type="button">매치업</button>
+        <button class="tab" data-tab="bracket" type="button">32강</button>
+        <button class="tab" data-tab="sources" type="button">출처</button>
+      </nav>
+
+      <section class="toolbar" aria-label="검색과 필터">
+        <label class="search-box">
+          <span>검색</span>
+          <input id="searchInput" type="search" placeholder="팀, 선수, 조 검색" />
+        </label>
+        <label class="select-box">
+          <span>상태</span>
+          <select id="statusFilter" aria-label="진출 상태">
+            <option value="all">전체 상태</option>
+            <option value="Top 2">Top 2</option>
+            <option value="3rd race">3위 경쟁</option>
+            <option value="At risk">위험</option>
+          </select>
+        </label>
+      </section>
+
+      <section id="groupsView" class="view is-active"></section>
+      <section id="teamsView" class="view"></section>
+      <section id="playersView" class="view"></section>
+      <section id="matchupsView" class="view"></section>
+      <section id="bracketView" class="view"></section>
+      <section id="sourcesView" class="view"></section>
+    </main>
+
+    <dialog id="teamDialog" class="team-dialog"></dialog>
+
+    <script src="./data.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
