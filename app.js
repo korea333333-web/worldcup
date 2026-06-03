@@ -12,6 +12,7 @@ const views = {
   groups: document.querySelector("#groupsView"),
   teams: document.querySelector("#teamsView"),
   players: document.querySelector("#playersView"),
+  schedule: document.querySelector("#scheduleView"),
   matchups: document.querySelector("#matchupsView"),
   bracket: document.querySelector("#bracketView"),
   sources: document.querySelector("#sourcesView")
@@ -48,6 +49,7 @@ function renderApp() {
   renderGroups();
   renderTeams();
   renderPlayers();
+  renderSchedule();
   renderMatchups();
   renderBracket();
   renderSources();
@@ -169,6 +171,34 @@ function renderPlayers() {
   `;
   bindTeamButtons(views.players);
   hydrateWikiPhotos();
+}
+
+function renderSchedule() {
+  const schedule = DATA.matchSchedule;
+  if (!schedule) {
+    views.schedule.innerHTML = `<div class="empty-state">경기 일정 데이터가 아직 없습니다.</div>`;
+    return;
+  }
+
+  const cards = schedule.matches
+    .filter(matchesScheduleFilters)
+    .map((matchItem) => scheduleCard(matchItem))
+    .join("");
+
+  views.schedule.innerHTML = `
+    ${sectionHeading("경기 일정", "경기 날짜, 현지 킥오프 시간, 한국 시간, 경기장과 도시를 함께 보여줍니다.", schedule.sourceNote)}
+    <div class="schedule-summary">
+      <div class="panel">
+        <h3>일정 기준</h3>
+        <p class="source-note">업데이트: ${escapeHtml(schedule.updatedAt)} · 공식 경기 슬롯과 앱 조편성 시나리오를 구분해서 표시합니다.</p>
+      </div>
+      <div class="panel">
+        <h3>시간 표시</h3>
+        <p class="source-note">현지 시간은 개최 도시 기준, 한국 시간은 KST 기준입니다. 공식 확정 전 시나리오 경기는 배지로 표시됩니다.</p>
+      </div>
+    </div>
+    <div class="schedule-grid">${cards || `<div class="empty-state">검색 조건에 맞는 일정이 없습니다.</div>`}</div>
+  `;
 }
 
 function renderMatchups() {
@@ -325,6 +355,18 @@ function openTeamDialog(teamId) {
       <section class="panel">
         <div class="section-heading compact-heading">
           <div>
+            <h3>다가오는 경기</h3>
+            <p>경기장, 개최 도시, 현지 시간과 한국 시간을 함께 확인합니다.</p>
+          </div>
+        </div>
+        <div class="schedule-strip">
+          ${teamSchedule(team.id).slice(0, 4).map(scheduleCardCompact).join("") || `<div class="empty-state">이 팀의 일정이 아직 연결되지 않았습니다.</div>`}
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-heading compact-heading">
+          <div>
             <h3>대표 스타 라인</h3>
             <p>얼굴, 소속 클럽, 클럽 역할, 대표팀 역할을 함께 표시합니다.</p>
           </div>
@@ -419,6 +461,34 @@ function matchesFilters(team) {
   const queryOk = !state.query || haystack.includes(state.query);
   const statusOk = state.status === "all" || team.status === state.status;
   return queryOk && statusOk;
+}
+
+function matchesScheduleFilters(matchItem) {
+  if (!state.query) return true;
+  const venue = venueFor(matchItem.venueId);
+  const teamA = matchItem.teamA ? DATA.teams[matchItem.teamA] : null;
+  const teamB = matchItem.teamB ? DATA.teams[matchItem.teamB] : null;
+  const haystack = [
+    matchItem.stage,
+    matchItem.note,
+    matchItem.status,
+    venue?.name,
+    venue?.cityKo,
+    venue?.countryKo,
+    teamA?.nameKo,
+    teamA?.nameEn,
+    teamB?.nameKo,
+    teamB?.nameEn
+  ].filter(Boolean).join(" ").toLowerCase();
+  return haystack.includes(state.query);
+}
+
+function teamSchedule(teamId) {
+  return (DATA.matchSchedule?.matches || []).filter((matchItem) => matchItem.teamA === teamId || matchItem.teamB === teamId);
+}
+
+function venueFor(venueId) {
+  return DATA.matchSchedule?.venues.find((venue) => venue.id === venueId);
 }
 
 function groupFor(teamId) {
@@ -549,6 +619,69 @@ function videoCard(video) {
       <a href="${escapeAttr(video.url)}" target="_blank" rel="noreferrer">유튜브에서 보기</a>
     </article>
   `;
+}
+
+function scheduleCard(matchItem) {
+  const venue = venueFor(matchItem.venueId);
+  const teamA = matchItem.teamA ? DATA.teams[matchItem.teamA] : null;
+  const teamB = matchItem.teamB ? DATA.teams[matchItem.teamB] : null;
+  return `
+    <article class="schedule-card">
+      <div class="schedule-card-top">
+        <span class="badge ${matchItem.status === "official" || matchItem.status === "official-slot" ? "top" : "sample"}">${scheduleStatusLabel(matchItem.status)}</span>
+        <strong>Match ${matchItem.number}</strong>
+      </div>
+      <h3 class="card-title">${escapeHtml(matchTitle(matchItem, teamA, teamB))}</h3>
+      <p class="team-meta">${escapeHtml(matchItem.stage)} · ${escapeHtml(matchItem.note)}</p>
+      <div class="fixture-teams">
+        ${fixtureTeam(teamA, "TBD")}
+        <span>VS</span>
+        ${fixtureTeam(teamB, "TBD")}
+      </div>
+      <div class="schedule-info">
+        <div><span>현지</span><strong>${escapeHtml(matchItem.date)} ${escapeHtml(matchItem.localTime)}</strong></div>
+        <div><span>한국</span><strong>${escapeHtml(matchItem.kstDateTime)} KST</strong></div>
+        <div><span>장소</span><strong>${escapeHtml(venue?.name || "Venue TBD")}</strong></div>
+        <div><span>도시</span><strong>${escapeHtml(`${venue?.cityKo || ""}${venue?.countryKo ? ", " + venue.countryKo : ""}`)}</strong></div>
+      </div>
+    </article>
+  `;
+}
+
+function scheduleCardCompact(matchItem) {
+  const venue = venueFor(matchItem.venueId);
+  const teamA = matchItem.teamA ? DATA.teams[matchItem.teamA] : null;
+  const teamB = matchItem.teamB ? DATA.teams[matchItem.teamB] : null;
+  const opponent = teamA && teamB ? `${teamA.nameKo} vs ${teamB.nameKo}` : matchTitle(matchItem, teamA, teamB);
+  return `
+    <article class="schedule-mini">
+      <span class="badge ${matchItem.status === "official" ? "top" : "sample"}">${scheduleStatusLabel(matchItem.status)}</span>
+      <strong>${escapeHtml(opponent)}</strong>
+      <span>${escapeHtml(matchItem.kstDateTime)} KST</span>
+      <small>${escapeHtml(venue?.name || "Venue TBD")} · ${escapeHtml(venue?.cityKo || "")}</small>
+    </article>
+  `;
+}
+
+function fixtureTeam(team, fallback) {
+  if (!team) return `<div class="fixture-team tbd"><span>${escapeHtml(fallback)}</span></div>`;
+  return `
+    <div class="fixture-team">
+      ${flag(team, "flag-img")}
+      <span>${escapeHtml(team.nameKo)}</span>
+    </div>
+  `;
+}
+
+function matchTitle(matchItem, teamA, teamB) {
+  if (teamA && teamB) return `${teamA.nameKo} vs ${teamB.nameKo}`;
+  return matchItem.stage === "Final" ? "결승전" : matchItem.stage === "Third Place" ? "3위 결정전" : "대진 미정";
+}
+
+function scheduleStatusLabel(status) {
+  if (status === "official") return "공식 확인";
+  if (status === "official-slot") return "공식 슬롯";
+  return "시나리오";
 }
 
 function probBox(label, value) {

@@ -503,7 +503,8 @@ select option {
 .player-grid,
 .video-grid,
 .source-grid,
-.bracket-grid {
+.bracket-grid,
+.schedule-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 14px;
@@ -514,7 +515,8 @@ select option {
 .video-card,
 .source-card,
 .panel,
-.match-card {
+.match-card,
+.schedule-card {
   padding: 15px;
 }
 
@@ -757,6 +759,112 @@ select option {
   text-align: right;
 }
 
+.schedule-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.schedule-card {
+  display: grid;
+  gap: 12px;
+  background:
+    linear-gradient(135deg, rgba(30, 232, 200, 0.075), rgba(245, 199, 94, 0.055)),
+    var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28), inset 0 0 28px rgba(76, 201, 240, 0.035);
+}
+
+.schedule-card-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+  color: var(--gold);
+  font-size: 13px;
+}
+
+.fixture-teams {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 42px minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+}
+
+.fixture-teams > span {
+  color: var(--gold);
+  font-weight: 950;
+  text-align: center;
+}
+
+.fixture-team {
+  display: grid;
+  gap: 7px;
+  justify-items: center;
+  min-height: 92px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.fixture-team span {
+  color: #fff;
+  font-weight: 950;
+}
+
+.fixture-team.tbd {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+}
+
+.schedule-info {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.schedule-info div,
+.schedule-mini {
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+}
+
+.schedule-info span,
+.schedule-mini span,
+.schedule-mini small {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.schedule-info strong,
+.schedule-mini strong {
+  display: block;
+  margin-top: 3px;
+  color: #fff;
+  font-weight: 950;
+}
+
+.schedule-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.schedule-mini {
+  display: grid;
+  gap: 6px;
+}
+
 .compact-list {
   display: grid;
   gap: 8px;
@@ -964,7 +1072,12 @@ select option {
   .video-grid,
   .source-grid,
   .bracket-grid,
+  .schedule-grid,
   .star-line {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .schedule-strip {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -990,9 +1103,17 @@ select option {
   .video-grid,
   .source-grid,
   .bracket-grid,
+  .schedule-grid,
+  .schedule-summary,
   .prob-grid,
   .star-line,
-  .scouting-grid {
+  .scouting-grid,
+  .schedule-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .schedule-info,
+  .fixture-teams {
     grid-template-columns: 1fr;
   }
 
