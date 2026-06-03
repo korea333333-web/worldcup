@@ -98,6 +98,7 @@ function renderMatchHero() {
       <div class="match-chip-row">
         ${(featured.scorers || []).map((item) => `<span>${escapeHtml(item)}</span>`).join("")}
       </div>
+      ${highlightReel(featured)}
       ${votePanel(featured)}
       <div class="hero-actions">
         <a class="primary-button hero-link" href="${escapeAttr(featured.highlightUrl)}" target="_blank" rel="noreferrer">하이라이트 보기</a>
@@ -111,6 +112,63 @@ function renderMatchHero() {
 
   bindVoteButtons(target);
   loadVoteSummary(featured.id, featured);
+}
+
+function highlightReel(matchItem) {
+  const videos = (matchItem.highlightVideos || [
+    {
+      title: `${matchItem.headline} 하이라이트`,
+      channel: matchItem.source?.label || "YouTube",
+      type: "highlight",
+      url: matchItem.highlightUrl,
+      duration: "PLAY",
+      meta: "하이라이트 링크"
+    }
+  ]).map(normalizeVideo);
+  const lead = videos[0];
+  const queue = videos.slice(1, 4);
+
+  return `
+    <section class="highlight-reel" aria-label="하이라이트 영상">
+      <a class="highlight-lead" href="${escapeAttr(lead.url)}" target="_blank" rel="noreferrer">
+        ${videoThumbnailMedia(lead)}
+        <span class="play-chip">PLAY</span>
+        <span class="video-duration">${escapeHtml(lead.duration || "영상")}</span>
+        <div class="highlight-lead-copy">
+          <span>${escapeHtml(lead.channel)}</span>
+          <strong>${escapeHtml(lead.title)}</strong>
+          <small>${escapeHtml(lead.meta || lead.thumbnailSource || "YouTube")}</small>
+        </div>
+      </a>
+      <div class="highlight-queue">
+        ${queue.map((video) => `
+          <a class="highlight-mini" href="${escapeAttr(video.url)}" target="_blank" rel="noreferrer">
+            ${videoThumbnailMedia(video)}
+            <div>
+              <strong>${escapeHtml(video.title)}</strong>
+              <span>${escapeHtml(video.channel)} · ${escapeHtml(video.duration || "영상")}</span>
+            </div>
+          </a>
+        `).join("")}
+      </div>
+    </section>
+  `;
+}
+
+function normalizeVideo(video) {
+  return (window.VIDEO_UTILS?.normalizeVideoEntry || ((item) => item))(video);
+}
+
+function videoThumbnailMedia(video) {
+  if (video.thumbnailUrl) {
+    return `<img src="${escapeAttr(video.thumbnailUrl)}" alt="${escapeAttr(video.title)} 썸네일" loading="lazy" referrerpolicy="no-referrer" />`;
+  }
+  return `
+    <div class="video-thumb-fallback">
+      <span>${escapeHtml(video.type || "video")}</span>
+      <strong>${escapeHtml(video.duration || "PLAY")}</strong>
+    </div>
+  `;
 }
 
 function heroFixtureTeam(team, fallbackName, fallbackFlag) {
@@ -502,10 +560,7 @@ function renderSources() {
 function openTeamDialog(teamId) {
   const team = DATA.teams[teamId];
   const dialog = document.querySelector("#teamDialog");
-  const videos = [
-    ...(team.videos || []),
-    ...team.players.slice(0, 4).flatMap((player) => player.videos || [])
-  ];
+  const videos = collectTeamVideos(team);
 
   dialog.innerHTML = `
     <div class="dialog-inner">
@@ -663,7 +718,9 @@ function teamCardPanel(team, active) {
 }
 
 function teamCardOverview(team) {
+  const leadVideo = collectTeamVideos(team)[0];
   return `
+    ${leadVideo ? compactVideoPreview(leadVideo, "team-overview-video") : ""}
     <div class="player-face-stack" aria-label="${escapeHtml(team.nameKo)} 핵심 선수">
       ${team.players.slice(0, 6).map((player) => playerPortrait(player, "small")).join("")}
     </div>
@@ -700,6 +757,29 @@ function teamCardSquad(team) {
         </article>
       `).join("")}
     </div>
+  `;
+}
+
+function collectTeamVideos(team) {
+  return [
+    ...(team.videos || []),
+    ...team.players.slice(0, 3).flatMap((player) => player.videos || [])
+  ].map(normalizeVideo);
+}
+
+function compactVideoPreview(video, className = "") {
+  const item = normalizeVideo(video);
+  return `
+    <a class="compact-video ${className}" href="${escapeAttr(item.url)}" target="_blank" rel="noreferrer">
+      <div class="compact-video-thumb">
+        ${videoThumbnailMedia(item)}
+        <span>PLAY</span>
+      </div>
+      <div>
+        <strong>${escapeHtml(item.title)}</strong>
+        <small>${escapeHtml(item.channel)} · ${escapeHtml(item.thumbnailSource || "YouTube search")}</small>
+      </div>
+    </a>
   `;
 }
 
@@ -1008,17 +1088,17 @@ function miniTeam(team) {
 }
 
 function videoCard(video) {
+  const item = normalizeVideo(video);
   const label = video.type === "tactical" ? "전술 분석" : video.type === "interview" ? "인터뷰" : "하이라이트";
   return `
     <article class="video-card">
-      <a class="video-thumb video-thumb-generated" href="${escapeAttr(video.url)}" target="_blank" rel="noreferrer" aria-label="${escapeHtml(video.title)} 보기">
-        <span>${escapeHtml(label)}</span>
-        <strong>${escapeHtml(video.title)}</strong>
+      <a class="video-thumb ${item.thumbnailUrl ? "video-thumb-image" : "video-thumb-generated"}" href="${escapeAttr(item.url)}" target="_blank" rel="noreferrer" aria-label="${escapeHtml(item.title)} 보기">
+        ${item.thumbnailUrl ? videoThumbnailMedia(item) : `<span>${escapeHtml(label)}</span><strong>${escapeHtml(item.title)}</strong>`}
       </a>
-      <span class="badge sample">${escapeHtml(video.type)}</span>
-      <h3 class="card-title">${escapeHtml(video.title)}</h3>
-      <p class="team-meta">${escapeHtml(video.channel)} · YouTube search</p>
-      <a href="${escapeAttr(video.url)}" target="_blank" rel="noreferrer">유튜브에서 보기</a>
+      <span class="badge sample">${escapeHtml(item.type || "video")}</span>
+      <h3 class="card-title">${escapeHtml(item.title)}</h3>
+      <p class="team-meta">${escapeHtml(item.channel)} · ${escapeHtml(item.thumbnailSource || "YouTube link")}</p>
+      <a href="${escapeAttr(item.url)}" target="_blank" rel="noreferrer">유튜브에서 보기</a>
     </article>
   `;
 }

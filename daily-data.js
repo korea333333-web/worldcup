@@ -29,6 +29,32 @@
         scorers: ["손흥민 2골", "조규성 2골", "황희찬 1골"],
         notes: ["전반 손흥민 중심 공격", "후반 조규성 투입 후 박스 장악", "무실점으로 수비 안정감 확보"],
         highlightUrl: "https://www.youtube.com/results?search_query=Korea+Republic+Trinidad+and+Tobago+5-0+highlights",
+        highlightVideos: [
+          {
+            title: "대한민국 vs 트리니다드토바고 하이라이트",
+            channel: "KFATV 대한민국 축구 국가대표팀",
+            type: "highlight",
+            youtubeId: "LZAdpDpslcc",
+            duration: "13:25",
+            meta: "공식 채널 하이라이트"
+          },
+          {
+            title: "South Korea 5-0 Trinidad and Tobago 리뷰",
+            channel: "YouTube search",
+            type: "analysis",
+            url: "https://www.youtube.com/results?search_query=South+Korea+5-0+Trinidad+and+Tobago+review+2026",
+            duration: "분석",
+            meta: "경기 리뷰 검색"
+          },
+          {
+            title: "손흥민 멀티골 장면 모아보기",
+            channel: "YouTube search",
+            type: "highlight",
+            url: "https://www.youtube.com/results?search_query=Son+Heung-min+Trinidad+and+Tobago+goals+2026",
+            duration: "골 장면",
+            meta: "선수 하이라이트 검색"
+          }
+        ],
         source: {
           label: "Korea JoongAng Daily",
           url: "https://koreajoongangdaily.joins.com/news/2026-05-31/sports/football/Korea-secures-50-victory-over-Trinidad-and-Tobago-in-friendly/2604849"

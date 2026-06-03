@@ -115,6 +115,15 @@
     }
   };
 
+  richTeams.korea.videos.unshift({
+    title: "대한민국 vs 트리니다드토바고 하이라이트",
+    channel: "KFATV 대한민국 축구 국가대표팀",
+    type: "highlight",
+    youtubeId: "LZAdpDpslcc",
+    duration: "13:25",
+    meta: "공식 채널 하이라이트"
+  });
+
   Object.entries(richTeams).forEach(([teamId, rich]) => {
     if (!data.teams[teamId]) return;
     data.teams[teamId] = {
