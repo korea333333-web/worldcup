@@ -862,6 +862,18 @@ select option {
   overflow: hidden;
 }
 
+.group-card-clickable {
+  cursor: pointer;
+  transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
+}
+
+.group-card-clickable:hover,
+.group-card-clickable:focus-within {
+  border-color: rgba(245, 199, 94, 0.62);
+  box-shadow: 0 20px 54px rgba(0, 0, 0, 0.34), inset 0 0 34px rgba(245, 199, 94, 0.055);
+  transform: translateY(-2px);
+}
+
 .group-head {
   display: flex;
   justify-content: space-between;
@@ -1787,6 +1799,156 @@ select option {
   gap: 14px;
 }
 
+.group-emblem {
+  display: grid;
+  place-items: center;
+  width: 62px;
+  height: 62px;
+  color: #07100d;
+  background: linear-gradient(135deg, var(--gold), var(--teal));
+  border-radius: 8px;
+  font-size: 30px;
+  font-weight: 950;
+  box-shadow: 0 0 30px rgba(245, 199, 94, 0.22);
+}
+
+.group-dialog-hero {
+  display: grid;
+  grid-template-columns: 0.75fr 1.25fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.group-standing-list,
+.group-match-grid,
+.route-grid,
+.deep-route {
+  display: grid;
+  gap: 10px;
+}
+
+.group-standing-row {
+  display: grid;
+  grid-template-columns: 34px 40px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(174, 255, 211, 0.14);
+  border-radius: 8px;
+}
+
+.group-standing-row > strong {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  color: #07100d;
+  background: var(--gold);
+  border-radius: 999px;
+}
+
+.group-standing-row span {
+  color: #fff;
+  font-weight: 950;
+}
+
+.group-standing-row small {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.group-first-match {
+  display: grid;
+  gap: 12px;
+}
+
+.group-first-match h4 {
+  margin: 0;
+  color: #fff;
+  font-size: 24px;
+}
+
+.group-match-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.group-match-card {
+  min-height: 268px;
+}
+
+.route-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.route-card {
+  display: grid;
+  gap: 10px;
+  padding: 13px;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(174, 255, 211, 0.16);
+  border-radius: 8px;
+}
+
+.route-card h4 {
+  margin: 0;
+  color: #fff;
+}
+
+.route-card > strong {
+  color: var(--gold);
+}
+
+.route-card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.deep-route {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.deep-route-step {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 10px;
+  padding: 12px;
+  background:
+    linear-gradient(135deg, rgba(30, 232, 200, 0.09), transparent),
+    rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(174, 255, 211, 0.14);
+  border-radius: 8px;
+}
+
+.deep-route-step > span {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  color: #07100d;
+  background: linear-gradient(135deg, var(--teal), var(--gold));
+  border-radius: 999px;
+  font-weight: 950;
+}
+
+.deep-route-step strong {
+  display: block;
+  color: #fff;
+}
+
+.deep-route-step small,
+.deep-route-step p {
+  display: block;
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
 .empty-state {
   padding: 18px;
   color: var(--muted);
@@ -1828,6 +1990,7 @@ select option {
   .match-hero,
   .match-layout,
   .dialog-grid,
+  .group-dialog-hero,
   .scouting-hero {
     grid-template-columns: 1fr;
   }
@@ -1845,7 +2008,10 @@ select option {
 
   .schedule-strip,
   .round-odds.detail,
-  .match-record-grid {
+  .match-record-grid,
+  .deep-route,
+  .route-grid,
+  .group-match-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -1866,6 +2032,9 @@ select option {
 
   .summary-strip,
   .group-grid,
+  .group-match-grid,
+  .route-grid,
+  .deep-route,
   .team-grid,
   .player-grid,
   .video-grid,

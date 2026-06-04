@@ -359,7 +359,7 @@ function renderGroups() {
       .join("");
 
     return `
-      <article class="group-card">
+      <article class="group-card group-card-clickable" data-group-id="${escapeAttr(group.id)}">
         <header class="group-head">
           <h3>${escapeHtml(group.name)}</h3>
           <span class="badge sample">시나리오</span>
@@ -375,6 +375,7 @@ function renderGroups() {
     <div class="group-grid">${groupCards.join("")}</div>
   `;
   bindTeamButtons(views.groups);
+  bindGroupCards(views.groups);
 }
 
 function renderTeams() {
@@ -681,6 +682,158 @@ function openTeamDialog(teamId) {
   hydrateWikiPhotos();
 }
 
+function openGroupDialog(groupId) {
+  const group = DATA.groups.find((item) => item.id === groupId);
+  if (!group) return;
+
+  const dialog = document.querySelector("#teamDialog");
+  const matches = window.GROUP_UTILS.buildGroupMatches(group, DATA.matchSchedule?.matches || []);
+  const table = window.GROUP_UTILS.buildProjectedGroupTable(group, DATA.teams);
+  const routes = window.GROUP_UTILS.buildGroupRouteSlots(group, table);
+  const deepRoute = window.GROUP_UTILS.buildDeepRoute();
+
+  dialog.innerHTML = `
+    <div class="dialog-inner">
+      <header class="dialog-head scouting-head">
+        <div class="dialog-title">
+          <div class="group-emblem">${escapeHtml(group.id)}</div>
+          <div>
+            <p class="eyebrow">${escapeHtml(group.name)} ROUTE MAP</p>
+            <h2>${escapeHtml(group.name)}</h2>
+            <p class="source-note">조별 첫 경기, 경기장, 한국 시간, 그리고 현재 예상 순위 기준의 다음 라운드 경로입니다.</p>
+          </div>
+        </div>
+        <button class="close-button" type="button">닫기</button>
+      </header>
+
+      <section class="group-dialog-hero">
+        <div class="panel">
+          <h3>예상 순위</h3>
+          <div class="group-standing-list">
+            ${table.map(groupStandingRow).join("")}
+          </div>
+        </div>
+        <div class="panel">
+          <h3>첫 경기</h3>
+          ${matches[0] ? groupMatchFeature(matches[0]) : `<div class="empty-state">이 조의 일정이 아직 연결되지 않았습니다.</div>`}
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-heading compact-heading">
+          <div>
+            <h3>조별 경기 일정</h3>
+            <p>각 경기의 상대, 경기장, 개최 도시, 현지 시간과 한국 시간을 같이 표시합니다.</p>
+          </div>
+        </div>
+        <div class="group-match-grid">
+          ${matches.map(groupMatchCard).join("") || `<div class="empty-state">연결된 조별 일정이 없습니다.</div>`}
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-heading compact-heading">
+          <div>
+            <h3>이기면 어디로 가나</h3>
+            <p>현재 앱의 예상 순위 기준으로 32강 슬롯을 보여줍니다. 실제 결과가 들어오면 승자 기준으로 자동 교체할 수 있습니다.</p>
+          </div>
+        </div>
+        <div class="route-grid">
+          ${routes.map(routeCard).join("")}
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-heading compact-heading">
+          <div>
+            <h3>Road to Final</h3>
+            <p>32강을 통과한 팀들이 이후 어떤 라운드에서 다시 만나는지 단계별로 표시합니다.</p>
+          </div>
+        </div>
+        <div class="deep-route">
+          ${deepRoute.map(deepRouteStep).join("")}
+        </div>
+      </section>
+    </div>
+  `;
+
+  dialog.querySelector(".close-button").addEventListener("click", () => dialog.close());
+  if (typeof dialog.showModal === "function") {
+    dialog.showModal();
+  } else {
+    dialog.setAttribute("open", "");
+  }
+}
+
+function groupStandingRow(item) {
+  return `
+    <article class="group-standing-row">
+      <strong>${item.rank}</strong>
+      ${flag(item.team, "flag-img")}
+      <div>
+        <span>${escapeHtml(item.team.nameKo)}</span>
+        <small>${escapeHtml(item.label)} · ${item.team.advance}%</small>
+      </div>
+    </article>
+  `;
+}
+
+function groupMatchFeature(matchItem) {
+  const venue = venueFor(matchItem.venueId);
+  const teamA = matchItem.teamA ? DATA.teams[matchItem.teamA] : null;
+  const teamB = matchItem.teamB ? DATA.teams[matchItem.teamB] : null;
+  return `
+    <article class="group-first-match">
+      <span class="badge ${matchItem.status === "official" ? "top" : "sample"}">${scheduleStatusLabel(matchItem.status)}</span>
+      <h4>${escapeHtml(matchTitle(matchItem, teamA, teamB))}</h4>
+      <div class="fixture-teams">
+        ${fixtureTeam(teamA, "TBD")}
+        <span>VS</span>
+        ${fixtureTeam(teamB, "TBD")}
+      </div>
+      <div class="schedule-info">
+        <div><span>한국</span><strong>${escapeHtml(matchItem.kstDateTime)} KST</strong></div>
+        <div><span>현지</span><strong>${escapeHtml(matchItem.date)} ${escapeHtml(matchItem.localTime)}</strong></div>
+        <div><span>경기장</span><strong>${escapeHtml(venue?.name || "Venue TBD")}</strong></div>
+        <div><span>도시</span><strong>${escapeHtml(venue?.cityKo || venue?.countryKo || "TBD")}</strong></div>
+      </div>
+    </article>
+  `;
+}
+
+function groupMatchCard(matchItem) {
+  return scheduleCard(matchItem).replace("schedule-card", "schedule-card group-match-card");
+}
+
+function routeCard(routeItem) {
+  return `
+    <article class="route-card">
+      <span class="badge ${routeItem.status === "공식 슬롯" ? "top" : "sample"}">${escapeHtml(routeItem.status)}</span>
+      <h4>${escapeHtml(routeItem.seed)} · ${escapeHtml(routeItem.team?.nameKo || "팀 미정")}</h4>
+      <strong>${escapeHtml(routeItem.stage)} ${escapeHtml(routeItem.matchLabel)}</strong>
+      <p>${escapeHtml(routeItem.opponent)}</p>
+      <div class="schedule-info">
+        <div><span>날짜</span><strong>${escapeHtml(routeItem.date)}</strong></div>
+        <div><span>경기장</span><strong>${escapeHtml(routeItem.venue)}</strong></div>
+        <div><span>도시</span><strong>${escapeHtml(routeItem.city)}</strong></div>
+      </div>
+    </article>
+  `;
+}
+
+function deepRouteStep(routeItem, index) {
+  return `
+    <article class="deep-route-step">
+      <span>${index + 1}</span>
+      <div>
+        <strong>${escapeHtml(routeItem.stage)} · ${escapeHtml(routeItem.matchLabel)}</strong>
+        <small>${escapeHtml(routeItem.date)} · ${escapeHtml(routeItem.venue)} · ${escapeHtml(routeItem.city)}</small>
+        <p>${escapeHtml(routeItem.opponent)}</p>
+      </div>
+    </article>
+  `;
+}
+
 function teamHubCard(team) {
   const active = state.teamCardTabs[team.id] || "overview";
   return `
@@ -928,6 +1081,15 @@ function boostOdds(source, factor) {
 function bindTeamButtons(root) {
   root.querySelectorAll(".open-team, .team-row").forEach((button) => {
     button.addEventListener("click", () => openTeamDialog(button.dataset.teamId));
+  });
+}
+
+function bindGroupCards(root) {
+  root.querySelectorAll(".group-card-clickable").forEach((card) => {
+    card.addEventListener("click", (event) => {
+      if (event.target.closest(".team-row")) return;
+      openGroupDialog(card.dataset.groupId);
+    });
   });
 }
 
