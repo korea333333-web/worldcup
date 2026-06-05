@@ -4,9 +4,9 @@ window.WORLD_CUP_DATA = {
     teams: 48,
     groups: 12,
     stage: "개막 전 리서치",
-    updatedAt: "2026-06-03",
+    updatedAt: "2026-06-05",
     formatNote: "12개 조 4팀. 각 조 1, 2위와 3위 중 상위 8팀이 32강에 진출합니다.",
-    scenarioNote: "이 프로토타입의 조 편성/승률은 UI 검증용 시나리오입니다. 공식 확정 데이터는 출처 확인 후 교체합니다."
+    scenarioNote: "2026-06-05 기준 FIFA 공식 조 추첨과 A조 일정은 반영했고, 나머지 일부 조 편성/승률은 여전히 UI 검증용 시나리오입니다."
   },
   sources: [
     {
@@ -14,7 +14,7 @@ window.WORLD_CUP_DATA = {
       title: "FIFA 2026 조별리그와 32강 진출 규칙",
       publisher: "FIFA",
       url: "https://www.fifa.com/en/articles/groups-how-teams-qualify-tie-breakers",
-      checkedAt: "2026-06-03",
+      checkedAt: "2026-06-05",
       reliability: "official"
     },
     {
@@ -22,7 +22,7 @@ window.WORLD_CUP_DATA = {
       title: "FIFA 2026 본선 진출팀 목록",
       publisher: "FIFA",
       url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/world-cup-2026-who-has-qualified",
-      checkedAt: "2026-06-03",
+      checkedAt: "2026-06-05",
       reliability: "official"
     },
     {
@@ -30,7 +30,31 @@ window.WORLD_CUP_DATA = {
       title: "FIFA 2026 최종 조 추첨 절차와 포트",
       publisher: "FIFA",
       url: "https://inside.fifa.com/media-releases/procedures-final-draw-world-cup-2026-revealed",
-      checkedAt: "2026-06-03",
+      checkedAt: "2026-06-05",
+      reliability: "official"
+    },
+    {
+      id: "fifa-group-a",
+      title: "FIFA 월드컵 2026 A조 집중 분석",
+      publisher: "FIFA",
+      url: "https://www.fifa.com/ko/articles/group-a-focus-teams-fixtures-standings-ko",
+      checkedAt: "2026-06-05",
+      reliability: "official"
+    },
+    {
+      id: "fifa-korea-profile",
+      title: "대한민국 월드컵 2026 팀 프로필과 일정",
+      publisher: "FIFA",
+      url: "https://www.fifa.com/en/articles/korea-republic-team-profile-history",
+      checkedAt: "2026-06-05",
+      reliability: "official"
+    },
+    {
+      id: "fifa-czechia-profile",
+      title: "체코 월드컵 2026 팀 프로필과 일정",
+      publisher: "FIFA",
+      url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/czechia-team-profile-history",
+      checkedAt: "2026-06-05",
       reliability: "official"
     },
     {
@@ -38,17 +62,17 @@ window.WORLD_CUP_DATA = {
       title: "선수별 유튜브 영상은 큐레이션 링크로 시작",
       publisher: "YouTube",
       url: "https://www.youtube.com",
-      checkedAt: "2026-06-03",
+      checkedAt: "2026-06-05",
       reliability: "curated"
     }
   ],
   groups: [
-    { id: "A", name: "Group A", teams: ["mexico", "south-africa", "korea", "norway"] },
+    { id: "A", name: "Group A", teams: ["mexico", "south-africa", "korea", "czechia"] },
     { id: "B", name: "Group B", teams: ["canada", "japan", "ghana", "switzerland"] },
     { id: "C", name: "Group C", teams: ["usa", "australia", "curacao", "croatia"] },
     { id: "D", name: "Group D", teams: ["spain", "jordan", "morocco", "paraguay"] },
     { id: "E", name: "Group E", teams: ["argentina", "uzbekistan", "sweden", "senegal"] },
-    { id: "F", name: "Group F", teams: ["france", "qatar", "czechia", "colombia"] },
+    { id: "F", name: "Group F", teams: ["france", "qatar", "norway", "colombia"] },
     { id: "G", name: "Group G", teams: ["england", "panama", "tunisia", "turkiye"] },
     { id: "H", name: "Group H", teams: ["brazil", "haiti", "austria", "egypt"] },
     { id: "I", name: "Group I", teams: ["portugal", "cabo-verde", "uruguay", "saudi-arabia"] },
@@ -57,7 +81,7 @@ window.WORLD_CUP_DATA = {
     { id: "L", name: "Group L", teams: ["germany", "dr-congo", "iran", "ivory-coast"] }
   ],
   teams: {
-    "mexico": team("mexico", "멕시코", "Mexico", "mx", "CONCACAF", "하이메 로사노", 15, "빠른 전환과 홈 이점이 강한 팀", "측면 압박", "라인 뒤 공간 관리", "Santiago Gimenez", "FW", "Feyenoord", 71, "Top 2"),
+    "mexico": team("mexico", "멕시코", "Mexico", "mx", "CONCACAF", "하비에르 아기레", 15, "빠른 전환과 홈 이점이 강한 팀", "측면 압박", "라인 뒤 공간 관리", "Santiago Gimenez", "FW", "Feyenoord", 71, "Top 2"),
     "south-africa": team("south-africa", "남아공", "South Africa", "za", "CAF", "우고 브로스", 57, "개막전 분위기를 타면 까다로운 활동량 팀", "중원 압박", "득점 안정성", "Percy Tau", "FW", "Al Ahly", 42, "3rd race"),
     "korea": team("korea", "대한민국", "Korea Republic", "kr", "AFC", "홍명보", 23, "손흥민을 중심으로 전환과 침투가 강한 팀", "전방 결정력", "후방 빌드업 압박 대처", "Son Heung-min", "FW", "Tottenham Hotspur", 63, "3rd race", true),
     "norway": team("norway", "노르웨이", "Norway", "no", "UEFA", "스톨레 솔바켄", 33, "엘링 홀란의 박스 장악력이 모든 예측을 흔든다", "최전방 파괴력", "라인 간 수비", "Erling Haaland", "FW", "Manchester City", 67, "Top 2"),
@@ -84,7 +108,7 @@ window.WORLD_CUP_DATA = {
 
     "france": team("france", "프랑스", "France", "fr", "UEFA", "디디에 데샹", 2, "스쿼드 깊이와 음바페의 속도가 압도적이다", "전방 속도", "중원 조합", "Kylian Mbappe", "FW", "Real Madrid", 88, "Top 2"),
     "qatar": team("qatar", "카타르", "Qatar", "qa", "AFC", "마르케스 로페스", 34, "아시안컵 경험과 조직력이 강한 팀", "조직력", "강팀 상대 압박", "Akram Afif", "LW", "Al Sadd", 45, "3rd race"),
-    "czechia": team("czechia", "체코", "Czechia", "cz", "UEFA", "이반 하셰크", 36, "피지컬과 세트피스가 안정적인 유럽 팀", "세트피스", "속도전", "Patrik Schick", "FW", "Bayer Leverkusen", 52, "3rd race"),
+    "czechia": team("czechia", "체코", "Czechia", "cz", "UEFA", "미로슬라프 코우베크", 36, "피지컬과 세트피스가 안정적인 유럽 팀", "세트피스", "속도전", "Patrik Schick", "FW", "Bayer Leverkusen", 52, "3rd race"),
     "colombia": team("colombia", "콜롬비아", "Colombia", "co", "CONMEBOL", "네스토르 로렌소", 13, "기술과 강도가 함께 살아난 남미 다크호스", "2선 창의성", "수비 뒷공간", "Luis Diaz", "LW", "Liverpool", 73, "Top 2"),
 
     "england": team("england", "잉글랜드", "England", "gb-eng", "UEFA", "개러스 사우스게이트", 4, "벨링엄과 케인을 중심으로 우승권 전력이 탄탄하다", "중앙 퀄리티", "압박 회피", "Jude Bellingham", "AM", "Real Madrid", 82, "Top 2"),
@@ -186,7 +210,7 @@ function prediction(teamA, teamB, a, draw, b, sourceType, explanation) {
     teamBWin: b,
     sourceType,
     confidence: sourceType === "ranking" ? "medium" : "low",
-    updatedAt: "2026-06-03",
+    updatedAt: "2026-06-05",
     explanation
   };
 }

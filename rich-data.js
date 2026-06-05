@@ -7,9 +7,9 @@
   const richTeams = {
     korea: {
       styleTags: ["전환 공격", "측면 침투", "센터백 빌드업", "왼발 플레이메이킹"],
-      watchMatch: "vs 멕시코",
+      watchMatch: "vs 체코",
       dataStatus: "선수단 리서치 초안",
-      lastChecked: "2026-06-03",
+      lastChecked: "2026-06-05",
       ratings: { attack: 78, midfield: 74, defense: 76, speed: 82, experience: 73 },
       roundOdds: odds([63, 34, 14, 6, 3, 1], [78, 46, 22, 10, 5, 2], [55, 28, 10, 4, 2, 1], "한국 팬 기대와 모델 전망을 분리한 샘플입니다."),
       tacticalNotes: [
@@ -99,9 +99,9 @@
     usa: {
       styleTags: ["활동량", "전방 압박", "젊은 코어", "측면 속도"],
       ratings: { attack: 78, midfield: 77, defense: 73, speed: 83, experience: 72 },
-      watchMatch: "vs 크로아티아",
+      watchMatch: "vs 독일",
       dataStatus: "선수단 리서치 초안",
-      lastChecked: "2026-06-03",
+      lastChecked: "2026-06-05",
       roundOdds: odds([74, 43, 19, 8, 4, 2], [84, 55, 27, 13, 6, 3], [70, 39, 16, 7, 3, 1], "개최국 기대치가 반영된 미국 전망 샘플입니다."),
       tacticalNotes: ["풀리식과 발로건이 공격의 깊이를 만들고, 맥케니와 무사가 중원 에너지를 공급합니다."],
       players: [

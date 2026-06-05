@@ -3,14 +3,38 @@
   if (!data) return;
 
   data.dailyMatchHub = {
-    updatedAt: "2026-06-04",
+    updatedAt: "2026-06-05",
     mode: "warmup",
     title: "오늘의 매치 허브",
     kicker: "WORLD CUP WARM-UP",
     summary: "월드컵 개막 전에는 각 국가대표의 친선경기 결과와 컨디션 리포트를 보여주고, 대회가 시작되면 실제 경기 결과와 하이라이트 중심으로 자동 전환합니다.",
-    sourceNote: "친선경기 결과는 확인된 보도와 공식 일정이 확보되는 항목부터 업데이트합니다.",
-    featuredMatchId: "warmup-kor-tri-2026-05-31",
+    sourceNote: "친선경기 결과는 Korea JoongAng Daily, U.S. Soccer, FIFA 일정 페이지처럼 출처가 분명한 항목부터 반영합니다.",
+    featuredMatchId: "warmup-kor-slv-2026-06-04",
     matches: [
+      {
+        id: "warmup-kor-slv-2026-06-04",
+        status: "result",
+        phaseLabel: "친선경기 결과",
+        competition: "Pre-World Cup Friendly",
+        teamA: "korea",
+        teamBName: "엘살바도르",
+        teamBFlag: "sv",
+        score: "1 - 0",
+        dateLabel: "2026-06-04 KST",
+        localTimeLabel: "2026-06-03 19:00 local",
+        venue: "BYU South Field",
+        city: "Provo, Utah",
+        headline: "한국, 엘살바도르전 1-0 승리로 월드컵 직전 튠업 마무리",
+        recap: "이동경의 프리킥 결승골로 한국이 2연승으로 친선 일정을 마쳤습니다. 대표팀은 이후 과달라하라로 이동해 체코와의 조별리그 1차전을 준비합니다.",
+        scorers: ["이동경 57분"],
+        notes: ["조유민 이탈 뒤 수비 조합 점검", "이강인 합류 후 컨디션 조율", "2연승으로 베이스캠프 이동"],
+        highlightUrl: "https://www.youtube.com/results?search_query=Korea+Republic+El+Salvador+2026+highlights",
+        source: {
+          label: "Korea JoongAng Daily",
+          url: "https://koreajoongangdaily.joins.com/news/2026-06-04/sports/football/Korea-beats-El-Salvador-in-final-friendly-before-World-Cup/2608530"
+        },
+        modelPick: { teamA: 61, draw: 24, teamB: 15 }
+      },
       {
         id: "warmup-kor-tri-2026-05-31",
         status: "result",
@@ -63,25 +87,25 @@
       },
       {
         id: "warmup-usa-sen-2026-05-31",
-        status: "monitoring",
-        phaseLabel: "하이라이트 대기",
+        status: "result",
+        phaseLabel: "친선경기 결과",
         competition: "Pre-World Cup Friendly",
         teamA: "usa",
         teamBName: "세네갈",
         teamBFlag: "sn",
-        score: "업데이트 대기",
-        dateLabel: "결과 확인 중",
-        localTimeLabel: "현지 경기 후 업데이트",
-        venue: "TBD",
-        city: "United States",
-        headline: "미국 대표팀 워밍업 매치 모니터링",
-        recap: "공식 결과와 신뢰 가능한 하이라이트 링크가 확인되면 오늘의 매치 허브에 반영합니다.",
-        scorers: ["득점자 확인 대기"],
-        notes: ["선발 명단 확인 대기", "교체 및 경기 통계 확인 대기"],
-        highlightUrl: "https://www.youtube.com/results?search_query=USA+Senegal+2026+friendly+highlights",
+        score: "3 - 2",
+        dateLabel: "2026-06-01 KST",
+        localTimeLabel: "2026-05-31 15:30 local",
+        venue: "Bank of America Stadium",
+        city: "Charlotte, North Carolina",
+        headline: "미국, 세네갈에 3-2 승리로 홈 월드컵 리허설 순항",
+        recap: "세르지뇨 데스트, 크리스천 풀리식, 폴라린 발로건의 득점으로 미국이 세네갈을 3-2로 꺾었습니다. U.S. Soccer 공식 리캡에서 선발, 교체, 경기 스탯까지 확인됐습니다.",
+        scorers: ["세르지뇨 데스트 7분", "크리스천 풀리식 20분", "폴라린 발로건 63분"],
+        notes: ["선발: Turner; Dest, McKenzie, Ream, Robinson; Adams, Berhalter; Freeman, Reyna, Pulisic; Pepi", "슈팅 15-7, 유효슈팅 5-3", "Chris Richards는 발목 관리로 원정 제외"],
+        highlightUrl: "https://www.ussoccer.com/stories/2026/05/usmnt/match-recap-goals-highlights-vs-senegal",
         source: {
-          label: "YouTube search",
-          url: "https://www.youtube.com/results?search_query=USA+Senegal+2026+friendly+highlights"
+          label: "U.S. Soccer Match Recap",
+          url: "https://www.ussoccer.com/stories/2026/05/usmnt/match-recap-goals-highlights-vs-senegal"
         },
         modelPick: { teamA: 44, draw: 27, teamB: 29 }
       },
