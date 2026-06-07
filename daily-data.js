@@ -3,13 +3,13 @@
   if (!data) return;
 
   data.dailyMatchHub = {
-    updatedAt: "2026-06-05",
-    mode: "warmup",
-    title: "오늘의 매치 허브",
-    kicker: "WORLD CUP WARM-UP",
-    summary: "월드컵 개막 전에는 각 국가대표의 친선경기 결과와 컨디션 리포트를 보여주고, 대회가 시작되면 실제 경기 결과와 하이라이트 중심으로 자동 전환합니다.",
-    sourceNote: "친선경기 결과는 Korea JoongAng Daily, U.S. Soccer, FIFA 일정 페이지처럼 출처가 분명한 항목부터 반영합니다.",
-    featuredMatchId: "warmup-kor-slv-2026-06-04",
+    updatedAt: "2026-06-08",
+    mode: "countdown",
+    title: "오늘의 월드컵 허브",
+    kicker: "WORLD CUP COUNTDOWN",
+    summary: "한국 시간 2026년 6월 8일 현재 월드컵 본경기는 아직 시작되지 않았습니다. 친선경기 최종 점검과 개막전 공식 슬롯을 함께 보여주고, 6월 12일 KST부터 실제 경기 결과 허브로 전환합니다.",
+    sourceNote: "친선경기 결과는 Korea JoongAng Daily, U.S. Soccer를, 개막 일정과 최종 엔트리는 FIFA 공식 일정/스쿼드 공지를 기준으로 확인합니다.",
+    featuredMatchId: "wc-opener-mex-rsa-2026-06-12",
     matches: [
       {
         id: "warmup-kor-slv-2026-06-04",

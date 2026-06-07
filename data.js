@@ -4,9 +4,9 @@ window.WORLD_CUP_DATA = {
     teams: 48,
     groups: 12,
     stage: "개막 전 리서치",
-    updatedAt: "2026-06-05",
+    updatedAt: "2026-06-08",
     formatNote: "12개 조 4팀. 각 조 1, 2위와 3위 중 상위 8팀이 32강에 진출합니다.",
-    scenarioNote: "2026-06-05 기준 FIFA 공식 조 추첨과 A조 일정은 반영했고, 나머지 일부 조 편성/승률은 여전히 UI 검증용 시나리오입니다."
+    scenarioNote: "2026-06-08 기준 FIFA 공식 조 편성과 초반 조별리그 일정을 반영했습니다. 승률과 일부 전력 평가는 여전히 UI 검증용 시나리오입니다."
   },
   sources: [
     {
@@ -54,7 +54,15 @@ window.WORLD_CUP_DATA = {
       title: "체코 월드컵 2026 팀 프로필과 일정",
       publisher: "FIFA",
       url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/czechia-team-profile-history",
-      checkedAt: "2026-06-05",
+      checkedAt: "2026-06-08",
+      reliability: "official"
+    },
+    {
+      id: "fifa-squads-confirmed",
+      title: "FIFA 월드컵 2026 최종 엔트리 확정",
+      publisher: "FIFA",
+      url: "https://www.fifa.com/en/articles/fifa-world-cup-2026-squads-confirmed",
+      checkedAt: "2026-06-08",
       reliability: "official"
     },
     {
@@ -62,23 +70,23 @@ window.WORLD_CUP_DATA = {
       title: "선수별 유튜브 영상은 큐레이션 링크로 시작",
       publisher: "YouTube",
       url: "https://www.youtube.com",
-      checkedAt: "2026-06-05",
+      checkedAt: "2026-06-08",
       reliability: "curated"
     }
   ],
   groups: [
     { id: "A", name: "Group A", teams: ["mexico", "south-africa", "korea", "czechia"] },
-    { id: "B", name: "Group B", teams: ["canada", "japan", "ghana", "switzerland"] },
-    { id: "C", name: "Group C", teams: ["usa", "australia", "curacao", "croatia"] },
-    { id: "D", name: "Group D", teams: ["spain", "jordan", "morocco", "paraguay"] },
-    { id: "E", name: "Group E", teams: ["argentina", "uzbekistan", "sweden", "senegal"] },
-    { id: "F", name: "Group F", teams: ["france", "qatar", "norway", "colombia"] },
-    { id: "G", name: "Group G", teams: ["england", "panama", "tunisia", "turkiye"] },
-    { id: "H", name: "Group H", teams: ["brazil", "haiti", "austria", "egypt"] },
-    { id: "I", name: "Group I", teams: ["portugal", "cabo-verde", "uruguay", "saudi-arabia"] },
-    { id: "J", name: "Group J", teams: ["netherlands", "new-zealand", "algeria", "bosnia"] },
-    { id: "K", name: "Group K", teams: ["belgium", "iraq", "ecuador", "scotland"] },
-    { id: "L", name: "Group L", teams: ["germany", "dr-congo", "iran", "ivory-coast"] }
+    { id: "B", name: "Group B", teams: ["canada", "bosnia", "qatar", "switzerland"] },
+    { id: "C", name: "Group C", teams: ["brazil", "haiti", "morocco", "scotland"] },
+    { id: "D", name: "Group D", teams: ["usa", "australia", "paraguay", "turkiye"] },
+    { id: "E", name: "Group E", teams: ["ivory-coast", "ecuador", "germany", "curacao"] },
+    { id: "F", name: "Group F", teams: ["netherlands", "japan", "sweden", "tunisia"] },
+    { id: "G", name: "Group G", teams: ["belgium", "egypt", "iran", "new-zealand"] },
+    { id: "H", name: "Group H", teams: ["spain", "cabo-verde", "saudi-arabia", "uruguay"] },
+    { id: "I", name: "Group I", teams: ["france", "senegal", "iraq", "norway"] },
+    { id: "J", name: "Group J", teams: ["argentina", "algeria", "austria", "jordan"] },
+    { id: "K", name: "Group K", teams: ["portugal", "colombia", "uzbekistan", "dr-congo"] },
+    { id: "L", name: "Group L", teams: ["england", "croatia", "ghana", "panama"] }
   ],
   teams: {
     "mexico": team("mexico", "멕시코", "Mexico", "mx", "CONCACAF", "하비에르 아기레", 15, "빠른 전환과 홈 이점이 강한 팀", "측면 압박", "라인 뒤 공간 관리", "Santiago Gimenez", "FW", "Feyenoord", 71, "Top 2"),
@@ -88,7 +96,7 @@ window.WORLD_CUP_DATA = {
 
     "canada": team("canada", "캐나다", "Canada", "ca", "CONCACAF", "제시 마시", 31, "속도와 전진성이 뚜렷한 공동 개최국", "풀백 전진", "중원 점유 안정성", "Alphonso Davies", "LB", "Bayern Munich", 58, "3rd race"),
     "japan": team("japan", "일본", "Japan", "jp", "AFC", "모리야스 하지메", 18, "조직적인 압박과 2선 퀄리티가 좋은 아시아 강호", "조직력", "피지컬 매치업", "Takefusa Kubo", "AM", "Real Sociedad", 68, "Top 2"),
-    "ghana": team("ghana", "가나", "Ghana", "gh", "CAF", "오토 아도", 68, "개인 능력과 템포 변화가 있는 서아프리카 팀", "전환 속도", "수비 집중력", "Mohammed Kudus", "AM", "West Ham United", 39, "At risk"),
+    "ghana": team("ghana", "가나", "Ghana", "gh", "CAF", "카를루스 케이로스", 68, "개인 능력과 템포 변화가 있는 서아프리카 팀", "전환 속도", "수비 집중력", "Mohammed Kudus", "AM", "West Ham United", 39, "At risk"),
     "switzerland": team("switzerland", "스위스", "Switzerland", "ch", "UEFA", "무라트 야킨", 19, "토너먼트 운영 능력이 좋은 균형형 팀", "경기 관리", "측면 속도", "Granit Xhaka", "CM", "Bayer Leverkusen", 70, "Top 2"),
 
     "usa": team("usa", "미국", "United States", "us", "CONCACAF", "마우리시오 포체티노", 16, "젊은 코어와 홈 이점이 만나는 팀", "강한 활동량", "마무리 기복", "Christian Pulisic", "RW", "AC Milan", 74, "Top 2"),
@@ -104,7 +112,7 @@ window.WORLD_CUP_DATA = {
     "argentina": team("argentina", "아르헨티나", "Argentina", "ar", "CONMEBOL", "리오넬 스칼로니", 1, "챔피언의 경기 운영과 메시의 영향력이 여전히 핵심", "경기 관리", "세대교체 부담", "Lionel Messi", "FW", "Inter Miami", 86, "Top 2"),
     "uzbekistan": team("uzbekistan", "우즈베키스탄", "Uzbekistan", "uz", "AFC", "스레치코 카타네츠", 52, "첫 본선에서 단단한 수비와 젊은 재능을 앞세운다", "수비 집중", "대회 경험", "Eldor Shomurodov", "FW", "Cagliari", 37, "At risk"),
     "sweden": team("sweden", "스웨덴", "Sweden", "se", "UEFA", "욘 달 토마손", 28, "전방 재능과 피지컬이 살아나면 위험하다", "박스 안 위협", "수비 전환", "Alexander Isak", "FW", "Newcastle United", 59, "3rd race"),
-    "senegal": team("senegal", "세네갈", "Senegal", "sn", "CAF", "알리우 시세", 17, "강한 피지컬과 개인 전진 능력을 갖춘 아프리카 강호", "피지컬", "밀집 수비 공략", "Sadio Mane", "FW", "Al Nassr", 62, "Top 2"),
+    "senegal": team("senegal", "세네갈", "Senegal", "sn", "CAF", "파프 티아우", 17, "강한 피지컬과 개인 전진 능력을 갖춘 아프리카 강호", "피지컬", "밀집 수비 공략", "Sadio Mane", "FW", "Al Nassr", 62, "Top 2"),
 
     "france": team("france", "프랑스", "France", "fr", "UEFA", "디디에 데샹", 2, "스쿼드 깊이와 음바페의 속도가 압도적이다", "전방 속도", "중원 조합", "Kylian Mbappe", "FW", "Real Madrid", 88, "Top 2"),
     "qatar": team("qatar", "카타르", "Qatar", "qa", "AFC", "마르케스 로페스", 34, "아시안컵 경험과 조직력이 강한 팀", "조직력", "강팀 상대 압박", "Akram Afif", "LW", "Al Sadd", 45, "3rd race"),
@@ -116,7 +124,7 @@ window.WORLD_CUP_DATA = {
     "tunisia": team("tunisia", "튀니지", "Tunisia", "tn", "CAF", "몽데르 케바이에르", 46, "타이트한 수비와 경기 흐름 제어가 장점", "수비 밀도", "창의성", "Hannibal Mejbri", "CM", "Burnley", 35, "At risk"),
     "turkiye": team("turkiye", "튀르키예", "Turkiye", "tr", "UEFA", "빈첸초 몬텔라", 27, "젊은 기술자들이 많아 경기 변수가 크다", "2선 기술", "수비 안정성", "Arda Guler", "AM", "Real Madrid", 55, "3rd race"),
 
-    "brazil": team("brazil", "브라질", "Brazil", "br", "CONMEBOL", "도리바우 주니오르", 5, "개인 돌파와 전방 압박의 상한선이 높다", "개인 능력", "중원 밸런스", "Vinicius Junior", "LW", "Real Madrid", 80, "Top 2"),
+    "brazil": team("brazil", "브라질", "Brazil", "br", "CONMEBOL", "카를로 안첼로티", 5, "개인 돌파와 전방 압박의 상한선이 높다", "개인 능력", "중원 밸런스", "Vinicius Junior", "LW", "Real Madrid", 80, "Top 2"),
     "haiti": team("haiti", "아이티", "Haiti", "ht", "CONCACAF", "세바스티앙 미녜", 83, "속도 있는 역습으로 이변을 노린다", "역습 속도", "수비 지속성", "Duckens Nazon", "FW", "Kayserispor", 26, "At risk"),
     "austria": team("austria", "오스트리아", "Austria", "at", "UEFA", "랄프 랑닉", 22, "강한 압박과 조직적인 전진이 특징", "압박 강도", "마무리", "Marcel Sabitzer", "CM", "Borussia Dortmund", 60, "3rd race"),
     "egypt": team("egypt", "이집트", "Egypt", "eg", "CAF", "호삼 하산", 32, "살라 중심의 역습과 결정력이 승부처", "전방 결정력", "수비 라인", "Mohamed Salah", "RW", "Liverpool", 57, "3rd race"),
@@ -131,8 +139,8 @@ window.WORLD_CUP_DATA = {
     "algeria": team("algeria", "알제리", "Algeria", "dz", "CAF", "블라디미르 페트코비치", 37, "기술 좋은 2선과 북아프리카 특유의 강도가 있다", "개인 기술", "수비 집중", "Riyad Mahrez", "RW", "Al Ahli", 53, "3rd race"),
     "bosnia": team("bosnia", "보스니아", "Bosnia and Herzegovina", "ba", "UEFA", "세르게이 바르바레즈", 43, "경험 있는 공격 자원을 활용하는 팀", "박스 안 결정력", "수비 속도", "Edin Dzeko", "FW", "Fenerbahce", 36, "At risk"),
 
-    "belgium": team("belgium", "벨기에", "Belgium", "be", "UEFA", "도메니코 테데스코", 8, "데브라위너의 전진 패스와 세대교체가 공존한다", "찬스 창출", "수비 뒷공간", "Kevin De Bruyne", "AM", "Manchester City", 78, "Top 2"),
-    "iraq": team("iraq", "이라크", "Iraq", "iq", "AFC", "헤수스 카사스", 55, "긴 예선 여정을 통과한 단단한 팀", "집중력", "득점 루트", "Ali Al-Hamadi", "FW", "Ipswich Town", 32, "At risk"),
+    "belgium": team("belgium", "벨기에", "Belgium", "be", "UEFA", "루디 가르시아", 8, "데브라위너의 전진 패스와 세대교체가 공존한다", "찬스 창출", "수비 뒷공간", "Kevin De Bruyne", "AM", "Manchester City", 78, "Top 2"),
+    "iraq": team("iraq", "이라크", "Iraq", "iq", "AFC", "그레이엄 아널드", 55, "긴 예선 여정을 통과한 단단한 팀", "집중력", "득점 루트", "Ali Al-Hamadi", "FW", "Ipswich Town", 32, "At risk"),
     "ecuador": team("ecuador", "에콰도르", "Ecuador", "ec", "CONMEBOL", "세바스티안 베카세세", 24, "운동능력과 전방 압박이 좋은 남미 팀", "피지컬", "경험 관리", "Moises Caicedo", "CM", "Chelsea", 61, "3rd race"),
     "scotland": team("scotland", "스코틀랜드", "Scotland", "gb-sct", "UEFA", "스티브 클라크", 39, "중원 에너지와 왼쪽 라인의 전개가 강점", "중원 에너지", "득점력", "Scott McTominay", "CM", "Napoli", 47, "3rd race"),
 
@@ -170,7 +178,7 @@ function team(id, nameKo, nameEn, flagCode, confederation, coach, rank, summary,
     status,
     koreaFocus,
     form: rank <= 10 ? "elite" : rank <= 30 ? "strong" : rank <= 55 ? "volatile" : "underdog",
-    sources: ["fifa-qualified", "fifa-draw-procedure", "youtube-curated"],
+    sources: ["fifa-qualified", "fifa-draw-procedure", "fifa-squads-confirmed", "youtube-curated"],
     players: [
       {
         id: playerId,
@@ -210,7 +218,7 @@ function prediction(teamA, teamB, a, draw, b, sourceType, explanation) {
     teamBWin: b,
     sourceType,
     confidence: sourceType === "ranking" ? "medium" : "low",
-    updatedAt: "2026-06-05",
+    updatedAt: "2026-06-08",
     explanation
   };
 }
