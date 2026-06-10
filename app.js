@@ -77,6 +77,7 @@ function renderMatchHero() {
       <div class="hero-source-line">
         <span>${escapeHtml(featured.phaseLabel)}</span>
         <a href="${escapeAttr(featured.source.url)}" target="_blank" rel="noreferrer">${escapeHtml(featured.source.label)}</a>
+        ${dailySourceMeta(featured.source)}
       </div>
     </div>
     <article class="feature-match-card" data-match-id="${escapeAttr(featured.id)}">
@@ -112,6 +113,15 @@ function renderMatchHero() {
 
   bindVoteButtons(target);
   loadVoteSummary(featured.id, featured);
+}
+
+function dailySourceMeta(source) {
+  if (!source || (!source.checkedAt && !source.reliability)) return "";
+
+  const parts = [];
+  if (source.reliability) parts.push(source.reliability);
+  if (source.checkedAt) parts.push(`확인 ${source.checkedAt}`);
+  return `<small>${escapeHtml(parts.join(" · "))}</small>`;
 }
 
 function highlightReel(matchItem) {

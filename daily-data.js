@@ -3,12 +3,12 @@
   if (!data) return;
 
   data.dailyMatchHub = {
-    updatedAt: "2026-06-08",
+    updatedAt: "2026-06-10",
     mode: "countdown",
     title: "오늘의 월드컵 허브",
     kicker: "WORLD CUP COUNTDOWN",
-    summary: "한국 시간 2026년 6월 8일 현재 월드컵 본경기는 아직 시작되지 않았습니다. 친선경기 최종 점검과 개막전 공식 슬롯을 함께 보여주고, 6월 12일 KST부터 실제 경기 결과 허브로 전환합니다.",
-    sourceNote: "친선경기 결과는 Korea JoongAng Daily, U.S. Soccer를, 개막 일정과 최종 엔트리는 FIFA 공식 일정/스쿼드 공지를 기준으로 확인합니다.",
+    summary: "한국 시간 2026년 6월 10일 현재 월드컵 본경기는 아직 시작되지 않았습니다. 6월 6일 미국-독일 최종 평가전까지 반영했고, 6월 12일 KST부터 실제 경기 결과 허브로 전환합니다.",
+    sourceNote: "친선경기 결과는 Korea JoongAng Daily와 U.S. Soccer 공식 리캡/선발 명단을, 개막 일정과 최종 엔트리는 FIFA 공식 일정 및 스쿼드 공지를 기준으로 2026-06-10 KST 재확인했습니다.",
     featuredMatchId: "wc-opener-mex-rsa-2026-06-12",
     matches: [
       {
@@ -110,6 +110,32 @@
         modelPick: { teamA: 44, draw: 27, teamB: 29 }
       },
       {
+        id: "warmup-usa-ger-2026-06-07",
+        status: "result",
+        phaseLabel: "친선경기 결과",
+        competition: "Pre-World Cup Friendly",
+        teamA: "usa",
+        teamBName: "Germany",
+        teamBFlag: "de",
+        score: "1 - 2",
+        dateLabel: "2026-06-07 KST",
+        localTimeLabel: "2026-06-06 13:30 local",
+        venue: "Soldier Field",
+        city: "Chicago, Illinois",
+        headline: "미국, 독일에 1-2 패배에도 최종 리허설 경쟁력 확인",
+        recap: "U.S. Soccer 공식 리캡 기준으로 미국은 안토니 로빈슨의 동점골로 맞섰지만 카이 하베르츠와 르로이 자네에게 실점해 1-2로 졌습니다. 본선 직전 최종 평가전에서 63,636명 매진 관중 앞 경쟁력을 확인한 경기였습니다.",
+        scorers: ["안토니 로빈슨 39분"],
+        notes: ["선발: Freese; Dest, M. Robinson, Ream, A. Robinson; Adams, McKennie; Freeman, Tillman, Pulisic; Balogun", "관중 63,636명으로 Soldier Field 축구 최다 관중", "전반 점유율 49%-51%, Chris Richards는 발목 부상 관리로 결장"],
+        highlightUrl: "https://www.ussoccer.com/stories/2026/06/usmnt/match-recap-antonee-robinson-goal-highlights-vs-germany",
+        source: {
+          label: "U.S. Soccer Match Recap",
+          url: "https://www.ussoccer.com/stories/2026/06/usmnt/match-recap-antonee-robinson-goal-highlights-vs-germany",
+          checkedAt: "2026-06-10",
+          reliability: "official"
+        },
+        modelPick: { teamA: 33, draw: 24, teamB: 43 }
+      },
+      {
         id: "wc-opener-mex-rsa-2026-06-12",
         status: "scheduled",
         phaseLabel: "월드컵 공식 슬롯",
@@ -128,7 +154,9 @@
         highlightUrl: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026",
         source: {
           label: "FIFA schedule",
-          url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/match-schedule-fixtures-results-teams-stadiums"
+          url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/match-schedule-fixtures-results-teams-stadiums",
+          checkedAt: "2026-06-10",
+          reliability: "official"
         },
         modelPick: { teamA: 52, draw: 28, teamB: 20 }
       }
