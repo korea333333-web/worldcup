@@ -1776,6 +1776,44 @@ select option {
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.32);
 }
 
+.video-thumb-generated-shell {
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+  width: min(88%, 320px);
+}
+
+.video-thumb-identity {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+}
+
+.video-thumb .video-thumb-identity .player-portrait {
+  border-color: rgba(7, 16, 13, 0.18);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.18);
+}
+
+.video-thumb-team {
+  padding: 4px 10px;
+  color: #07100d;
+  background: rgba(255, 255, 255, 0.42);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 950;
+}
+
+.video-flag {
+  width: 48px;
+  height: 32px;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  border-radius: 6px;
+  box-shadow: 0 0 18px rgba(0, 0, 0, 0.18);
+}
+
 .video-thumb span {
   padding: 4px 8px;
   background: rgba(0, 0, 0, 0.22);

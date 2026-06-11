@@ -908,7 +908,7 @@ function openTeamDialog(teamId) {
       </section>
 
       <section class="video-grid" aria-label="관련 유튜브 영상">
-        ${videos.slice(0, 6).map(videoCard).join("") || `<div class="empty-state">영상 큐레이션이 아직 없습니다.</div>`}
+        ${videos.slice(0, 6).map((video) => videoCard(video, team)).join("") || `<div class="empty-state">영상 큐레이션이 아직 없습니다.</div>`}
       </section>
     </div>
   `;
@@ -1489,13 +1489,14 @@ function miniTeam(team) {
   `;
 }
 
-function videoCard(video) {
+function videoCard(video, team = null) {
   const item = normalizeVideo(video);
   const label = video.type === "tactical" ? "전술 분석" : video.type === "interview" ? "인터뷰" : "하이라이트";
+  const representative = resolveVideoRepresentative(team, item);
   return `
     <article class="video-card">
       <a class="video-thumb ${item.thumbnailUrl ? "video-thumb-image" : "video-thumb-generated"}" href="${escapeAttr(item.url)}" target="_blank" rel="noreferrer" aria-label="${escapeHtml(item.title)} 보기">
-        ${item.thumbnailUrl ? videoThumbnailMedia(item) : `<span>${escapeHtml(label)}</span><strong>${escapeHtml(item.title)}</strong>`}
+        ${item.thumbnailUrl ? videoThumbnailMedia(item) : videoGeneratedThumb(item, label, team, representative)}
       </a>
       <span class="badge sample">${escapeHtml(item.type || "video")}</span>
       <h3 class="card-title">${escapeHtml(item.title)}</h3>
@@ -1503,6 +1504,30 @@ function videoCard(video) {
       <a href="${escapeAttr(item.url)}" target="_blank" rel="noreferrer">유튜브에서 보기</a>
     </article>
   `;
+}
+
+function videoGeneratedThumb(item, label, team, representative) {
+  return `
+    <div class="video-thumb-generated-shell">
+      <div class="video-thumb-identity">
+        ${representative ? playerPortrait(representative, "small") : team ? flag(team, "video-flag") : ""}
+        ${team ? `<span class="video-thumb-team">${escapeHtml(team.nameKo)}</span>` : ""}
+      </div>
+      <span>${escapeHtml(label)}</span>
+      <strong>${escapeHtml(item.title)}</strong>
+    </div>
+  `;
+}
+
+function resolveVideoRepresentative(team, item) {
+  if (!team?.players?.length) return null;
+  const haystack = `${item.title || ""} ${item.channel || ""} ${item.query || ""}`.toLowerCase();
+  return (
+    team.players.find((player) => {
+      const names = [player.name, player.nameKo].filter(Boolean).map((value) => String(value).toLowerCase());
+      return names.some((name) => haystack.includes(name));
+    }) || team.players[0]
+  );
 }
 
 function scheduleCard(matchItem) {
