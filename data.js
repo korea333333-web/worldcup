@@ -66,6 +66,22 @@ window.WORLD_CUP_DATA = {
       reliability: "official"
     },
     {
+      id: "lafc-son-profile",
+      title: "손흥민 LAFC 공식 선수 프로필",
+      publisher: "LAFC",
+      url: "https://www.lafc.com/players/son-heung-min/",
+      checkedAt: "2026-06-11",
+      reliability: "official"
+    },
+    {
+      id: "capology-son-salary",
+      title: "손흥민 2026 연봉 추정",
+      publisher: "Capology",
+      url: "https://www.capology.com/player/heung-min-son-33793/",
+      checkedAt: "2026-06-11",
+      reliability: "estimate"
+    },
+    {
       id: "youtube-curated",
       title: "선수별 유튜브 영상은 큐레이션 링크로 시작",
       publisher: "YouTube",
@@ -91,7 +107,7 @@ window.WORLD_CUP_DATA = {
   teams: {
     "mexico": team("mexico", "멕시코", "Mexico", "mx", "CONCACAF", "하비에르 아기레", 15, "빠른 전환과 홈 이점이 강한 팀", "측면 압박", "라인 뒤 공간 관리", "Santiago Gimenez", "FW", "Feyenoord", 71, "Top 2"),
     "south-africa": team("south-africa", "남아공", "South Africa", "za", "CAF", "우고 브로스", 57, "개막전 분위기를 타면 까다로운 활동량 팀", "중원 압박", "득점 안정성", "Percy Tau", "FW", "Al Ahly", 42, "3rd race"),
-    "korea": team("korea", "대한민국", "Korea Republic", "kr", "AFC", "홍명보", 23, "손흥민을 중심으로 전환과 침투가 강한 팀", "전방 결정력", "후방 빌드업 압박 대처", "Son Heung-min", "FW", "Tottenham Hotspur", 63, "3rd race", true),
+    "korea": team("korea", "대한민국", "Korea Republic", "kr", "AFC", "홍명보", 23, "손흥민을 중심으로 전환과 침투가 강한 팀", "전방 결정력", "후방 빌드업 압박 대처", "Son Heung-min", "FW", "LAFC", 63, "3rd race", true),
     "norway": team("norway", "노르웨이", "Norway", "no", "UEFA", "스톨레 솔바켄", 33, "엘링 홀란의 박스 장악력이 모든 예측을 흔든다", "최전방 파괴력", "라인 간 수비", "Erling Haaland", "FW", "Manchester City", 67, "Top 2"),
 
     "canada": team("canada", "캐나다", "Canada", "ca", "CONCACAF", "제시 마시", 31, "속도와 전진성이 뚜렷한 공동 개최국", "풀백 전진", "중원 점유 안정성", "Alphonso Davies", "LB", "Bayern Munich", 58, "3rd race"),
@@ -178,7 +194,13 @@ function team(id, nameKo, nameEn, flagCode, confederation, coach, rank, summary,
     status,
     koreaFocus,
     form: rank <= 10 ? "elite" : rank <= 30 ? "strong" : rank <= 55 ? "volatile" : "underdog",
-    sources: ["fifa-qualified", "fifa-draw-procedure", "fifa-squads-confirmed", "youtube-curated"],
+    sources: [
+      "fifa-qualified",
+      "fifa-draw-procedure",
+      "fifa-squads-confirmed",
+      ...(id === "korea" ? ["lafc-son-profile", "capology-son-salary"] : []),
+      "youtube-curated"
+    ],
     players: [
       {
         id: playerId,

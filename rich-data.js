@@ -18,7 +18,7 @@
         "황희찬과 오현규/조규성의 박스 안 움직임이 2차 득점 루트를 만듭니다."
       ],
       players: [
-        player("Son Heung-min", "손흥민", "FW/LW", "Tottenham Hotspur", "대표 스타", "클럽에서는 왼쪽에서 안쪽으로 들어오는 득점 루트와 주장 리더십을 맡고, 대표팀에서는 전환 공격의 최종 마무리 역할을 합니다.", "대표팀에서는 공간 침투, 페널티 박스 결정력, 역습 상황의 첫 번째 목표점입니다.", "공격", { attack: 91, creation: 77, press: 72, defense: 45, form: 82 }, "Son_Heung-min"),
+        player("Son Heung-min", "손흥민", "FW/LW", "LAFC", "대표 스타", "클럽에서는 왼쪽에서 안쪽으로 들어오는 득점 루트와 주장 리더십을 맡고, 대표팀에서는 전환 공격의 최종 마무리 역할을 합니다.", "대표팀에서는 공간 침투, 페널티 박스 결정력, 역습 상황의 첫 번째 목표점입니다.", "공격", { attack: 91, creation: 77, press: 72, defense: 45, form: 82 }, "Son_Heung-min"),
         player("Lee Kang-in", "이강인", "AM/RW", "Paris Saint-Germain", "창의성 핵심", "클럽에서는 좁은 공간 탈압박, 왼발 전진 패스, 세트피스 옵션으로 공격 템포를 바꾸는 역할을 합니다.", "대표팀에서는 손흥민에게 찬스를 공급하고, 낮은 수비 블록을 풀어내는 플레이메이커입니다.", "중원", { attack: 76, creation: 88, press: 70, defense: 48, form: 79 }, "Lee_Kang-in"),
         player("Kim Min-jae", "김민재", "CB", "Bayern Munich", "수비 코어", "클럽에서는 높은 라인의 커버, 대인 수비, 전진 패스의 출발점 역할을 맡습니다.", "대표팀에서는 수비 라인의 기준점이며 상대 역습을 끊는 가장 중요한 선수입니다.", "수비", { attack: 42, creation: 55, press: 74, defense: 91, form: 78 }, "Kim_Min-jae"),
         player("Hwang Hee-chan", "황희찬", "LW/FW", "Wolverhampton Wanderers", "직선 돌파", "클럽에서는 박스 침투와 강한 압박, 빠른 전환 상황에서 득점 찬스를 만드는 역할입니다.", "대표팀에서는 손흥민 반대편에서 뒷공간을 흔들고 2차 득점 루트를 만듭니다.", "공격", { attack: 79, creation: 62, press: 83, defense: 48, form: 74 }, "Hwang_Hee-chan"),
@@ -205,7 +205,7 @@
 
   function estimatedSalary(name) {
     const salaryMap = {
-      "Son Heung-min": salary(12000000, 230000, "Capology/언론 추정", "medium"),
+      "Son Heung-min": salary(10368750, 199399, "Capology 추정 / LAFC 공식 프로필", "medium", "2026-06-11"),
       "Lee Kang-in": salary(4300000, 83000, "Capology/언론 추정", "low"),
       "Kim Min-jae": salary(12500000, 240000, "Capology/언론 추정", "medium"),
       "Hwang Hee-chan": salary(3900000, 75000, "Capology/언론 추정", "low"),
@@ -224,7 +224,7 @@
     return salaryMap[name] || defaultSalary();
   }
 
-  function salary(annualUsd, weeklyUsd, source, confidence) {
+  function salary(annualUsd, weeklyUsd, source, confidence, updatedAt = "2026-06-03") {
     const usdKrw = 1380;
     return {
       annualUsd,
@@ -235,7 +235,7 @@
       basis: "세전 추정",
       source,
       confidence,
-      updatedAt: "2026-06-03"
+      updatedAt
     };
   }
 
