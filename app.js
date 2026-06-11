@@ -225,9 +225,9 @@ function renderStoryVideoCard(item) {
 
 function storyThumbnail(item) {
   if (item.thumbnailUrl) {
-    return `<a class="story-thumb" href="${escapeAttr(item.url || item.source?.url || "#")}" target="_blank" rel="noreferrer"><img src="${escapeAttr(item.thumbnailUrl)}" alt="${escapeAttr(item.headline || item.title || "thumbnail")}" loading="lazy" referrerpolicy="no-referrer" /></a>`;
+    return `<a class="story-thumb" href="${escapeAttr(item.url || item.source?.url || "#")}" target="_blank" rel="noreferrer"><img src="${escapeAttr(item.thumbnailUrl)}" alt="${escapeAttr(item.headline || item.title || "thumbnail")}" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none';this.parentElement.classList.add('is-fallback');" /><span class="story-thumb-label">${escapeHtml(item.thumbnailSource || item.type || "story")}</span></a>`;
   }
-  return `<div class="story-thumb-fallback">${escapeHtml(item.thumbnailSource || item.type || "story")}</div>`;
+  return `<div class="story-thumb story-thumb-fallback is-fallback"><span class="story-thumb-label">${escapeHtml(item.thumbnailSource || item.type || "story")}</span></div>`;
 }
 
 function sourceLinkLine(source, urlOverride) {
@@ -258,6 +258,7 @@ function renderMobileQuickNav() {
   target.innerHTML = items
     .map((item) => `<button class="quick-nav-chip ${state.activeTab === item.tab ? "is-active" : ""}" data-quick-tab="${item.tab}" type="button">${escapeHtml(item.label)}</button>`)
     .join("");
+  target.setAttribute("aria-label", "빠른 이동");
 
   target.querySelectorAll("[data-quick-tab]").forEach((button) => {
     button.addEventListener("click", () => {
