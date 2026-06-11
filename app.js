@@ -224,10 +224,25 @@ function renderStoryVideoCard(item) {
 }
 
 function storyThumbnail(item) {
+  if (item.thumbnailMode === "search-candidate") {
+    return storyThumbnailFallback(item);
+  }
   if (item.thumbnailUrl) {
     return `<a class="story-thumb" href="${escapeAttr(item.url || item.source?.url || "#")}" target="_blank" rel="noreferrer"><img src="${escapeAttr(item.thumbnailUrl)}" alt="${escapeAttr(item.headline || item.title || "thumbnail")}" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none';this.parentElement.classList.add('is-fallback');" /><span class="story-thumb-label">${escapeHtml(item.thumbnailSource || item.type || "story")}</span></a>`;
   }
-  return `<div class="story-thumb story-thumb-fallback is-fallback"><span class="story-thumb-label">${escapeHtml(item.thumbnailSource || item.type || "story")}</span></div>`;
+  return storyThumbnailFallback(item);
+}
+
+function storyThumbnailFallback(item) {
+  return `
+    <div class="story-thumb story-thumb-fallback is-fallback">
+      <div class="story-thumb-copy">
+        <span class="story-thumb-label">${escapeHtml(item.thumbnailSource || item.type || "story")}</span>
+        <strong>${escapeHtml(item.headline || item.title || "영상 후보")}</strong>
+        <small>${escapeHtml(item.personName || item.performer || item.role || "검색 결과에서 확인")}</small>
+      </div>
+    </div>
+  `;
 }
 
 function sourceLinkLine(source, urlOverride) {

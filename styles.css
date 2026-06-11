@@ -393,8 +393,29 @@ h1 {
   place-items: center;
 }
 
+.story-thumb-copy {
+  display: grid;
+  gap: 10px;
+  width: min(82%, 360px);
+  text-align: center;
+}
+
+.story-thumb-copy strong {
+  color: #fff;
+  font-size: clamp(20px, 2.1vw, 28px);
+  font-weight: 950;
+  line-height: 1.15;
+}
+
+.story-thumb-copy small {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 850;
+}
+
 .story-thumb.is-fallback .story-thumb-label {
   position: static;
+  justify-self: center;
 }
 
 .feature-match-card {

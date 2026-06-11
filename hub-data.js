@@ -34,8 +34,8 @@
         summary: "출연자, 불린 노래, 특별 게스트, 주요 장면을 카드 단위로 정리합니다.",
         performer: "Opening ceremony coverage",
         songTitle: "Verified set list pending",
-        thumbnailUrl: "https://img.youtube.com/vi/x8fQg4K8z2Q/hqdefault.jpg",
-        thumbnailSource: "YouTube thumbnail",
+        thumbnailMode: "search-candidate",
+        thumbnailSource: "개막식 영상 후보",
         url: "https://www.youtube.com/results?search_query=FIFA+World+Cup+2026+opening+ceremony",
         source: {
           label: "FIFA",

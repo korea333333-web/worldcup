@@ -99,8 +99,8 @@
             teamId: "korea",
             headline: "손흥민 각오",
             summary: "높은 기대보다 팀 완성도와 첫 경기 집중력을 강조한 발언을 먼저 보여줍니다.",
-            thumbnailUrl: "https://img.youtube.com/vi/LZAdpDpslcc/hqdefault.jpg",
-            thumbnailSource: "YouTube thumbnail",
+            thumbnailMode: "search-candidate",
+            thumbnailSource: "인터뷰 영상 후보",
             url: "https://www.youtube.com/results?search_query=Son+Heung-min+World+Cup+2026+interview",
             source: {
               label: "YouTube search",
@@ -118,8 +118,8 @@
             teamId: "usa",
             headline: "풀리식 대회 첫 주 인터뷰",
             summary: "개최국 분위기와 첫 경기 책임감을 짧게 요약한 카드입니다.",
-            thumbnailUrl: "https://img.youtube.com/vi/9Auq9mYxFEE/hqdefault.jpg",
-            thumbnailSource: "YouTube thumbnail",
+            thumbnailMode: "search-candidate",
+            thumbnailSource: "인터뷰 영상 후보",
             url: "https://www.youtube.com/results?search_query=Christian+Pulisic+World+Cup+2026+interview",
             source: {
               label: "YouTube search",
@@ -137,8 +137,8 @@
             teamId: "france",
             headline: "음바페 대회 각오",
             summary: "우승 후보 프랑스의 압박감과 책임을 압축한 한줄 요약입니다.",
-            thumbnailUrl: "https://img.youtube.com/vi/9hYxj4Q0jUs/hqdefault.jpg",
-            thumbnailSource: "YouTube thumbnail",
+            thumbnailMode: "search-candidate",
+            thumbnailSource: "인터뷰 영상 후보",
             url: "https://www.youtube.com/results?search_query=Kylian+Mbappe+World+Cup+2026+interview",
             source: {
               label: "YouTube search",
@@ -159,8 +159,8 @@
             categoryLabel: "개막식",
             headline: "개막식 출연자와 무대 정리",
             summary: "공식 기사와 신뢰 가능한 보도를 바탕으로 출연자, 곡, 주요 장면을 모읍니다.",
-            thumbnailUrl: "https://img.youtube.com/vi/x8fQg4K8z2Q/hqdefault.jpg",
-            thumbnailSource: "YouTube thumbnail",
+            thumbnailMode: "search-candidate",
+            thumbnailSource: "개막식 영상 후보",
             url: "https://www.youtube.com/results?search_query=FIFA+World+Cup+2026+opening+ceremony",
             source: sourceOfficial
           }
@@ -175,8 +175,8 @@
             type: "video",
             headline: "개막식 영상 후보",
             summary: "공식 업로드 또는 신뢰 가능한 하이라이트가 나오면 썸네일과 함께 교체됩니다.",
-            thumbnailUrl: "https://img.youtube.com/vi/x8fQg4K8z2Q/hqdefault.jpg",
-            thumbnailSource: "YouTube thumbnail",
+            thumbnailMode: "search-candidate",
+            thumbnailSource: "영상 후보",
             url: "https://www.youtube.com/results?search_query=FIFA+World+Cup+2026+opening+ceremony",
             source: {
               label: "YouTube search",
