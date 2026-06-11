@@ -101,6 +101,10 @@
             summary: "높은 기대보다 팀 완성도와 첫 경기 집중력을 강조한 발언을 먼저 보여줍니다.",
             thumbnailMode: "search-candidate",
             thumbnailSource: "인터뷰 영상 후보",
+            selectedVideoTitle: "[D-1 Interview] South Korea vs. Czech Republic World Cup 26",
+            selectedChannel: "JTBC Sports",
+            selectedViews: "4.4K views",
+            selectedPublishedAt: "6 hours ago",
             url: "https://www.youtube.com/results?search_query=Son+Heung-min+World+Cup+2026+interview",
             source: {
               label: "YouTube search",

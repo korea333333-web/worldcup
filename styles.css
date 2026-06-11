@@ -413,6 +413,53 @@ h1 {
   font-weight: 850;
 }
 
+.story-representative {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  margin: 2px auto 4px;
+}
+
+.story-team-chip {
+  padding: 5px 10px;
+  color: #f7fbf8;
+  background: rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(174, 255, 211, 0.18);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.story-flag {
+  width: 48px;
+  height: 32px;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 6px;
+}
+
+.story-selected-video {
+  display: grid;
+  gap: 2px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+}
+
+.story-selected-video strong {
+  color: #fff;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.story-selected-video span {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+}
+
 .story-thumb.is-fallback .story-thumb-label {
   position: static;
   justify-self: center;

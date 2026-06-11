@@ -185,6 +185,7 @@ function renderInterviewCard(item) {
           <strong>${escapeHtml(item.personName || "")}</strong>
           <span>${escapeHtml(item.role || "")}</span>
         </div>
+        ${storySelectedVideoMeta(item)}
         ${sourceLinkLine(item.source, item.url)}
       </div>
     </article>
@@ -203,6 +204,7 @@ function renderEventCard(item) {
           <strong>${escapeHtml(item.performer || "")}</strong>
           <span>${escapeHtml(item.songTitle || "")}</span>
         </div>
+        ${storySelectedVideoMeta(item)}
         ${sourceLinkLine(item.source, item.url)}
       </div>
     </article>
@@ -238,15 +240,58 @@ function storyThumbnail(item) {
 }
 
 function storyThumbnailFallback(item) {
+  const representative = resolveStoryRepresentative(item);
   return `
     <div class="story-thumb story-thumb-fallback is-fallback">
       <div class="story-thumb-copy">
         <span class="story-thumb-label">${escapeHtml(item.thumbnailSource || item.type || "story")}</span>
+        ${storyRepresentativeMedia(representative)}
         <strong>${escapeHtml(item.headline || item.title || "영상 후보")}</strong>
         <small>${escapeHtml(item.personName || item.performer || item.role || "검색 결과에서 확인")}</small>
       </div>
     </div>
   `;
+}
+
+function storySelectedVideoMeta(item) {
+  if (!item.selectedVideoTitle && !item.selectedChannel && !item.selectedViews) return "";
+  return `
+    <div class="story-selected-video">
+      <strong>${escapeHtml(item.selectedVideoTitle || "선정 영상")}</strong>
+      <span>${escapeHtml([item.selectedChannel, item.selectedViews, item.selectedPublishedAt].filter(Boolean).join(" · "))}</span>
+    </div>
+  `;
+}
+
+function resolveStoryRepresentative(item) {
+  const team = item.teamId ? DATA.teams[item.teamId] : null;
+  if (item.personName && team?.players?.length) {
+    const needle = String(item.personName).toLowerCase();
+    const player = team.players.find((entry) => [entry.name, entry.nameKo].filter(Boolean).some((value) => String(value).toLowerCase() === needle));
+    if (player) return { player, team };
+  }
+  if (team?.players?.length) return { player: team.players[0], team };
+  return { player: null, team };
+}
+
+function storyRepresentativeMedia(representative) {
+  if (representative?.player) {
+    return `
+      <div class="story-representative">
+        ${playerPortrait(representative.player, "medium")}
+        ${representative.team ? `<span class="story-team-chip">${escapeHtml(representative.team.nameKo)}</span>` : ""}
+      </div>
+    `;
+  }
+  if (representative?.team) {
+    return `
+      <div class="story-representative">
+        ${flag(representative.team, "story-flag")}
+        <span class="story-team-chip">${escapeHtml(representative.team.nameKo)}</span>
+      </div>
+    `;
+  }
+  return "";
 }
 
 function sourceLinkLine(source, urlOverride) {
