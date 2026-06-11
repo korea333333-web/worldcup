@@ -224,7 +224,11 @@ function renderStoryVideoCard(item) {
 }
 
 function storyThumbnail(item) {
-  if (item.thumbnailMode === "search-candidate") {
+  const looksLikeYouTubeCandidate =
+    item.thumbnailMode === "search-candidate" ||
+    (item.thumbnailUrl && item.thumbnailUrl.includes("img.youtube.com") && !item.verifiedThumbnail);
+
+  if (looksLikeYouTubeCandidate) {
     return storyThumbnailFallback(item);
   }
   if (item.thumbnailUrl) {
