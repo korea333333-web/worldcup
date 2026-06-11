@@ -12,27 +12,36 @@
         <div class="title-block">
           <p class="eyebrow">FIFA World Cup 2026</p>
           <h1>World Cup Command Center</h1>
-          <p class="subhead">조별 판세, 스타 플레이어, 하이라이트 영상, 매치업 승률을 게임 오프닝 같은 분석 HUD로 확인합니다.</p>
+          <p class="subhead">
+            경기, 인터뷰, 개막식, 하이라이트, 팀 분석을 한 화면에서 보는 월드컵 운영 허브입니다.
+          </p>
         </div>
+        <button id="mobileMenuToggle" class="mobile-menu-toggle" type="button" aria-expanded="false" aria-controls="mobileQuickNav">
+          오늘의 메뉴
+        </button>
         <div class="summary-strip" id="summaryStrip" aria-label="대회 요약"></div>
       </header>
 
-      <section id="matchHero" class="match-hero" aria-label="오늘의 경기와 팬 투표"></section>
+      <nav id="mobileQuickNav" class="mobile-quick-nav" aria-label="모바일 빠른 이동"></nav>
+
+      <section id="matchHero" class="match-hero" aria-label="오늘의 대표 카드"></section>
 
       <nav class="tabs" aria-label="주요 보기">
         <button class="tab is-active" data-tab="groups" type="button">조별 현황</button>
         <button class="tab" data-tab="teams" type="button">팀 탐색</button>
-        <button class="tab" data-tab="players" type="button">스타 플레이어</button>
+        <button class="tab" data-tab="players" type="button">선수 정보</button>
         <button class="tab" data-tab="schedule" type="button">경기 일정</button>
-        <button class="tab" data-tab="matchups" type="button">매치업</button>
-        <button class="tab" data-tab="bracket" type="button">32강</button>
+        <button class="tab" data-tab="ceremony" type="button">개막식</button>
+        <button class="tab" data-tab="stats" type="button">스탯 센터</button>
+        <button class="tab" data-tab="matchups" type="button">빅매치</button>
+        <button class="tab" data-tab="bracket" type="button">토너먼트</button>
         <button class="tab" data-tab="sources" type="button">출처</button>
       </nav>
 
       <section class="toolbar" aria-label="검색과 필터">
         <label class="search-box">
           <span>검색</span>
-          <input id="searchInput" type="search" placeholder="팀, 선수, 조 검색" />
+          <input id="searchInput" type="search" placeholder="팀, 선수, 조, 경기 검색" />
         </label>
         <label class="select-box">
           <span>상태</span>
@@ -49,6 +58,8 @@
       <section id="teamsView" class="view"></section>
       <section id="playersView" class="view"></section>
       <section id="scheduleView" class="view"></section>
+      <section id="ceremonyView" class="view"></section>
+      <section id="statsView" class="view"></section>
       <section id="matchupsView" class="view"></section>
       <section id="bracketView" class="view"></section>
       <section id="sourcesView" class="view"></section>
@@ -60,6 +71,7 @@
     <script src="./rich-data.js"></script>
     <script src="./schedule-data.js"></script>
     <script src="./daily-data.js"></script>
+    <script src="./hub-data.js"></script>
     <script src="./video-utils.js"></script>
     <script src="./group-utils.js"></script>
     <script src="./app.js"></script>

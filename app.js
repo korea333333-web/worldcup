@@ -5,6 +5,7 @@ const state = {
   status: "all",
   matchupA: "korea",
   matchupB: "mexico",
+  mobileMenuOpen: false,
   teamCardTabs: {},
   votes: {}
 };
@@ -15,6 +16,8 @@ const views = {
   teams: document.querySelector("#teamsView"),
   players: document.querySelector("#playersView"),
   schedule: document.querySelector("#scheduleView"),
+  ceremony: document.querySelector("#ceremonyView"),
+  stats: document.querySelector("#statsView"),
   matchups: document.querySelector("#matchupsView"),
   bracket: document.querySelector("#bracketView"),
   sources: document.querySelector("#sourcesView")
@@ -26,9 +29,12 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function wireControls() {
+  wireMobileMenu();
   document.querySelectorAll(".tab").forEach((tab) => {
     tab.addEventListener("click", () => {
       state.activeTab = tab.dataset.tab;
+      state.mobileMenuOpen = false;
+      toggleMobileMenu(false);
       document.querySelectorAll(".tab").forEach((item) => item.classList.toggle("is-active", item === tab));
       Object.entries(views).forEach(([key, view]) => view.classList.toggle("is-active", key === state.activeTab));
       renderApp();
@@ -48,11 +54,14 @@ function wireControls() {
 
 function renderApp() {
   renderMatchHero();
+  renderMobileQuickNav();
   renderSummary();
   renderGroups();
   renderTeams();
   renderPlayers();
   renderSchedule();
+  renderCeremony();
+  renderStatsCenter();
   renderMatchups();
   renderBracket();
   renderSources();
@@ -109,6 +118,9 @@ function renderMatchHero() {
     <aside class="hero-match-queue" aria-label="추가 경기 로그">
       ${sideMatches.map(heroQueueCard).join("")}
     </aside>
+    <div class="live-hub-sections">
+      ${(hub.sections || []).map(renderLiveHubSection).join("")}
+    </div>
   `;
 
   bindVoteButtons(target);
@@ -122,6 +134,158 @@ function dailySourceMeta(source) {
   if (source.reliability) parts.push(source.reliability);
   if (source.checkedAt) parts.push(`확인 ${source.checkedAt}`);
   return `<small>${escapeHtml(parts.join(" · "))}</small>`;
+}
+
+function renderLiveHubSection(section) {
+  return `
+    <section class="live-hub-section live-hub-section-${escapeAttr(section.id)}" data-section-id="${escapeAttr(section.id)}">
+      <div class="section-head">
+        <h3>${escapeHtml(section.title)}</h3>
+      </div>
+      <div class="live-hub-card-grid">
+        ${(section.items || []).map((item) => renderHubSectionItem(section.id, item)).join("")}
+      </div>
+    </section>
+  `;
+}
+
+function renderHubSectionItem(sectionId, item) {
+  if (sectionId === "interviews" || item.type === "interview") return renderInterviewCard(item);
+  if (sectionId === "events" || item.type === "event") return renderEventCard(item);
+  if (sectionId === "videos" || item.type === "video") return renderStoryVideoCard(item);
+  return renderHubMatchCard(item);
+}
+
+function renderHubMatchCard(item) {
+  const teamA = DATA.teams[item.teamA];
+  const teamB = DATA.teams[item.teamB];
+  return `
+    <article class="hub-story-card hub-story-card-match">
+      <span class="badge ${item.status === "scheduled" ? "race" : "sample"}">${escapeHtml(item.phaseLabel || item.competition || "Match")}</span>
+      <h3>${escapeHtml(matchTitleFromHub(item, teamA, teamB))}</h3>
+      <p>${escapeHtml(item.summary || item.headline || "")}</p>
+      <div class="story-meta">
+        <strong>${escapeHtml(item.score || "")}</strong>
+        <span>${escapeHtml(item.dateLabel || "")}</span>
+      </div>
+      ${sourceLinkLine(item.source)}
+    </article>
+  `;
+}
+
+function renderInterviewCard(item) {
+  return `
+    <article class="hub-story-card hub-story-card-interview">
+      ${storyThumbnail(item)}
+      <div class="story-copy">
+        <span class="badge sample">${escapeHtml(item.phaseLabel || "Interview")}</span>
+        <h3>${escapeHtml(item.headline)}</h3>
+        <p>${escapeHtml(item.summary || "")}</p>
+        <div class="story-meta">
+          <strong>${escapeHtml(item.personName || "")}</strong>
+          <span>${escapeHtml(item.role || "")}</span>
+        </div>
+        ${sourceLinkLine(item.source, item.url)}
+      </div>
+    </article>
+  `;
+}
+
+function renderEventCard(item) {
+  return `
+    <article class="hub-story-card hub-story-card-event">
+      ${storyThumbnail(item)}
+      <div class="story-copy">
+        <span class="badge race">${escapeHtml(item.categoryLabel || "Event")}</span>
+        <h3>${escapeHtml(item.headline)}</h3>
+        <p>${escapeHtml(item.summary || "")}</p>
+        <div class="story-meta">
+          <strong>${escapeHtml(item.performer || "")}</strong>
+          <span>${escapeHtml(item.songTitle || "")}</span>
+        </div>
+        ${sourceLinkLine(item.source, item.url)}
+      </div>
+    </article>
+  `;
+}
+
+function renderStoryVideoCard(item) {
+  return `
+    <article class="hub-story-card hub-story-card-video">
+      ${storyThumbnail(item)}
+      <div class="story-copy">
+        <span class="badge top">Video</span>
+        <h3>${escapeHtml(item.headline || item.title || "")}</h3>
+        <p>${escapeHtml(item.summary || "")}</p>
+        ${sourceLinkLine(item.source, item.url)}
+      </div>
+    </article>
+  `;
+}
+
+function storyThumbnail(item) {
+  if (item.thumbnailUrl) {
+    return `<a class="story-thumb" href="${escapeAttr(item.url || item.source?.url || "#")}" target="_blank" rel="noreferrer"><img src="${escapeAttr(item.thumbnailUrl)}" alt="${escapeAttr(item.headline || item.title || "thumbnail")}" loading="lazy" referrerpolicy="no-referrer" /></a>`;
+  }
+  return `<div class="story-thumb-fallback">${escapeHtml(item.thumbnailSource || item.type || "story")}</div>`;
+}
+
+function sourceLinkLine(source, urlOverride) {
+  if (!source && !urlOverride) return "";
+  const href = urlOverride || source?.url || "#";
+  const label = source?.label || "Source";
+  return `
+    <div class="hero-source-line">
+      <a href="${escapeAttr(href)}" target="_blank" rel="noreferrer">${escapeHtml(label)}</a>
+      ${dailySourceMeta(source)}
+    </div>
+  `;
+}
+
+function renderMobileQuickNav() {
+  const target = document.querySelector("#mobileQuickNav");
+  if (!target) return;
+
+  const items = [
+    { tab: "groups", label: "조별 현황" },
+    { tab: "schedule", label: "오늘 경기" },
+    { tab: "ceremony", label: "개막식" },
+    { tab: "stats", label: "스탯" },
+    { tab: "players", label: "선수" },
+    { tab: "sources", label: "출처" }
+  ];
+
+  target.innerHTML = items
+    .map((item) => `<button class="quick-nav-chip ${state.activeTab === item.tab ? "is-active" : ""}" data-quick-tab="${item.tab}" type="button">${escapeHtml(item.label)}</button>`)
+    .join("");
+
+  target.querySelectorAll("[data-quick-tab]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const tab = button.dataset.quickTab;
+      if (!tab) return;
+      state.activeTab = tab;
+      document.querySelectorAll(".tab").forEach((item) => item.classList.toggle("is-active", item.dataset.tab === tab));
+      Object.entries(views).forEach(([key, view]) => view.classList.toggle("is-active", key === tab));
+      state.mobileMenuOpen = false;
+      toggleMobileMenu(false);
+      renderApp();
+    });
+  });
+}
+
+function wireMobileMenu() {
+  const button = document.querySelector("#mobileMenuToggle");
+  if (!button) return;
+  button.addEventListener("click", () => toggleMobileMenu());
+}
+
+function toggleMobileMenu(forceState) {
+  const next = typeof forceState === "boolean" ? forceState : !state.mobileMenuOpen;
+  state.mobileMenuOpen = next;
+  const button = document.querySelector("#mobileMenuToggle");
+  const nav = document.querySelector("#mobileQuickNav");
+  if (button) button.setAttribute("aria-expanded", String(next));
+  if (nav) nav.classList.toggle("is-open", next);
 }
 
 function highlightReel(matchItem) {
@@ -466,6 +630,52 @@ function renderSchedule() {
     </div>
     <div class="schedule-grid">${cards || `<div class="empty-state">검색 조건에 맞는 일정이 없습니다.</div>`}</div>
   `;
+}
+
+function renderCeremony() {
+  const ceremony = DATA.openingCeremony;
+  if (!views.ceremony) return;
+  if (!ceremony) {
+    views.ceremony.innerHTML = `<div class="empty-state">개막식 정보가 아직 없습니다.</div>`;
+    return;
+  }
+
+  views.ceremony.innerHTML = `
+    ${sectionHeading("개막식", ceremony.sourceNote || "공식 기사와 신뢰 가능한 영상 후보를 함께 모았습니다.")}
+    <div class="live-hub-card-grid">
+      ${(ceremony.items || []).map(renderEventCard).join("")}
+    </div>
+  `;
+}
+
+function renderStatsCenter() {
+  const stats = DATA.statsCenter;
+  if (!views.stats) return;
+  if (!stats) {
+    views.stats.innerHTML = `<div class="empty-state">스탯 센터 데이터가 아직 없습니다.</div>`;
+    return;
+  }
+
+  views.stats.innerHTML = `
+    ${sectionHeading("스탯 센터", stats.emptyState || "공식 경기 후 득점, 도움, 팀 스탯을 이곳에 누적합니다.")}
+    <div class="schedule-summary">
+      <div class="panel">
+        <h3>선수 스탯</h3>
+        <div class="source-note">${renderStatsList(stats.playerStats, "공식 경기 이후 득점왕, 도움, 공격 포인트가 표시됩니다.")}</div>
+      </div>
+      <div class="panel">
+        <h3>팀 스탯</h3>
+        <div class="source-note">${renderStatsList(stats.teamStats, "점유율, 슈팅, 유효슈팅, 클린시트 같은 팀 지표가 표시됩니다.")}</div>
+      </div>
+    </div>
+  `;
+}
+
+function renderStatsList(items, fallback) {
+  if (!items || !items.length) return escapeHtml(fallback);
+  return items
+    .map((item) => `${escapeHtml(item.label || item.name || "-")}: ${escapeHtml(item.value || item.stat || "-")}`)
+    .join("<br />");
 }
 
 function renderMatchups() {
@@ -1379,6 +1589,10 @@ function moneyChip(player, size = "normal") {
   `;
 }
 
+function salaryConfidenceValue(salary) {
+  return salary.confidence || "pending";
+}
+
 function formatUsd(value) {
   if (!value) return "-";
   if (value >= 1000000) return `$${trimNumber(value / 1000000)}M`;
@@ -1437,8 +1651,15 @@ function flag(team, className) {
 
 function playerPortrait(player, size = "medium") {
   const initials = getInitials(player.nameKo || player.name);
+  if (player.imageUrl) {
+    return `
+      <div class="player-portrait ${size}" data-image-source="${escapeAttr(player.imageSource || "curated")}" title="${escapeAttr(player.name)}">
+        <img src="${escapeAttr(player.imageUrl)}" alt="${escapeAttr(player.name)} portrait" loading="lazy" referrerpolicy="no-referrer" />
+      </div>
+    `;
+  }
   const slug = player.wikiSlug ? ` data-wiki-slug="${escapeAttr(player.wikiSlug)}"` : "";
-  const source = player.wikiSlug ? ` data-photo-source="Wikipedia"` : "";
+  const source = player.wikiSlug ? ` data-image-source="Wikipedia" data-photo-source="Wikipedia"` : "";
   return `
     <div class="player-portrait ${size}"${slug}${source} title="${escapeAttr(player.name)}">
       <span>${escapeHtml(initials)}</span>
