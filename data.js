@@ -4,7 +4,7 @@ window.WORLD_CUP_DATA = {
     teams: 48,
     groups: 12,
     stage: "개막 전 리서치",
-    updatedAt: "2026-06-08",
+    updatedAt: "2026-06-13",
     formatNote: "12개 조 4팀. 각 조 1, 2위와 3위 중 상위 8팀이 32강에 진출합니다.",
     scenarioNote: "2026-06-08 기준 FIFA 공식 조 편성과 초반 조별리그 일정을 반영했습니다. 승률과 일부 전력 평가는 여전히 UI 검증용 시나리오입니다."
   },

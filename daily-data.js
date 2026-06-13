@@ -2,51 +2,172 @@
   const data = window.WORLD_CUP_DATA;
   if (!data) return;
 
-  const sourceOfficial = {
-    label: "FIFA",
+  const sourceSchedule = {
+    label: "FIFA 일정/결과",
     url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/match-schedule-fixtures-results-teams-stadiums",
-    checkedAt: "2026-06-12",
+    checkedAt: "2026-06-13",
+    reliability: "official"
+  };
+
+  const sourceMexico = {
+    label: "FIFA 멕시코-남아공 리포트",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/mexico-south-africa-highlights-match-report",
+    checkedAt: "2026-06-13",
+    reliability: "official"
+  };
+
+  const sourceKorea = {
+    label: "FIFA 대한민국-체코 리포트",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/korea-republic-czechia-highlights-match-report",
+    checkedAt: "2026-06-13",
+    reliability: "official"
+  };
+
+  const sourceCanada = {
+    label: "FIFA 캐나다-보스니아 리포트",
+    url: "https://www.fifa.com/en/articles/canada-bosnia-and-herzegovina-highlights-match-report",
+    checkedAt: "2026-06-13",
+    reliability: "official"
+  };
+
+  const sourceUsa = {
+    label: "FIFA 미국-파라과이 리포트",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/usa-paraguay-highlights-match-report",
+    checkedAt: "2026-06-13",
     reliability: "official"
   };
 
   data.dailyMatchHub = {
-    updatedAt: "2026-06-12",
+    updatedAt: "2026-06-13",
     mode: "live-hub",
-    title: "오늘의 하이라이트",
+    title: "오늘의 월드컵 허브",
     kicker: "WORLD CUP LIVE HUB",
-    summary: "경기, 인터뷰, 개막식, 영상 후보를 날짜 기준으로 묶어 보는 월드컵 라이브 허브입니다.",
-    sourceNote: "본선이 시작되면 친선경기는 메인 전면에서 내리고, 공식 경기와 인터뷰, 개막식, 영상 후보 중심으로 보여줍니다.",
+    summary: "전날과 오늘 끝난 공식 경기 결과, 득점, 카드, 주요 장면과 하이라이트 링크를 신뢰 가능한 출처 기준으로 묶었습니다.",
+    sourceNote: "경기 결과와 하이라이트는 FIFA 공식 페이지를 우선 반영했습니다. 인터뷰와 추가 영상 후보는 검색 링크를 유지하며 확인일과 신뢰도를 함께 표시합니다.",
     leadMode: "match-priority",
-    featuredMatchId: "wc-opener-mex-rsa-2026-06-12",
+    featuredMatchId: "group-a-kor-cze-2026-06-12",
     matches: [
+      {
+        id: "group-a-kor-cze-2026-06-12",
+        type: "match",
+        status: "final",
+        phaseLabel: "조별리그 A조",
+        competition: "FIFA World Cup 2026",
+        teamA: "korea",
+        teamB: "czechia",
+        score: "대한민국 2-1 체코",
+        dateLabel: "2026-06-12 KST",
+        localTimeLabel: "2026-06-11 20:00 local",
+        venue: "Guadalajara Stadium",
+        city: "Guadalajara",
+        headline: "대한민국, 체코에 역전승",
+        recap: "대한민국이 선제 실점 뒤 황인범의 동점골과 오현규의 결승골로 2-1 역전승을 거뒀습니다.",
+        scorers: ["라디슬라프 크레이치 31'", "황인범 66'", "오현규 82'"],
+        notes: ["황인범 1골 1도움", "대한민국은 A조 승점 3 확보", "FIFA 공식 하이라이트 공개"],
+        highlightUrl: "https://www.fifa.com/en/watch/1iidGe97khg8lmdSRopdh4",
+        source: sourceKorea,
+        modelPick: { teamA: 52, draw: 28, teamB: 20 },
+        highlightVideos: [
+          {
+            title: "Korea Republic v Czechia | Highlights",
+            channel: "FIFA",
+            type: "highlight",
+            url: "https://www.fifa.com/en/watch/1iidGe97khg8lmdSRopdh4",
+            duration: "official",
+            meta: "FIFA 공식 하이라이트"
+          }
+        ]
+      },
       {
         id: "wc-opener-mex-rsa-2026-06-12",
         type: "match",
-        status: "scheduled",
+        status: "final",
         phaseLabel: "개막전",
         competition: "FIFA World Cup 2026",
         teamA: "mexico",
         teamB: "south-africa",
-        score: "2026-06-12 04:00 KST",
+        score: "멕시코 2-0 남아공",
         dateLabel: "2026-06-12 KST",
         localTimeLabel: "2026-06-11 13:00 local",
         venue: "Mexico City Stadium",
         city: "Mexico City",
-        headline: "멕시코 vs 남아공 개막전",
-        recap: "개막전이 시작되면 이 카드에 공식 결과, 선발, 득점, 교체, 주요 스탯, 하이라이트가 우선 반영됩니다.",
-        scorers: ["공식 킥오프 대기", "개막식 연계 노출", "실시간 업데이트 예정"],
-        notes: ["공식 일정 기준", "개막식 후 경기 시작", "결과 반영 시 본 카드가 최상단 유지"],
-        highlightUrl: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026",
-        source: sourceOfficial,
+        headline: "멕시코, 개막전 승리",
+        recap: "멕시코가 개막전에서 남아공을 2-0으로 꺾었습니다. 훌리안 키뇨네스와 라울 히메네스가 득점했습니다.",
+        scorers: ["훌리안 키뇨네스 9'", "라울 히메네스 67'"],
+        notes: ["남아공 퇴장 2명: 시톨레, 즈와네", "멕시코도 몬테스 퇴장", "FIFA 공식 하이라이트 공개"],
+        highlightUrl: "https://www.fifa.com/en/watch/7wv3jFr0T2wczSuQbhgrSW",
+        source: sourceMexico,
         modelPick: { teamA: 52, draw: 28, teamB: 20 },
         highlightVideos: [
           {
-            title: "FIFA World Cup 2026 opening match coverage",
+            title: "Mexico v South Africa | Highlights",
             channel: "FIFA",
             type: "highlight",
-            url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026",
-            duration: "LIVE",
-            meta: "공식 대회 페이지"
+            url: "https://www.fifa.com/en/watch/7wv3jFr0T2wczSuQbhgrSW",
+            duration: "official",
+            meta: "FIFA 공식 하이라이트"
+          }
+        ]
+      },
+      {
+        id: "group-b-can-bih-2026-06-13",
+        type: "match",
+        status: "final",
+        phaseLabel: "조별리그 B조",
+        competition: "FIFA World Cup 2026",
+        teamA: "canada",
+        teamB: "bosnia",
+        score: "캐나다 1-1 보스니아",
+        dateLabel: "2026-06-13 KST",
+        localTimeLabel: "2026-06-12 15:00 local",
+        venue: "Toronto Stadium",
+        city: "Toronto",
+        headline: "캐나다, 후반 동점으로 승점 1",
+        recap: "캐나다가 보스니아에 먼저 실점했지만 후반 교체 투입된 사일 라린의 골로 1-1을 만들었습니다.",
+        scorers: ["요보 루키치 21'", "사일 라린 78'"],
+        notes: ["캐나다 남자 월드컵 역사상 첫 승점", "프로미스 데이비드가 동점골 전개 관여", "FIFA 공식 하이라이트 공개"],
+        highlightUrl: "https://www.fifa.com/en/watch/5ekSKA6XJZqv9Fag9pI7sH",
+        source: sourceCanada,
+        modelPick: { teamA: 45, draw: 29, teamB: 26 },
+        highlightVideos: [
+          {
+            title: "Canada v Bosnia and Herzegovina | Highlights",
+            channel: "FIFA",
+            type: "highlight",
+            url: "https://www.fifa.com/en/watch/5ekSKA6XJZqv9Fag9pI7sH",
+            duration: "official",
+            meta: "FIFA 공식 하이라이트"
+          }
+        ]
+      },
+      {
+        id: "group-d-usa-par-2026-06-13",
+        type: "match",
+        status: "final",
+        phaseLabel: "조별리그 D조",
+        competition: "FIFA World Cup 2026",
+        teamA: "usa",
+        teamB: "paraguay",
+        score: "미국 4-1 파라과이",
+        dateLabel: "2026-06-13 KST",
+        localTimeLabel: "2026-06-12 18:00 local",
+        venue: "Los Angeles Stadium",
+        city: "Los Angeles",
+        headline: "미국, 파라과이 상대로 4골",
+        recap: "미국이 파라과이를 4-1로 꺾고 대회 첫 경기를 강하게 출발했습니다. 발로건이 멀티골을 넣었습니다.",
+        scorers: ["웨스턴 맥케니 14'", "폴라린 발로건 24', 42'", "마우리시우 73'", "지오 레이나 90+1'"],
+        notes: ["발로건 멀티골", "후반 시작과 함께 풀리식 교체 아웃", "FIFA 공식 하이라이트 공개"],
+        highlightUrl: "https://www.fifa.com/en/watch/6jzgitUqP6YyXpwwuY6VRc",
+        source: sourceUsa,
+        modelPick: { teamA: 54, draw: 25, teamB: 21 },
+        highlightVideos: [
+          {
+            title: "USA v Paraguay | Highlights",
+            channel: "FIFA",
+            type: "highlight",
+            url: "https://www.fifa.com/en/watch/6jzgitUqP6YyXpwwuY6VRc",
+            duration: "official",
+            meta: "FIFA 공식 하이라이트"
           }
         ]
       }
@@ -54,101 +175,129 @@
     sections: [
       {
         id: "matches",
-        title: "오늘 경기",
+        title: "주요 경기",
         items: [
-          {
-            id: "wc-opener-mex-rsa-2026-06-12",
-            type: "match",
-            status: "scheduled",
-            phaseLabel: "개막전",
-            competition: "FIFA World Cup 2026",
-            teamA: "mexico",
-            teamB: "south-africa",
-            dateLabel: "2026-06-12 KST",
-            score: "04:00",
-            headline: "멕시코 vs 남아공",
-            summary: "개막식 이후 이어지는 본선 첫 경기입니다.",
-            source: sourceOfficial
-          },
           {
             id: "group-a-kor-cze-2026-06-12",
             type: "match",
-            status: "scheduled",
-            phaseLabel: "조별리그",
+            status: "final",
+            phaseLabel: "A조 종료",
             competition: "FIFA World Cup 2026",
             teamA: "korea",
             teamB: "czechia",
             dateLabel: "2026-06-12 KST",
-            score: "11:00",
+            score: "2-1",
             headline: "대한민국 vs 체코",
-            summary: "한국의 첫 경기로, 경기 전 인터뷰와 전술 카드가 함께 노출됩니다.",
-            source: sourceOfficial
+            summary: "황인범 1골 1도움, 오현규 결승골로 한국이 역전승했습니다.",
+            source: sourceKorea
+          },
+          {
+            id: "wc-opener-mex-rsa-2026-06-12",
+            type: "match",
+            status: "final",
+            phaseLabel: "개막전 종료",
+            competition: "FIFA World Cup 2026",
+            teamA: "mexico",
+            teamB: "south-africa",
+            dateLabel: "2026-06-12 KST",
+            score: "2-0",
+            headline: "멕시코 vs 남아공",
+            summary: "키뇨네스와 히메네스의 골, 남아공 2퇴장으로 개막전이 정리됐습니다.",
+            source: sourceMexico
+          },
+          {
+            id: "group-b-can-bih-2026-06-13",
+            type: "match",
+            status: "final",
+            phaseLabel: "B조 종료",
+            competition: "FIFA World Cup 2026",
+            teamA: "canada",
+            teamB: "bosnia",
+            dateLabel: "2026-06-13 KST",
+            score: "1-1",
+            headline: "캐나다 vs 보스니아",
+            summary: "라린의 후반 동점골로 캐나다가 승점 1을 챙겼습니다.",
+            source: sourceCanada
+          },
+          {
+            id: "group-d-usa-par-2026-06-13",
+            type: "match",
+            status: "final",
+            phaseLabel: "D조 종료",
+            competition: "FIFA World Cup 2026",
+            teamA: "usa",
+            teamB: "paraguay",
+            dateLabel: "2026-06-13 KST",
+            score: "4-1",
+            headline: "미국 vs 파라과이",
+            summary: "맥케니, 발로건 2골, 레이나 득점으로 미국이 4-1 완승했습니다.",
+            source: sourceUsa
           }
         ]
       },
       {
         id: "interviews",
-        title: "인터뷰",
+        title: "인터뷰/반응",
         items: [
           {
             id: "interview-son-world-cup-start",
             type: "interview",
-            phaseLabel: "경기 전 인터뷰",
+            phaseLabel: "대한민국 관련 영상 후보",
             personName: "손흥민",
             role: "대한민국 주장",
             teamId: "korea",
-            headline: "손흥민 각오",
-            summary: "높은 기대보다 팀 완성도와 첫 경기 집중력을 강조한 발언을 먼저 보여줍니다.",
+            headline: "손흥민 경기 전후 인터뷰 후보",
+            summary: "공식 업로드 전까지는 YouTube 검색 후보를 유지합니다. 경기 후 반응 영상이 올라오면 교체할 수 있습니다.",
             thumbnailUrl: "./assets/son-kbs-top-interview.png",
             verifiedThumbnail: true,
             thumbnailSource: "KBS Sports YouTube",
-            selectedVideoTitle: "\"The team atmosphere is excellent\": Official interview with captain Son Heung-min one day before ...",
+            selectedVideoTitle: "\"The team atmosphere is excellent\" - Son Heung-min official interview candidate",
             selectedChannel: "KBS Sports",
             selectedViews: "41K views",
-            selectedPublishedAt: "15 hours ago",
+            selectedPublishedAt: "1 day ago",
             url: "https://www.youtube.com/results?search_query=Son+Heung-min+World+Cup+2026+interview",
             source: {
               label: "YouTube search",
               url: "https://www.youtube.com/results?search_query=Son+Heung-min+World+Cup+2026+interview",
-              checkedAt: "2026-06-12",
+              checkedAt: "2026-06-13",
               reliability: "curated"
             }
           },
           {
-            id: "interview-pulisic-opener-week",
+            id: "interview-pulisic-post-match",
             type: "interview",
-            phaseLabel: "경기 전 인터뷰",
+            phaseLabel: "미국 경기 후 영상 후보",
             personName: "Christian Pulisic",
             role: "United States forward",
             teamId: "usa",
-            headline: "풀리식 대회 첫 주 인터뷰",
-            summary: "개최국 분위기와 첫 경기 책임감을 짧게 요약한 카드입니다.",
+            headline: "풀리식/미국 경기 후 인터뷰 후보",
+            summary: "미국의 4-1 승리 직후 인터뷰와 하이라이트 쇼 클립을 찾기 위한 검색 링크입니다.",
             thumbnailMode: "search-candidate",
             thumbnailSource: "인터뷰 영상 후보",
-            url: "https://www.youtube.com/results?search_query=Christian+Pulisic+World+Cup+2026+interview",
+            url: "https://www.youtube.com/results?search_query=Christian+Pulisic+USA+Paraguay+2026+interview",
             source: {
               label: "YouTube search",
-              url: "https://www.youtube.com/results?search_query=Christian+Pulisic+World+Cup+2026+interview",
-              checkedAt: "2026-06-12",
+              url: "https://www.youtube.com/results?search_query=Christian+Pulisic+USA+Paraguay+2026+interview",
+              checkedAt: "2026-06-13",
               reliability: "curated"
             }
           },
           {
-            id: "interview-mbappe-big-match",
+            id: "interview-balogun-post-match",
             type: "interview",
-            phaseLabel: "빅매치 인터뷰",
-            personName: "Kylian Mbappe",
-            role: "France forward",
-            teamId: "france",
-            headline: "음바페 대회 각오",
-            summary: "우승 후보 프랑스의 압박감과 책임을 압축한 한줄 요약입니다.",
+            phaseLabel: "선수 반응 후보",
+            personName: "Folarin Balogun",
+            role: "United States forward",
+            teamId: "usa",
+            headline: "발로건 멀티골 반응 영상 후보",
+            summary: "멀티골 직후 현장 인터뷰, 믹스트존 반응, FIFA 또는 방송사 업로드 후보를 추적합니다.",
             thumbnailMode: "search-candidate",
             thumbnailSource: "인터뷰 영상 후보",
-            url: "https://www.youtube.com/results?search_query=Kylian+Mbappe+World+Cup+2026+interview",
+            url: "https://www.youtube.com/results?search_query=Folarin+Balogun+World+Cup+2026+interview",
             source: {
               label: "YouTube search",
-              url: "https://www.youtube.com/results?search_query=Kylian+Mbappe+World+Cup+2026+interview",
-              checkedAt: "2026-06-12",
+              url: "https://www.youtube.com/results?search_query=Folarin+Balogun+World+Cup+2026+interview",
+              checkedAt: "2026-06-13",
               reliability: "curated"
             }
           }
@@ -156,18 +305,23 @@
       },
       {
         id: "events",
-        title: "개막식·이벤트",
+        title: "개막 세리머니",
         items: [
           {
             id: "opening-ceremony-main",
             type: "event",
-            categoryLabel: "개막식",
-            headline: "개막식 출연자와 무대 정리",
-            summary: "공식 기사와 신뢰 가능한 보도를 바탕으로 출연자, 곡, 주요 장면을 모읍니다.",
+            categoryLabel: "개막 세리머니",
+            headline: "개막식 핵심 출연진 정리",
+            summary: "FIFA 공식 기사 기준으로 멕시코시티 개막식의 핵심 출연진과 추가 세리머니 링크를 묶었습니다.",
             thumbnailMode: "search-candidate",
-            thumbnailSource: "개막식 영상 후보",
-            url: "https://www.youtube.com/results?search_query=FIFA+World+Cup+2026+opening+ceremony",
-            source: sourceOfficial
+            thumbnailSource: "공식 영상 후보",
+            url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/opening-ceremony-usa",
+            source: {
+              label: "FIFA 개막식 기사",
+              url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/opening-ceremony-usa",
+              checkedAt: "2026-06-13",
+              reliability: "official"
+            }
           }
         ]
       },
@@ -176,19 +330,36 @@
         title: "영상 후보",
         items: [
           {
-            id: "video-opening-ceremony-search",
+            id: "video-kor-cze-highlight",
             type: "video",
-            headline: "개막식 영상 후보",
-            summary: "공식 업로드 또는 신뢰 가능한 하이라이트가 나오면 썸네일과 함께 교체됩니다.",
-            thumbnailMode: "search-candidate",
-            thumbnailSource: "영상 후보",
-            url: "https://www.youtube.com/results?search_query=FIFA+World+Cup+2026+opening+ceremony",
-            source: {
-              label: "YouTube search",
-              url: "https://www.youtube.com/results?search_query=FIFA+World+Cup+2026+opening+ceremony",
-              checkedAt: "2026-06-12",
-              reliability: "curated"
-            }
+            headline: "대한민국 vs 체코 공식 하이라이트",
+            summary: "FIFA 공식 하이라이트 페이지로 연결됩니다.",
+            url: "https://www.fifa.com/en/watch/1iidGe97khg8lmdSRopdh4",
+            source: sourceKorea
+          },
+          {
+            id: "video-mex-rsa-highlight",
+            type: "video",
+            headline: "멕시코 vs 남아공 공식 하이라이트",
+            summary: "개막전 하이라이트 공식 링크입니다.",
+            url: "https://www.fifa.com/en/watch/7wv3jFr0T2wczSuQbhgrSW",
+            source: sourceMexico
+          },
+          {
+            id: "video-can-bih-highlight",
+            type: "video",
+            headline: "캐나다 vs 보스니아 공식 하이라이트",
+            summary: "캐나다의 첫 승점 경기 공식 링크입니다.",
+            url: "https://www.fifa.com/en/watch/5ekSKA6XJZqv9Fag9pI7sH",
+            source: sourceCanada
+          },
+          {
+            id: "video-usa-par-highlight",
+            type: "video",
+            headline: "미국 vs 파라과이 공식 하이라이트",
+            summary: "미국의 4-1 승리 하이라이트 공식 링크입니다.",
+            url: "https://www.fifa.com/en/watch/6jzgitUqP6YyXpwwuY6VRc",
+            source: sourceUsa
           }
         ]
       }
@@ -199,16 +370,18 @@
         {
           id: "warmup-kor-slv-2026-06-04",
           headline: "대한민국 1-0 엘살바도르",
-          summary: "본선 시작 이후 메인 전면에서 빠진 최근 친선 경기 기록입니다.",
+          summary: "월드컵 개막 전 마지막 평가전 기록입니다.",
           url: "https://koreajoongangdaily.joins.com/news/2026-06-04/sports/football/Korea-beats-El-Salvador-in-final-friendly-before-World-Cup/2608530"
         },
         {
           id: "warmup-usa-ger-2026-06-07",
           headline: "미국 1-2 독일",
-          summary: "개최국 미국의 최종 점검 경기 기록입니다.",
+          summary: "미국의 월드컵 직전 최종 리허설 경기 기록입니다.",
           url: "https://www.ussoccer.com/stories/2026/06/usmnt/match-recap-antonee-robinson-goal-highlights-vs-germany"
         }
-      ]
+      ],
+      officialResultsCheckedAt: "2026-06-13",
+      source: sourceSchedule
     }
   };
 })();
