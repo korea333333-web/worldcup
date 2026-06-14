@@ -320,3 +320,104 @@
     return Math.max(30, Math.min(92, Math.round(value)));
   }
 })();
+
+(function extendRichWorldCupDataJune14() {
+  const data = window.WORLD_CUP_DATA;
+  if (!data?.teams) return;
+
+  const applyRecord = (teamId, patch) => {
+    const team = data.teams[teamId];
+    if (!team) return;
+    Object.assign(team, patch);
+  };
+
+  applyRecord("brazil", {
+    lastChecked: "2026-06-14",
+    matchRecords: [
+      {
+        status: "played",
+        matchLabel: "브라질 조별리그 1차전 vs 모로코",
+        score: "브라질 1-1 모로코",
+        startingXI: ["Alisson Becker", "Gabriel Magalhaes", "Marquinhos", "Douglas Santos", "Roger Ibanez", "Raphinha", "Bruno Guimaraes", "Casemiro", "Igor Thiago", "Vinicius Junior", "Lucas Paqueta"],
+        substitutions: ["45' Danilo in, Roger Ibanez out", "45' Fabinho in, Casemiro out", "61' Matheus Cunha in, Lucas Paqueta out", "62' Luiz Henrique in, Igor Thiago out", "80' Danilo Santos in, Bruno Guimaraes out"],
+        stats: { shots: "12 / 유효 5", possession: "51.4%", xg: "ESPN 미제공" },
+        mom: "Vinicius Junior"
+      }
+    ]
+  });
+
+  applyRecord("morocco", {
+    lastChecked: "2026-06-14",
+    matchRecords: [
+      {
+        status: "played",
+        matchLabel: "모로코 조별리그 1차전 vs 브라질",
+        score: "모로코 1-1 브라질",
+        startingXI: ["Yassine Bounou", "Chadi Riad", "Issa Diop", "Noussair Mazraoui", "Achraf Hakimi", "Azzedine Ounahi", "Ayyoub Bouaddi", "Neil El Aynaoui", "Ismael Saibari", "Bilal El Khannouss", "Brahim Diaz"],
+        substitutions: ["65' Samir El Mourabet in, Azzedine Ounahi out", "65' Chemsdine Talbi in, Brahim Diaz out", "80' Anass Salah-Eddine in, Noussair Mazraoui out", "80' Ayoube Amaimouni-Echghouyab in, Bilal El Khannouss out", "89' Soufiane Rahimi in, Ismael Saibari out"],
+        stats: { shots: "14 / 유효 3", possession: "48.6%", xg: "ESPN 미제공" },
+        mom: "Ismael Saibari"
+      }
+    ]
+  });
+
+  applyRecord("scotland", {
+    lastChecked: "2026-06-14",
+    matchRecords: [
+      {
+        status: "played",
+        matchLabel: "스코틀랜드 조별리그 1차전 vs 아이티",
+        score: "스코틀랜드 1-0 아이티",
+        startingXI: ["Angus Gunn", "Jack Hendry", "Grant Hanley", "Andy Robertson", "Aaron Hickey", "Lewis Ferguson", "Scott McTominay", "John McGinn", "Ben Gannon-Doak", "Che Adams", "Lawrence Shankland"],
+        substitutions: ["75' Ryan Christie in, Ben Gannon-Doak out", "75' Lyndon Dykes in, Che Adams out", "75' Nathan Patterson in, Aaron Hickey out", "83' Findlay Curtis in, John McGinn out", "83' Kenny McLean in, Lawrence Shankland out"],
+        stats: { shots: "9 / 유효 2", possession: "46.2%", xg: "ESPN 미제공" },
+        mom: "John McGinn"
+      }
+    ]
+  });
+
+  applyRecord("haiti", {
+    lastChecked: "2026-06-14",
+    matchRecords: [
+      {
+        status: "played",
+        matchLabel: "아이티 조별리그 1차전 vs 스코틀랜드",
+        score: "아이티 0-1 스코틀랜드",
+        startingXI: ["Johny Placide", "Hannes Delcroix", "Ricardo Ade", "Martin Experience", "Carlens Arcus", "Jean-Ricner Bellegarde", "Danley Jean Jacques", "Ruben Providence", "Louicius Deedson", "Wilson Isidor", "Frantzdy Pierrot"],
+        substitutions: ["61' Josue Casimir in, Louicius Deedson out", "76' Lenny Joseph in, Wilson Isidor out", "85' Yassin Fortune in, Ruben Providence out"],
+        stats: { shots: "15 / 유효 2", possession: "53.8%", xg: "ESPN 미제공" },
+        mom: "John McGinn"
+      }
+    ]
+  });
+
+  applyRecord("qatar", {
+    lastChecked: "2026-06-14",
+    matchRecords: [
+      {
+        status: "played",
+        matchLabel: "카타르 조별리그 1차전 vs 스위스",
+        score: "카타르 1-1 스위스",
+        startingXI: ["Mahmoud Abunada", "Boualem Khoukhi", "Pedro Miguel", "Homam Ahmed", "Ayoub Al-Oui", "Assim Madibo", "Issa Laye", "Jassem Gaber", "Yusuf Abdurisag", "Akram Afif", "Edmilson Junior"],
+        substitutions: ["60' Ahmed Fathy in, Ayoub Al Oui out", "60' Karim Boudiaf in, Jassem Gaber out", "60' Ahmed Alaa in, Yusuf Abdurisag out", "79' Mohammad Al Mannai in, Assim Madibo out", "88' Hassan Al Haydos in, Edmilson Junior out"],
+        stats: { shots: "6 / 유효 3", possession: "32.0%", xg: "ESPN 미제공" },
+        mom: "Homam Ahmed"
+      }
+    ]
+  });
+
+  applyRecord("switzerland", {
+    lastChecked: "2026-06-14",
+    matchRecords: [
+      {
+        status: "played",
+        matchLabel: "스위스 조별리그 1차전 vs 카타르",
+        score: "스위스 1-1 카타르",
+        startingXI: ["Gregor Kobel", "Manuel Akanji", "Nico Elvedi", "Ricardo Rodriguez", "Denis Zakaria", "Granit Xhaka", "Remo Freuler", "Michel Aebischer", "Breel Embolo", "Ruben Vargas", "Dan Ndoye"],
+        substitutions: ["65' Fabian Rieder in, Michel Aebischer out", "65' Johan Manzambi in, Dan Ndoye out", "79' Zeki Amdouni in, Ruben Vargas out", "89' Ardon Jashari in, Remo Freuler out", "89' Miro Muheim in, Ricardo Rodriguez out"],
+        stats: { shots: "26 / 유효 7", possession: "68.0%", xg: "ESPN 미제공" },
+        mom: "Breel Embolo"
+      }
+    ]
+  });
+})();

@@ -119,3 +119,69 @@
     emptyState: "경기 후 공식 결과와 주요 스탯을 반영했습니다."
   };
 })();
+
+(function extendWorldCupHubDataJune14() {
+  const data = window.WORLD_CUP_DATA;
+  if (!data) return;
+
+  data.tournament.updatedAt = "2026-06-14";
+  data.tournament.scenarioNote = "2026-06-14 기준 FIFA 공식 조 편성과 개막 2일 차까지 끝난 조별리그 결과를 반영했습니다. 승률과 일부 전력 평가는 여전히 UI 검증용 시나리오입니다.";
+
+  const upsertSource = (source) => {
+    const index = data.sources.findIndex((item) => item.id === source.id);
+    if (index >= 0) {
+      data.sources[index] = source;
+      return;
+    }
+    data.sources.push(source);
+  };
+
+  upsertSource({
+    id: "fifa-results-2026-06-14",
+    title: "FIFA World Cup 2026 일정·결과·하이라이트",
+    publisher: "FIFA",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/match-schedule-fixtures-results-teams-stadiums",
+    checkedAt: "2026-06-14",
+    reliability: "official"
+  });
+
+  upsertSource({
+    id: "fifa-standings-2026-06-14",
+    title: "FIFA World Cup 2026 조별 순위",
+    publisher: "FIFA",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/standings",
+    checkedAt: "2026-06-14",
+    reliability: "official"
+  });
+
+  upsertSource({
+    id: "espn-match-summaries-2026-06-14",
+    title: "ESPN FIFA World Cup 2026 match summaries",
+    publisher: "ESPN",
+    url: "https://www.espn.com/soccer/league/_/name/fifa.world",
+    checkedAt: "2026-06-14",
+    reliability: "trusted"
+  });
+
+  if (data.openingCeremony) {
+    data.openingCeremony.updatedAt = "2026-06-14";
+  }
+
+  data.statsCenter = {
+    updatedAt: "2026-06-14",
+    playerStats: [
+      { label: "폴라린 발로건", value: "2골 vs 파라과이" },
+      { label: "비니시우스 주니오르", value: "브라질 월드컵 첫 골 vs 모로코" },
+      { label: "존 맥긴", value: "스코틀랜드 결승골 vs 아이티" },
+      { label: "브릴 엠볼로", value: "스위스 선제 PK 골 vs 카타르" },
+      { label: "황인범", value: "1골 1도움 vs 체코" }
+    ],
+    teamStats: [
+      { label: "A조 선두권", value: "멕시코 +2, 대한민국 +1, 두 팀 모두 승점 3" },
+      { label: "B조 현황", value: "캐나다 1점, 보스니아 1점, 카타르 1점, 스위스 1점" },
+      { label: "C조 현황", value: "스코틀랜드 3점, 브라질 1점, 모로코 1점, 아이티 0점" },
+      { label: "D조 현황", value: "미국 3점, 골득실 +3, 호주-튀르키예 킥오프 대기" }
+    ],
+    emptyState: "공식 경기 결과와 주요 스탯을 반영했습니다."
+  };
+})();

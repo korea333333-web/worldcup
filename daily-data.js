@@ -385,3 +385,250 @@
     }
   };
 })();
+
+(function extendDailyMatchHubJune14() {
+  const data = window.WORLD_CUP_DATA;
+  const hub = data?.dailyMatchHub;
+  if (!hub) return;
+
+  const sourceSchedule = {
+    label: "FIFA 일정/결과",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/match-schedule-fixtures-results-teams-stadiums",
+    checkedAt: "2026-06-14",
+    reliability: "official"
+  };
+
+  const sourceBrazil = {
+    label: "FIFA 브라질-모로코 리포트",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/brazil-morocco-highlights-match-report",
+    checkedAt: "2026-06-14",
+    reliability: "official"
+  };
+
+  const sourceEspn = {
+    label: "ESPN match summary",
+    url: "https://www.espn.com/soccer/league/_/name/fifa.world",
+    checkedAt: "2026-06-14",
+    reliability: "trusted"
+  };
+
+  hub.updatedAt = "2026-06-14";
+  hub.summary = "전날과 당일(2026-06-14 KST 12:23 기준) 종료된 공식 경기 결과, 득점, 카드, 선발, 주요 스탯, 영상 후보를 신뢰 가능한 출처로 보강했습니다.";
+  hub.sourceNote = "결과와 순위는 FIFA 공식 일정·결과·순위 페이지를 우선 반영했고, 선발 명단·교체·팀 스탯은 ESPN 매치 서머리로 교차 확인했습니다. 공식 하이라이트가 없으면 YouTube 검색 후보를 유지합니다.";
+
+  const upsertMatch = (match) => {
+    const index = hub.matches.findIndex((item) => item.id === match.id);
+    if (index >= 0) {
+      hub.matches[index] = match;
+      return;
+    }
+    hub.matches.push(match);
+  };
+
+  const upsertSectionItem = (sectionId, item) => {
+    const section = hub.sections.find((entry) => entry.id === sectionId);
+    if (!section) return;
+    const index = section.items.findIndex((entry) => entry.id === item.id);
+    if (index >= 0) {
+      section.items[index] = item;
+      return;
+    }
+    section.items.push(item);
+  };
+
+  const upsertVideo = (item) => upsertSectionItem("videos", item);
+
+  upsertMatch({
+    id: "group-b-qat-sui-2026-06-14",
+    type: "match",
+    status: "final",
+    phaseLabel: "조별리그 B조",
+    competition: "FIFA World Cup 2026",
+    teamA: "qatar",
+    teamB: "switzerland",
+    score: "카타르 1-1 스위스",
+    dateLabel: "2026-06-14 KST",
+    localTimeLabel: "2026-06-13 12:00 local",
+    venue: "San Francisco Bay Area Stadium (Levi's Stadium)",
+    city: "Santa Clara",
+    headline: "카타르가 종료 직전 자책골 유도로 승점 1 확보",
+    recap: "스위스가 브릴 엠볼로의 페널티킥으로 앞섰지만, 후반 추가시간 미로 무하임 자책골로 카타르가 1-1을 만들었습니다.",
+    scorers: ["브릴 엠볼로 17' (PK)", "미로 무하임 90+4' (OG)"],
+    notes: ["카타르 점유율 32.0%, 슈팅 6-26 열세", "카타르는 옐로카드 2장", "공식 하이라이트 URL은 확인 대기"],
+    highlightUrl: "https://www.youtube.com/results?search_query=Qatar+Switzerland+2026+World+Cup+highlights",
+    source: sourceSchedule,
+    detailSource: sourceEspn,
+    modelPick: { teamA: 24, draw: 30, teamB: 46 },
+    highlightVideos: [
+      {
+        title: "Qatar v Switzerland highlights",
+        channel: "YouTube search",
+        type: "highlight",
+        url: "https://www.youtube.com/results?search_query=Qatar+Switzerland+2026+World+Cup+highlights",
+        duration: "candidate",
+        meta: "공식 업로드 확인 전 후보 링크"
+      }
+    ]
+  });
+
+  upsertMatch({
+    id: "group-c-bra-mar-2026-06-14",
+    type: "match",
+    status: "final",
+    phaseLabel: "조별리그 C조",
+    competition: "FIFA World Cup 2026",
+    teamA: "brazil",
+    teamB: "morocco",
+    score: "브라질 1-1 모로코",
+    dateLabel: "2026-06-14 KST",
+    localTimeLabel: "2026-06-13 18:00 local",
+    venue: "New York New Jersey Stadium (MetLife Stadium)",
+    city: "East Rutherford",
+    headline: "비니시우스 동점골, 브라질과 모로코 무승부",
+    recap: "모로코가 이스마엘 사이바리 선제골로 앞섰지만, 브라질은 비니시우스 주니오르가 전반 32분 동점골을 넣어 1-1로 마쳤습니다.",
+    scorers: ["이스마엘 사이바리 21'", "비니시우스 주니오르 32'"],
+    notes: ["브루누 기마랑이스 동점골 도움", "브라질 점유율 51.4%, 슈팅 12-14", "브라질 경고 2장: 카세미루, 호제르 이바녜스"],
+    highlightUrl: sourceBrazil.url,
+    source: sourceBrazil,
+    detailSource: sourceEspn,
+    modelPick: { teamA: 53, draw: 25, teamB: 22 },
+    highlightVideos: [
+      {
+        title: "Brazil v Morocco | Match report",
+        channel: "FIFA",
+        type: "report",
+        url: sourceBrazil.url,
+        duration: "official",
+        meta: "FIFA 공식 리포트"
+      },
+      {
+        title: "Brazil v Morocco highlights",
+        channel: "YouTube search",
+        type: "highlight",
+        url: "https://www.youtube.com/results?search_query=Brazil+Morocco+2026+World+Cup+highlights",
+        duration: "candidate",
+        meta: "공식 업로드 확인 전 후보 링크"
+      }
+    ]
+  });
+
+  upsertMatch({
+    id: "group-c-hai-sco-2026-06-14",
+    type: "match",
+    status: "final",
+    phaseLabel: "조별리그 C조",
+    competition: "FIFA World Cup 2026",
+    teamA: "haiti",
+    teamB: "scotland",
+    score: "아이티 0-1 스코틀랜드",
+    dateLabel: "2026-06-14 KST",
+    localTimeLabel: "2026-06-13 21:00 local",
+    venue: "Boston Stadium (Gillette Stadium)",
+    city: "Foxborough",
+    headline: "존 맥긴 결승골로 스코틀랜드 첫 승",
+    recap: "스코틀랜드는 전반 28분 존 맥긴의 결승골을 지켜 아이티를 1-0으로 꺾고 C조 선두로 출발했습니다.",
+    scorers: ["존 맥긴 28'"],
+    notes: ["아이티 점유율 53.8%, 슈팅 15-9 우세에도 무득점", "스코틀랜드 경고 3장", "공식 하이라이트 URL은 확인 대기"],
+    highlightUrl: "https://www.youtube.com/results?search_query=Haiti+Scotland+2026+World+Cup+highlights",
+    source: sourceSchedule,
+    detailSource: sourceEspn,
+    modelPick: { teamA: 23, draw: 29, teamB: 48 },
+    highlightVideos: [
+      {
+        title: "Haiti v Scotland highlights",
+        channel: "YouTube search",
+        type: "highlight",
+        url: "https://www.youtube.com/results?search_query=Haiti+Scotland+2026+World+Cup+highlights",
+        duration: "candidate",
+        meta: "공식 업로드 확인 전 후보 링크"
+      }
+    ]
+  });
+
+  upsertSectionItem("matches", {
+    id: "group-b-qat-sui-2026-06-14",
+    type: "match",
+    status: "final",
+    phaseLabel: "B조 종료",
+    competition: "FIFA World Cup 2026",
+    teamA: "qatar",
+    teamB: "switzerland",
+    dateLabel: "2026-06-14 KST",
+    score: "1-1",
+    headline: "카타르 vs 스위스",
+    summary: "엠볼로 PK 이후 후반 추가시간 자책골로 1-1 무승부가 됐습니다.",
+    source: sourceSchedule
+  });
+
+  upsertSectionItem("matches", {
+    id: "group-c-bra-mar-2026-06-14",
+    type: "match",
+    status: "final",
+    phaseLabel: "C조 종료",
+    competition: "FIFA World Cup 2026",
+    teamA: "brazil",
+    teamB: "morocco",
+    dateLabel: "2026-06-14 KST",
+    score: "1-1",
+    headline: "브라질 vs 모로코",
+    summary: "사이바리 선제골과 비니시우스 동점골로 승점 1씩 나눴습니다.",
+    source: sourceBrazil
+  });
+
+  upsertSectionItem("matches", {
+    id: "group-c-hai-sco-2026-06-14",
+    type: "match",
+    status: "final",
+    phaseLabel: "C조 종료",
+    competition: "FIFA World Cup 2026",
+    teamA: "haiti",
+    teamB: "scotland",
+    dateLabel: "2026-06-14 KST",
+    score: "0-1",
+    headline: "아이티 vs 스코틀랜드",
+    summary: "존 맥긴 결승골로 스코틀랜드가 C조 선두가 됐습니다.",
+    source: sourceSchedule
+  });
+
+  upsertVideo({
+    id: "video-bra-mar-report",
+    type: "video",
+    headline: "브라질 vs 모로코 공식 리포트",
+    summary: "FIFA 공식 경기 리포트 링크입니다. 하이라이트는 별도 확인 중입니다.",
+    url: sourceBrazil.url,
+    source: sourceBrazil
+  });
+
+  upsertVideo({
+    id: "video-qat-sui-candidate",
+    type: "video",
+    headline: "카타르 vs 스위스 하이라이트 후보",
+    summary: "공식 업로드 전 YouTube 검색 후보 링크를 유지합니다.",
+    url: "https://www.youtube.com/results?search_query=Qatar+Switzerland+2026+World+Cup+highlights",
+    source: {
+      label: "YouTube search",
+      url: "https://www.youtube.com/results?search_query=Qatar+Switzerland+2026+World+Cup+highlights",
+      checkedAt: "2026-06-14",
+      reliability: "curated"
+    }
+  });
+
+  upsertVideo({
+    id: "video-hai-sco-candidate",
+    type: "video",
+    headline: "아이티 vs 스코틀랜드 하이라이트 후보",
+    summary: "공식 업로드 전 YouTube 검색 후보 링크를 유지합니다.",
+    url: "https://www.youtube.com/results?search_query=Haiti+Scotland+2026+World+Cup+highlights",
+    source: {
+      label: "YouTube search",
+      url: "https://www.youtube.com/results?search_query=Haiti+Scotland+2026+World+Cup+highlights",
+      checkedAt: "2026-06-14",
+      reliability: "curated"
+    }
+  });
+
+  if (hub.archive) {
+    hub.archive.officialResultsCheckedAt = "2026-06-14";
+    hub.archive.source = sourceSchedule;
+  }
+})();

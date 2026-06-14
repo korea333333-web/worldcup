@@ -69,3 +69,87 @@
     };
   }
 })();
+
+(function extendWorldCupScheduleJune14() {
+  const data = window.WORLD_CUP_DATA;
+  const schedule = data?.matchSchedule;
+  if (!schedule) return;
+
+  schedule.updatedAt = "2026-06-14";
+  schedule.sourceNote = "FIFA 공식 일정과 결과 페이지를 기준으로 개막 2일 차까지 반영했습니다. 일정 카드는 킥오프 기준 형식을 유지하되 이미 끝난 경기는 note에 최종 스코어를 적었습니다.";
+
+  (schedule.sources || []).forEach((source) => {
+    source.checkedAt = "2026-06-14";
+  });
+
+  const ensureVenue = (id, name, cityKo, countryKo, timezone) => {
+    if (schedule.venues.some((venue) => venue.id === id)) return;
+    schedule.venues.push({ id, name, cityKo, countryKo, timezone });
+  };
+
+  const upsertMatch = (match) => {
+    const index = schedule.matches.findIndex((item) => item.number === match.number);
+    if (index >= 0) {
+      schedule.matches[index] = match;
+      return;
+    }
+    schedule.matches.push(match);
+  };
+
+  ensureVenue("san-francisco-bay-area", "San Francisco Bay Area Stadium", "샌타클래라", "미국", "UTC-7");
+  ensureVenue("boston", "Boston Stadium", "폭스버러", "미국", "UTC-4");
+
+  upsertMatch({
+    number: 5,
+    stage: "Group B",
+    date: "2026-06-13",
+    localTime: "12:00",
+    kstDateTime: "2026-06-14 04:00",
+    venueId: "san-francisco-bay-area",
+    teamA: "qatar",
+    teamB: "switzerland",
+    status: "official",
+    note: "종료: 카타르 1-1 스위스"
+  });
+
+  upsertMatch({
+    number: 6,
+    stage: "Group C",
+    date: "2026-06-13",
+    localTime: "18:00",
+    kstDateTime: "2026-06-14 07:00",
+    venueId: "new-york-new-jersey",
+    teamA: "brazil",
+    teamB: "morocco",
+    status: "official",
+    note: "종료: 브라질 1-1 모로코"
+  });
+
+  upsertMatch({
+    number: 7,
+    stage: "Group C",
+    date: "2026-06-13",
+    localTime: "21:00",
+    kstDateTime: "2026-06-14 10:00",
+    venueId: "boston",
+    teamA: "haiti",
+    teamB: "scotland",
+    status: "official",
+    note: "종료: 아이티 0-1 스코틀랜드"
+  });
+
+  upsertMatch({
+    number: 8,
+    stage: "Group D",
+    date: "2026-06-13",
+    localTime: "21:00",
+    kstDateTime: "2026-06-14 13:00",
+    venueId: "vancouver",
+    teamA: "australia",
+    teamB: "turkiye",
+    status: "official",
+    note: "6월 14일 오후 킥오프 예정"
+  });
+
+  schedule.matches.sort((a, b) => a.number - b.number);
+})();
