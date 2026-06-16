@@ -185,3 +185,70 @@
     emptyState: "공식 경기 결과와 주요 스탯을 반영했습니다."
   };
 })();
+
+(function extendWorldCupHubDataJune17() {
+  const data = window.WORLD_CUP_DATA;
+  if (!data) return;
+
+  data.tournament.updatedAt = "2026-06-17";
+  data.tournament.scenarioNote = "2026-06-17 KST 기준 FIFA 공식 일정/결과 페이지와 최근 매치 리포트를 대조해 6월 15일~17일 종료 경기 결과를 반영했습니다. 일부 승률/전력 평가는 여전히 UI 검증용 시나리오입니다.";
+
+  const upsertSource = (source) => {
+    const index = data.sources.findIndex((item) => item.id === source.id);
+    if (index >= 0) {
+      data.sources[index] = source;
+      return;
+    }
+    data.sources.push(source);
+  };
+
+  upsertSource({
+    id: "fifa-results-2026-06-17",
+    title: "FIFA World Cup 2026 일정·결과",
+    publisher: "FIFA",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/match-schedule-fixtures-results-teams-stadiums",
+    checkedAt: "2026-06-17",
+    reliability: "official"
+  });
+
+  upsertSource({
+    id: "fifa-standings-2026-06-17",
+    title: "FIFA World Cup 2026 조별 순위",
+    publisher: "FIFA",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/standings",
+    checkedAt: "2026-06-17",
+    reliability: "official"
+  });
+
+  upsertSource({
+    id: "guardian-match-reports-2026-06-17",
+    title: "Guardian World Cup 2026 match reports",
+    publisher: "The Guardian",
+    url: "https://www.theguardian.com/football/2026/jun/16/france-senegal-world-cup-group-i-match-report",
+    checkedAt: "2026-06-17",
+    reliability: "trusted"
+  });
+
+  if (data.openingCeremony) {
+    data.openingCeremony.updatedAt = "2026-06-17";
+  }
+
+  data.statsCenter = {
+    updatedAt: "2026-06-17",
+    playerStats: [
+      { label: "킬리안 음바페", value: "세네갈전 2골" },
+      { label: "다이치 가마다", value: "네덜란드전 89분 동점골" },
+      { label: "아마드 디알로", value: "에콰도르전 결승골" },
+      { label: "야신 아야리", value: "튀니지전 2골" },
+      { label: "이맘 아슈르", value: "벨기에전 선제골" }
+    ],
+    teamStats: [
+      { label: "E조 흐름", value: "독일 +6, 코트디부아르 +1로 초반 우위" },
+      { label: "F조 흐름", value: "일본과 네덜란드가 2-2, 스웨덴은 5-1 대승" },
+      { label: "G조 흐름", value: "벨기에-이집트 1-1, 이란-뉴질랜드 2-2" },
+      { label: "H조 흐름", value: "스페인 0-0 카보베르데, 사우디 1-1 우루과이" },
+      { label: "I조 첫 경기", value: "프랑스 3-1 세네갈, 이라크-노르웨이는 별도 확인 중" }
+    ],
+    emptyState: "공식 경기 결과와 주요 스탯을 최신 확인 시점 기준으로 반영했습니다."
+  };
+})();

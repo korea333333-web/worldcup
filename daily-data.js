@@ -632,3 +632,301 @@
     hub.archive.source = sourceSchedule;
   }
 })();
+
+(function extendDailyMatchHubJune17() {
+  const data = window.WORLD_CUP_DATA;
+  const hub = data?.dailyMatchHub;
+  if (!hub) return;
+
+  const sourceSchedule = {
+    label: "FIFA 일정/결과",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/match-schedule-fixtures-results-teams-stadiums",
+    checkedAt: "2026-06-17",
+    reliability: "official"
+  };
+
+  const sourceGuardianE = {
+    label: "Guardian Group E/F reports",
+    url: "https://www.theguardian.com/football/live/2026/jun/15/world-cup-2026-news-iran-arrive-in-us-amid-protests-spain-belgium-egypt-enter-tournament-live",
+    checkedAt: "2026-06-17",
+    reliability: "trusted"
+  };
+
+  const sourceGuardianG = {
+    label: "Guardian Group G/H reports",
+    url: "https://www.theguardian.com/football/live/2026/jun/16/world-cup-2026-news-france-enter-fray-iran-feel-oppressed-var-official-cleared-over-gesture-live",
+    checkedAt: "2026-06-17",
+    reliability: "trusted"
+  };
+
+  const sourceFrance = {
+    label: "Guardian France v Senegal report",
+    url: "https://www.theguardian.com/football/2026/jun/16/france-senegal-world-cup-group-i-match-report",
+    checkedAt: "2026-06-17",
+    reliability: "trusted"
+  };
+
+  hub.updatedAt = "2026-06-17";
+  hub.summary = "2026-06-17 KST 08:45 기준 전날과 당일 종료 경기 가운데 공식 결과와 신뢰 가능한 매치 리포트를 확보한 경기들을 허브에 반영했습니다.";
+  hub.sourceNote = "결과 확인은 FIFA 공식 일정/결과 페이지를 기준으로 유지했고, 세부 맥락과 주요 장면은 Guardian match report와 Reuters 전재 기사로 교차 확인했습니다. 공식 하이라이트가 바로 확인되지 않은 경기는 YouTube 검색 후보를 유지합니다.";
+  hub.featuredMatchId = "group-i-fra-sen-2026-06-17";
+
+  const upsertMatch = (match) => {
+    const index = hub.matches.findIndex((item) => item.id === match.id);
+    if (index >= 0) {
+      hub.matches[index] = match;
+      return;
+    }
+    hub.matches.push(match);
+  };
+
+  const upsertSectionItem = (sectionId, item) => {
+    const section = hub.sections.find((entry) => entry.id === sectionId);
+    if (!section) return;
+    const index = section.items.findIndex((entry) => entry.id === item.id);
+    if (index >= 0) {
+      section.items[index] = item;
+      return;
+    }
+    section.items.push(item);
+  };
+
+  const upsertVideo = (item) => upsertSectionItem("videos", item);
+
+  upsertMatch({
+    id: "group-e-ger-cur-2026-06-15",
+    type: "match",
+    status: "final",
+    phaseLabel: "조별리그 E조",
+    competition: "FIFA World Cup 2026",
+    teamA: "germany",
+    teamB: "curacao",
+    score: "독일 7-1 퀴라소",
+    dateLabel: "2026-06-15 KST",
+    localTimeLabel: "2026-06-14 18:00 local",
+    venue: "Houston Stadium",
+    city: "Houston",
+    headline: "독일이 퀴라소 데뷔전을 7-1로 제압",
+    recap: "독일이 조기부터 주도권을 잡아 7골을 몰아쳤고, 퀴라소는 대회 첫 월드컵 본선 골을 남겼습니다.",
+    scorers: ["독일 7골", "퀴라소 코멘엔시아 1골"],
+    notes: ["Guardian match report 확인", "퀴라소 월드컵 본선 첫 득점", "공식 하이라이트 URL은 추후 보강 대상"],
+    highlightUrl: "https://www.youtube.com/results?search_query=Germany+Curacao+2026+World+Cup+highlights",
+    source: sourceSchedule,
+    detailSource: sourceGuardianE,
+    modelPick: { teamA: 79, draw: 13, teamB: 8 },
+    highlightVideos: [
+      {
+        title: "Germany v Curacao highlights",
+        channel: "YouTube search",
+        type: "highlight",
+        url: "https://www.youtube.com/results?search_query=Germany+Curacao+2026+World+Cup+highlights",
+        duration: "candidate",
+        meta: "공식 업로드 확인 전 후보 링크"
+      }
+    ]
+  });
+
+  upsertMatch({
+    id: "group-f-ned-jpn-2026-06-15",
+    type: "match",
+    status: "final",
+    phaseLabel: "조별리그 F조",
+    competition: "FIFA World Cup 2026",
+    teamA: "netherlands",
+    teamB: "japan",
+    score: "네덜란드 2-2 일본",
+    dateLabel: "2026-06-15 KST",
+    localTimeLabel: "2026-06-14 15:00 local",
+    venue: "Dallas Stadium",
+    city: "Dallas",
+    headline: "가마다 동점골로 일본이 네덜란드와 2-2 무승부",
+    recap: "일본이 후반 막판 다이치 가마다의 동점골로 승점을 챙기며 F조 초반 흐름을 바꿨습니다.",
+    scorers: ["네덜란드 2골", "일본 2골", "가마다 89' 동점골"],
+    notes: ["Guardian match report 확인", "일본 late equaliser", "공식 하이라이트 URL은 추후 보강 대상"],
+    highlightUrl: "https://www.youtube.com/results?search_query=Netherlands+Japan+2026+World+Cup+highlights",
+    source: sourceSchedule,
+    detailSource: sourceGuardianE,
+    modelPick: { teamA: 45, draw: 26, teamB: 29 },
+    highlightVideos: [
+      {
+        title: "Netherlands v Japan highlights",
+        channel: "YouTube search",
+        type: "highlight",
+        url: "https://www.youtube.com/results?search_query=Netherlands+Japan+2026+World+Cup+highlights",
+        duration: "candidate",
+        meta: "공식 업로드 확인 전 후보 링크"
+      }
+    ]
+  });
+
+  upsertMatch({
+    id: "group-h-esp-cpv-2026-06-16",
+    type: "match",
+    status: "final",
+    phaseLabel: "조별리그 H조",
+    competition: "FIFA World Cup 2026",
+    teamA: "spain",
+    teamB: "cabo-verde",
+    score: "스페인 0-0 카보베르데",
+    dateLabel: "2026-06-16 KST",
+    localTimeLabel: "2026-06-15 12:00 local",
+    venue: "Atlanta Stadium",
+    city: "Atlanta",
+    headline: "카보베르데가 스페인을 0-0으로 막아낸 최대 이변",
+    recap: "카보베르데가 스페인의 공세를 버텨내며 승점 1점을 챙겼고, H조가 초반부터 크게 흔들렸습니다.",
+    scorers: [],
+    notes: ["Guardian news blog 확인", "카보베르데 수비 집중", "하이라이트는 검색 후보 유지"],
+    highlightUrl: "https://www.youtube.com/results?search_query=Spain+Cape+Verde+2026+World+Cup+highlights",
+    source: sourceSchedule,
+    detailSource: sourceGuardianG,
+    modelPick: { teamA: 72, draw: 18, teamB: 10 },
+    highlightVideos: [
+      {
+        title: "Spain v Cape Verde highlights",
+        channel: "YouTube search",
+        type: "highlight",
+        url: "https://www.youtube.com/results?search_query=Spain+Cape+Verde+2026+World+Cup+highlights",
+        duration: "candidate",
+        meta: "공식 업로드 확인 전 후보 링크"
+      }
+    ]
+  });
+
+  upsertMatch({
+    id: "group-g-bel-egy-2026-06-16",
+    type: "match",
+    status: "final",
+    phaseLabel: "조별리그 G조",
+    competition: "FIFA World Cup 2026",
+    teamA: "belgium",
+    teamB: "egypt",
+    score: "벨기에 1-1 이집트",
+    dateLabel: "2026-06-16 KST",
+    localTimeLabel: "2026-06-15 15:00 local",
+    venue: "Seattle Stadium",
+    city: "Seattle",
+    headline: "루카쿠 투입 후 벨기에가 이집트와 1-1",
+    recap: "이집트가 먼저 앞섰지만, 루카쿠 투입 직후 유도한 자책골로 벨기에가 균형을 맞췄습니다.",
+    scorers: ["이맘 아슈르 19'", "모하메드 하니 66' 자책골"],
+    notes: ["Guardian match report 확인", "루카쿠 교체 효과", "공식 하이라이트 URL은 추후 보강 대상"],
+    highlightUrl: "https://www.youtube.com/results?search_query=Belgium+Egypt+2026+World+Cup+highlights",
+    source: sourceSchedule,
+    detailSource: sourceGuardianG,
+    modelPick: { teamA: 52, draw: 26, teamB: 22 },
+    highlightVideos: [
+      {
+        title: "Belgium v Egypt highlights",
+        channel: "YouTube search",
+        type: "highlight",
+        url: "https://www.youtube.com/results?search_query=Belgium+Egypt+2026+World+Cup+highlights",
+        duration: "candidate",
+        meta: "공식 업로드 확인 전 후보 링크"
+      }
+    ]
+  });
+
+  upsertMatch({
+    id: "group-i-fra-sen-2026-06-17",
+    type: "match",
+    status: "final",
+    phaseLabel: "조별리그 I조",
+    competition: "FIFA World Cup 2026",
+    teamA: "france",
+    teamB: "senegal",
+    score: "프랑스 3-1 세네갈",
+    dateLabel: "2026-06-17 KST",
+    localTimeLabel: "2026-06-16 15:00 local",
+    venue: "New York New Jersey Stadium",
+    city: "East Rutherford",
+    headline: "음바페 멀티골, 프랑스가 세네갈을 3-1로 제압",
+    recap: "프랑스가 후반 전술 조정 이후 흐름을 잡았고, 음바페가 멀티골로 개막전을 정리했습니다.",
+    scorers: ["음바페 2골", "바르콜라 1골", "세네갈 이브라힘 음바예 1골"],
+    notes: ["Guardian match report 확인", "음바페 프랑스 통산 기록 경신 맥락", "후반 전술 수정 후 경기 양상 반전"],
+    highlightUrl: sourceFrance.url,
+    source: sourceSchedule,
+    detailSource: sourceFrance,
+    modelPick: { teamA: 62, draw: 22, teamB: 16 },
+    highlightVideos: [
+      {
+        title: "France v Senegal match report",
+        channel: "The Guardian",
+        type: "report",
+        url: sourceFrance.url,
+        duration: "article",
+        meta: "세부 경기 흐름 확인용 매치 리포트"
+      },
+      {
+        title: "France v Senegal highlights",
+        channel: "YouTube search",
+        type: "highlight",
+        url: "https://www.youtube.com/results?search_query=France+Senegal+2026+World+Cup+highlights",
+        duration: "candidate",
+        meta: "공식 업로드 확인 전 후보 링크"
+      }
+    ]
+  });
+
+  upsertSectionItem("matches", {
+    id: "group-i-fra-sen-2026-06-17",
+    type: "match",
+    status: "final",
+    phaseLabel: "I조 종료",
+    competition: "FIFA World Cup 2026",
+    teamA: "france",
+    teamB: "senegal",
+    dateLabel: "2026-06-17 KST",
+    score: "3-1",
+    headline: "프랑스 vs 세네갈",
+    summary: "음바페 멀티골과 후반 전술 수정으로 프랑스가 첫 승을 챙겼습니다.",
+    source: sourceFrance
+  });
+
+  upsertSectionItem("matches", {
+    id: "group-h-esp-cpv-2026-06-16",
+    type: "match",
+    status: "final",
+    phaseLabel: "H조 종료",
+    competition: "FIFA World Cup 2026",
+    teamA: "spain",
+    teamB: "cabo-verde",
+    dateLabel: "2026-06-16 KST",
+    score: "0-0",
+    headline: "스페인 vs 카보베르데",
+    summary: "이번 대회 초반 최대 이변 중 하나로 카보베르데가 승점 1점을 얻었습니다.",
+    source: sourceGuardianG
+  });
+
+  upsertSectionItem("matches", {
+    id: "group-f-ned-jpn-2026-06-15",
+    type: "match",
+    status: "final",
+    phaseLabel: "F조 종료",
+    competition: "FIFA World Cup 2026",
+    teamA: "netherlands",
+    teamB: "japan",
+    dateLabel: "2026-06-15 KST",
+    score: "2-2",
+    headline: "네덜란드 vs 일본",
+    summary: "가마다의 막판 동점골로 일본이 조 상위권 경쟁을 이어갔습니다.",
+    source: sourceGuardianE
+  });
+
+  upsertVideo({
+    id: "video-france-senegal-candidate",
+    type: "video",
+    headline: "프랑스 vs 세네갈 하이라이트 후보",
+    summary: "공식 영상 URL이 바로 노출되지 않아 검색 후보를 유지합니다.",
+    url: "https://www.youtube.com/results?search_query=France+Senegal+2026+World+Cup+highlights",
+    source: {
+      label: "YouTube search",
+      url: "https://www.youtube.com/results?search_query=France+Senegal+2026+World+Cup+highlights",
+      checkedAt: "2026-06-17",
+      reliability: "curated"
+    }
+  });
+
+  if (hub.archive) {
+    hub.archive.officialResultsCheckedAt = "2026-06-17";
+    hub.archive.source = sourceSchedule;
+  }
+})();

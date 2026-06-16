@@ -153,3 +153,173 @@
 
   schedule.matches.sort((a, b) => a.number - b.number);
 })();
+
+(function extendWorldCupScheduleJune17() {
+  const data = window.WORLD_CUP_DATA;
+  const schedule = data?.matchSchedule;
+  if (!schedule) return;
+
+  schedule.updatedAt = "2026-06-17";
+  schedule.sourceNote = "FIFA 공식 일정/결과 페이지를 2026-06-17 KST 기준으로 다시 확인해 6월 15일~17일 종료 경기 결과를 보강했습니다. 앱 시나리오용 향후 일정은 유지하되, 끝난 경기는 note에 최종 스코어를 적었습니다.";
+
+  (schedule.sources || []).forEach((source) => {
+    source.checkedAt = "2026-06-17";
+  });
+
+  const ensureVenue = (id, name, cityKo, countryKo, timezone) => {
+    if (schedule.venues.some((venue) => venue.id === id)) return;
+    schedule.venues.push({ id, name, cityKo, countryKo, timezone });
+  };
+
+  const upsertMatchByDateTeams = (match) => {
+    const index = schedule.matches.findIndex((item) =>
+      item.date === match.date &&
+      item.teamA === match.teamA &&
+      item.teamB === match.teamB
+    );
+
+    if (index >= 0) {
+      schedule.matches[index] = { ...schedule.matches[index], ...match };
+      return;
+    }
+
+    schedule.matches.push(match);
+  };
+
+  ensureVenue("philadelphia", "Philadelphia Stadium", "필라델피아", "미국", "UTC-4");
+
+  upsertMatchByDateTeams({
+    number: 9,
+    stage: "Group E",
+    date: "2026-06-14",
+    localTime: "12:00",
+    kstDateTime: "2026-06-15 01:00",
+    venueId: "philadelphia",
+    teamA: "ivory-coast",
+    teamB: "ecuador",
+    status: "official",
+    note: "종료: 코트디부아르 1-0 에콰도르"
+  });
+
+  upsertMatchByDateTeams({
+    number: 10,
+    stage: "Group E",
+    date: "2026-06-14",
+    localTime: "18:00",
+    kstDateTime: "2026-06-15 08:00",
+    venueId: "houston",
+    teamA: "germany",
+    teamB: "curacao",
+    status: "official",
+    note: "종료: 독일 7-1 퀴라소"
+  });
+
+  upsertMatchByDateTeams({
+    number: 11,
+    stage: "Group F",
+    date: "2026-06-14",
+    localTime: "15:00",
+    kstDateTime: "2026-06-15 05:00",
+    venueId: "dallas",
+    teamA: "netherlands",
+    teamB: "japan",
+    status: "official",
+    note: "종료: 네덜란드 2-2 일본"
+  });
+
+  upsertMatchByDateTeams({
+    number: 12,
+    stage: "Group F",
+    date: "2026-06-14",
+    localTime: "18:00",
+    kstDateTime: "2026-06-15 09:00",
+    venueId: "monterrey",
+    teamA: "sweden",
+    teamB: "tunisia",
+    status: "official",
+    note: "종료: 스웨덴 5-1 튀니지"
+  });
+
+  upsertMatchByDateTeams({
+    number: 13,
+    stage: "Group H",
+    date: "2026-06-15",
+    localTime: "12:00",
+    kstDateTime: "2026-06-16 01:00",
+    venueId: "atlanta",
+    teamA: "spain",
+    teamB: "cabo-verde",
+    status: "official",
+    note: "종료: 스페인 0-0 카보베르데"
+  });
+
+  upsertMatchByDateTeams({
+    number: 14,
+    stage: "Group G",
+    date: "2026-06-15",
+    localTime: "15:00",
+    kstDateTime: "2026-06-16 07:00",
+    venueId: "seattle",
+    teamA: "belgium",
+    teamB: "egypt",
+    status: "official",
+    note: "종료: 벨기에 1-1 이집트"
+  });
+
+  upsertMatchByDateTeams({
+    number: 15,
+    stage: "Group H",
+    date: "2026-06-15",
+    localTime: "18:00",
+    kstDateTime: "2026-06-16 09:00",
+    venueId: "miami",
+    teamA: "saudi-arabia",
+    teamB: "uruguay",
+    status: "official",
+    note: "종료: 사우디아라비아 1-1 우루과이"
+  });
+
+  upsertMatchByDateTeams({
+    number: 16,
+    stage: "Group G",
+    date: "2026-06-15",
+    localTime: "21:00",
+    kstDateTime: "2026-06-16 12:00",
+    venueId: "los-angeles",
+    teamA: "iran",
+    teamB: "new-zealand",
+    status: "official",
+    note: "종료: 이란 2-2 뉴질랜드"
+  });
+
+  upsertMatchByDateTeams({
+    number: 17,
+    stage: "Group I",
+    date: "2026-06-16",
+    localTime: "15:00",
+    kstDateTime: "2026-06-17 04:00",
+    venueId: "new-york-new-jersey",
+    teamA: "france",
+    teamB: "senegal",
+    status: "official",
+    note: "종료: 프랑스 3-1 세네갈"
+  });
+
+  upsertMatchByDateTeams({
+    number: 18,
+    stage: "Group I",
+    date: "2026-06-16",
+    localTime: "18:00",
+    kstDateTime: "2026-06-17 07:00",
+    venueId: "boston",
+    teamA: "iraq",
+    teamB: "norway",
+    status: "official",
+    note: "라이브 확인 중: 2026-06-17 KST 08:45 기준 별도 확정 결과 미반영"
+  });
+
+  schedule.matches.sort((a, b) => {
+    if (a.kstDateTime === b.kstDateTime) return a.number - b.number;
+    return a.kstDateTime.localeCompare(b.kstDateTime);
+  });
+})();
