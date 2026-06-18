@@ -321,6 +321,107 @@
   }
 })();
 
+(function extendRichWorldCupDataJune18() {
+  const data = window.WORLD_CUP_DATA;
+  if (!data?.teams) return;
+
+  const applyRecord = (teamId, patch) => {
+    const team = data.teams[teamId];
+    if (!team) return;
+    Object.assign(team, patch);
+  };
+
+  applyRecord("england", {
+    lastChecked: "2026-06-18",
+    matchRecords: [
+      {
+        status: "played",
+        matchLabel: "England Group L opener vs Croatia",
+        score: "England 4-2 Croatia",
+        startingXI: ["Jordan Pickford", "Reece James", "Ezri Konsa", "John Stones", "Myles Lewis-Skelly O'Reilly", "Elliot Anderson", "Declan Rice", "Noni Madueke", "Jude Bellingham", "Anthony Gordon", "Harry Kane"],
+        substitutions: ["Bukayo Saka in", "Marcus Rashford in", "England bench impact turned the game after half-time"],
+        stats: { shots: "trusted report summary", possession: "open match", xg: "not pinned at cutoff" },
+        mom: "Jude Bellingham"
+      }
+    ]
+  });
+
+  applyRecord("croatia", {
+    lastChecked: "2026-06-18",
+    matchRecords: [
+      {
+        status: "played",
+        matchLabel: "Croatia Group L opener vs England",
+        score: "Croatia 2-4 England",
+        startingXI: ["Dominik Livakovic", "Josip Sutalo", "Luka Vuskovic", "Josko Gvardiol", "Josip Stanisic", "Luka Modric", "Petar Sucic", "Ivan Perisic", "Mario Pasalic", "Martin Baturina", "Petar Musa"],
+        substitutions: ["Croatia levelled to 2-2 before half-time", "Unable to contain England's second-half transition game"],
+        stats: { shots: "trusted report summary", possession: "open match", xg: "not pinned at cutoff" },
+        mom: "Martin Baturina"
+      }
+    ]
+  });
+
+  applyRecord("portugal", {
+    lastChecked: "2026-06-18",
+    matchRecords: [
+      {
+        status: "played",
+        matchLabel: "Portugal Group K opener vs DR Congo",
+        score: "Portugal 1-1 DR Congo",
+        startingXI: ["Diogo Costa", "Joao Cancelo", "Tomas Araujo", "Renato Veiga", "Nuno Mendes", "Vitinha", "Joao Neves", "Bernardo Silva", "Bruno Fernandes", "Pedro Neto", "Cristiano Ronaldo"],
+        substitutions: ["Francisco Conceicao in", "Rafael Leao in", "Portugal had an overhead Cancelo goal ruled out for offside"],
+        stats: { shots: "trusted live blog summary", possession: "Portugal controlled possession", xg: "not pinned at cutoff" },
+        mom: "Joao Neves"
+      }
+    ]
+  });
+
+  applyRecord("dr-congo", {
+    lastChecked: "2026-06-18",
+    matchRecords: [
+      {
+        status: "played",
+        matchLabel: "DR Congo Group K opener vs Portugal",
+        score: "DR Congo 1-1 Portugal",
+        startingXI: ["Dimitry Bertaud Mpasi", "Aaron Wan-Bissaka", "Chancel Mbemba", "Axel Tuanzebe", "Batubinsika Kapaudi", "Arthur Masuaku", "Samuel Moutoussamy", "Noah Sadiki Mukau", "Edo Kayembe", "Cedric Bakambu", "Yoane Wissa"],
+        substitutions: ["Edo Kayembe and Cedric Bakambu led counters", "Noah Sadiki replacement noted in second half", "Deep block and set-piece equaliser earned first point"],
+        stats: { shots: "trusted live blog summary", possession: "less than Portugal", xg: "not pinned at cutoff" },
+        mom: "Yoane Wissa"
+      }
+    ]
+  });
+
+  applyRecord("iraq", {
+    lastChecked: "2026-06-18",
+    matchRecords: [
+      {
+        status: "played",
+        matchLabel: "Iraq Group I opener vs Norway",
+        score: "Iraq 1-4 Norway",
+        startingXI: ["Jalal Hassan", "Frans Putros Doski", "Rebin Sulaka Tahseen", "Munaf Hashim", "Hussein Ali", "Youssef Amyn Jasim", "Osama Rashid Ismail", "Montader Al-Ammari", "Bashar Resan Bayesh", "Ali Al-Hamadi", "Aymen Hussein"],
+        substitutions: ["Ahmed Qasem in", "Saadoon added late width", "Iraq hit the post and created multiple late first-half chances"],
+        stats: { shots: "trusted live blog summary", possession: "competitive despite scoreline", xg: "not pinned at cutoff" },
+        mom: "Aymen Hussein"
+      }
+    ]
+  });
+
+  applyRecord("norway", {
+    lastChecked: "2026-06-18",
+    matchRecords: [
+      {
+        status: "played",
+        matchLabel: "Norway Group I opener vs Iraq",
+        score: "Norway 4-1 Iraq",
+        startingXI: ["Orjan Nyland", "David Moller Wolfe", "Torbjorn Heggem", "Kristoffer Ajer", "Julian Ryerson", "Fredrik Aursnes", "Sander Berge", "Martin Odegaard", "Antonio Nusa", "Erling Haaland", "Alexander Sorloth"],
+        substitutions: ["Leo Ostigard in and scored", "Kristian Thorstvedt involved in late scramble leading to own goal", "Haaland scored twice on World Cup debut"],
+        stats: { shots: "trusted live blog summary", possession: "Norway ahead early, then under pressure", xg: "not pinned at cutoff" },
+        mom: "Erling Haaland"
+      }
+    ]
+  });
+})();
+
 (function extendRichWorldCupDataJune14() {
   const data = window.WORLD_CUP_DATA;
   if (!data?.teams) return;

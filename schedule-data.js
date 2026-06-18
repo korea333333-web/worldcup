@@ -70,6 +70,129 @@
   }
 })();
 
+(function finalizeWorldCupScheduleJune18() {
+  const data = window.WORLD_CUP_DATA;
+  const schedule = data?.matchSchedule;
+  if (!schedule) return;
+
+  schedule.updatedAt = "2026-06-18";
+  schedule.sourceNote = "FIFA official results and standings were rechecked at the 2026-06-18 07:00 KST automation cutoff. Completed matches before that cutoff were written back into the scenario schedule with trusted report notes where detailed official match reports were not yet pinned.";
+
+  (schedule.sources || []).forEach((source) => {
+    source.checkedAt = "2026-06-18";
+  });
+
+  const iraqNorway = schedule.matches.find((item) => item.teamA === "iraq" && item.teamB === "norway");
+  if (iraqNorway) {
+    iraqNorway.note = "Final: Iraq 1-4 Norway";
+  }
+})();
+
+(function extendWorldCupScheduleJune18() {
+  const data = window.WORLD_CUP_DATA;
+  const schedule = data?.matchSchedule;
+  if (!schedule) return;
+
+  schedule.updatedAt = "2026-06-18";
+  schedule.sourceNote = "FIFA official results and standings were rechecked at the 2026-06-18 07:00 KST automation cutoff. Completed matches before that cutoff were written back into the scenario schedule with trusted report notes where detailed official match reports were not yet pinned.";
+
+  (schedule.sources || []).forEach((source) => {
+    source.checkedAt = "2026-06-18";
+  });
+
+  const ensureVenue = (id, name, cityKo, countryKo, timezone) => {
+    if (schedule.venues.some((venue) => venue.id === id)) return;
+    schedule.venues.push({ id, name, cityKo, countryKo, timezone });
+  };
+
+  const upsertMatchByDateTeams = (match) => {
+    const index = schedule.matches.findIndex((item) =>
+      item.date === match.date &&
+      item.teamA === match.teamA &&
+      item.teamB === match.teamB
+    );
+
+    if (index >= 0) {
+      schedule.matches[index] = { ...schedule.matches[index], ...match };
+      return;
+    }
+
+    schedule.matches.push(match);
+  };
+
+  ensureVenue("kansas-city", "Kansas City Stadium", "Kansas City", "USA", "UTC-5");
+
+  upsertMatchByDateTeams({
+    number: 18,
+    stage: "Group I",
+    date: "2026-06-16",
+    localTime: "18:00",
+    kstDateTime: "2026-06-17 07:00",
+    venueId: "boston",
+    teamA: "iraq",
+    teamB: "norway",
+    status: "official",
+    note: "Final: Iraq 1-4 Norway"
+  });
+
+  upsertMatchByDateTeams({
+    number: 19,
+    stage: "Group J",
+    date: "2026-06-16",
+    localTime: "18:00",
+    kstDateTime: "2026-06-17 08:00",
+    venueId: "kansas-city",
+    teamA: "argentina",
+    teamB: "algeria",
+    status: "official",
+    note: "Final: Argentina 3-0 Algeria"
+  });
+
+  upsertMatchByDateTeams({
+    number: 20,
+    stage: "Group J",
+    date: "2026-06-16",
+    localTime: "18:00",
+    kstDateTime: "2026-06-17 10:00",
+    venueId: "san-francisco-bay-area",
+    teamA: "austria",
+    teamB: "jordan",
+    status: "official",
+    note: "Final: Austria 3-1 Jordan"
+  });
+
+  upsertMatchByDateTeams({
+    number: 23,
+    stage: "Group K",
+    date: "2026-06-17",
+    localTime: "13:00",
+    kstDateTime: "2026-06-18 01:00",
+    venueId: "houston",
+    teamA: "portugal",
+    teamB: "dr-congo",
+    status: "official",
+    note: "Final: Portugal 1-1 DR Congo"
+  });
+
+  upsertMatchByDateTeams({
+    number: 24,
+    stage: "Group L",
+    date: "2026-06-17",
+    localTime: "14:00",
+    kstDateTime: "2026-06-18 04:00",
+    venueId: "dallas",
+    teamA: "england",
+    teamB: "croatia",
+    status: "official",
+    note: "Final: England 4-2 Croatia"
+  });
+
+  schedule.matches.sort((a, b) => {
+    if (a.kstDateTime === b.kstDateTime) return a.number - b.number;
+    return a.kstDateTime.localeCompare(b.kstDateTime);
+  });
+})();
+
 (function extendWorldCupScheduleJune14() {
   const data = window.WORLD_CUP_DATA;
   const schedule = data?.matchSchedule;
@@ -159,11 +282,11 @@
   const schedule = data?.matchSchedule;
   if (!schedule) return;
 
-  schedule.updatedAt = "2026-06-17";
-  schedule.sourceNote = "FIFA 공식 일정/결과 페이지를 2026-06-17 KST 기준으로 다시 확인해 6월 15일~17일 종료 경기 결과를 보강했습니다. 앱 시나리오용 향후 일정은 유지하되, 끝난 경기는 note에 최종 스코어를 적었습니다.";
+  schedule.updatedAt = "2026-06-18";
+  schedule.sourceNote = "FIFA official results and standings were rechecked at the 2026-06-18 07:00 KST automation cutoff. Completed matches before that cutoff were written back into the scenario schedule with trusted report notes where detailed official match reports were not yet pinned.";
 
   (schedule.sources || []).forEach((source) => {
-    source.checkedAt = "2026-06-17";
+    source.checkedAt = "2026-06-18";
   });
 
   const ensureVenue = (id, name, cityKo, countryKo, timezone) => {
@@ -315,7 +438,7 @@
     teamA: "iraq",
     teamB: "norway",
     status: "official",
-    note: "라이브 확인 중: 2026-06-17 KST 08:45 기준 별도 확정 결과 미반영"
+    note: "Final: Iraq 1-4 Norway"
   });
 
   schedule.matches.sort((a, b) => {

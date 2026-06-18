@@ -386,6 +386,341 @@
   };
 })();
 
+(function finalizeDailyMatchHubJune18() {
+  const data = window.WORLD_CUP_DATA;
+  const hub = data?.dailyMatchHub;
+  if (!hub) return;
+
+  hub.updatedAt = "2026-06-18";
+  hub.summary = "Cutoff kept at 2026-06-18 07:00 KST. Official FIFA results/standings were rechecked and the latest completed matches before the cutoff were merged with trusted match reports.";
+  hub.sourceNote = "FIFA schedule/results and standings remain the official reference. Guardian match reports and live blogs were used only for scorers, lineup context, substitutions, and headline stats before the 07:00 KST automation cutoff.";
+  hub.featuredMatchId = "group-l-eng-cro-2026-06-17";
+
+  if (hub.archive) {
+    hub.archive.officialResultsCheckedAt = "2026-06-18";
+    hub.archive.source = {
+      label: "FIFA schedule/results",
+      url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/match-schedule-fixtures-results-teams-stadiums",
+      checkedAt: "2026-06-18",
+      reliability: "official"
+    };
+  }
+})();
+
+(function extendDailyMatchHubJune18() {
+  const data = window.WORLD_CUP_DATA;
+  const hub = data?.dailyMatchHub;
+  if (!hub) return;
+
+  const sourceSchedule = {
+    label: "FIFA schedule/results",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/match-schedule-fixtures-results-teams-stadiums",
+    checkedAt: "2026-06-18",
+    reliability: "official"
+  };
+
+  const sourceStandings = {
+    label: "FIFA standings",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/standings",
+    checkedAt: "2026-06-18",
+    reliability: "official"
+  };
+
+  const sourceEngland = {
+    label: "Guardian England v Croatia report",
+    url: "https://www.theguardian.com/football/2026/jun/17/england-croatia-world-cup-2026-group-l-match-report",
+    checkedAt: "2026-06-18",
+    reliability: "trusted"
+  };
+
+  const sourcePortugal = {
+    label: "Guardian Portugal v DR Congo report",
+    url: "https://www.theguardian.com/football/2026/jun/17/portugal-dr-congo-world-cup-2026-group-k-match-report",
+    checkedAt: "2026-06-18",
+    reliability: "trusted"
+  };
+
+  const sourceArgentina = {
+    label: "Guardian Argentina v Algeria report",
+    url: "https://www.theguardian.com/football/2026/jun/16/argentina-algeria-world-cup-group-j-match-report",
+    checkedAt: "2026-06-18",
+    reliability: "trusted"
+  };
+
+  const sourceIraq = {
+    label: "Guardian Iraq v Norway live report",
+    url: "https://www.theguardian.com/football/live/2026/jun/16/iraq-v-norway-world-cup-2026-live",
+    checkedAt: "2026-06-18",
+    reliability: "trusted"
+  };
+
+  hub.updatedAt = "2026-06-18";
+  hub.summary = "Cutoff kept at 2026-06-18 07:00 KST. Official FIFA results/standings were rechecked and the latest completed matches before the cutoff were merged with trusted match reports.";
+  hub.sourceNote = "FIFA schedule/results and standings remain the official reference. Guardian match reports and live blogs were used only for scorers, lineup context, substitutions, and headline stats before the 07:00 KST automation cutoff.";
+  hub.featuredMatchId = "group-l-eng-cro-2026-06-17";
+
+  const upsertMatch = (match) => {
+    const index = hub.matches.findIndex((item) => item.id === match.id);
+    if (index >= 0) {
+      hub.matches[index] = match;
+      return;
+    }
+    hub.matches.push(match);
+  };
+
+  const upsertSectionItem = (sectionId, item) => {
+    const section = hub.sections.find((entry) => entry.id === sectionId);
+    if (!section) return;
+    const index = section.items.findIndex((entry) => entry.id === item.id);
+    if (index >= 0) {
+      section.items[index] = item;
+      return;
+    }
+    section.items.push(item);
+  };
+
+  const upsertVideo = (item) => upsertSectionItem("videos", item);
+
+  upsertMatch({
+    id: "group-l-eng-cro-2026-06-17",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group L",
+    competition: "FIFA World Cup 2026",
+    teamA: "england",
+    teamB: "croatia",
+    score: "England 4-2 Croatia",
+    dateLabel: "2026-06-18 KST",
+    localTimeLabel: "2026-06-17 Dallas local",
+    venue: "Dallas Stadium",
+    city: "Dallas",
+    headline: "England survive a wide-open first half and pull away after the break",
+    recap: "Harry Kane scored twice, but Croatia replied through Martin Baturina and Petar Musa before half-time. Jude Bellingham and Marcus Rashford finished the job in the second half.",
+    scorers: ["Harry Kane (2)", "Martin Baturina", "Petar Musa", "Jude Bellingham", "Marcus Rashford"],
+    notes: ["Half-time score was 2-2", "Guardian report flagged England's defensive gaps despite the win", "Official result cross-checked against FIFA results and standings pages"],
+    highlightUrl: "https://www.youtube.com/results?search_query=England+Croatia+2026+World+Cup+highlights",
+    source: sourceEngland,
+    detailSource: sourceStandings,
+    modelPick: { teamA: 57, draw: 22, teamB: 21 },
+    highlightVideos: [
+      {
+        title: "England v Croatia highlights",
+        channel: "YouTube search",
+        type: "highlight",
+        url: "https://www.youtube.com/results?search_query=England+Croatia+2026+World+Cup+highlights",
+        duration: "candidate",
+        meta: "official upload candidate"
+      }
+    ]
+  });
+
+  upsertMatch({
+    id: "group-k-por-cod-2026-06-17",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group K",
+    competition: "FIFA World Cup 2026",
+    teamA: "portugal",
+    teamB: "dr-congo",
+    score: "Portugal 1-1 DR Congo",
+    dateLabel: "2026-06-18 KST",
+    localTimeLabel: "2026-06-17 Houston local",
+    venue: "Houston Stadium",
+    city: "Houston",
+    headline: "DR Congo take a historic point off Portugal",
+    recap: "Joao Neves put Portugal ahead in the sixth minute, but Yoane Wissa's stoppage-time header before the break earned DR Congo their first World Cup point since returning to the finals.",
+    scorers: ["Joao Neves 6'", "Yoane Wissa 45+5'"],
+    notes: ["Guardian report highlighted Portugal's lack of fluency around Cristiano Ronaldo", "DR Congo source reliability kept at trusted pending official FIFA match report page", "Official result cross-checked against FIFA results and standings pages"],
+    highlightUrl: "https://www.youtube.com/results?search_query=Portugal+DR+Congo+2026+World+Cup+highlights",
+    source: sourcePortugal,
+    detailSource: sourceSchedule,
+    modelPick: { teamA: 61, draw: 23, teamB: 16 },
+    highlightVideos: [
+      {
+        title: "Portugal v DR Congo highlights",
+        channel: "YouTube search",
+        type: "highlight",
+        url: "https://www.youtube.com/results?search_query=Portugal+DR+Congo+2026+World+Cup+highlights",
+        duration: "candidate",
+        meta: "official upload candidate"
+      }
+    ]
+  });
+
+  upsertMatch({
+    id: "group-j-arg-alg-2026-06-16",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group J",
+    competition: "FIFA World Cup 2026",
+    teamA: "argentina",
+    teamB: "algeria",
+    score: "Argentina 3-0 Algeria",
+    dateLabel: "2026-06-17 KST",
+    localTimeLabel: "2026-06-16 Kansas City local",
+    venue: "Kansas City Stadium",
+    city: "Kansas City",
+    headline: "Messi hat-trick powers Argentina through their opener",
+    recap: "Lionel Messi scored all three goals in Argentina's opening win and matched Miroslav Klose's all-time World Cup scoring record.",
+    scorers: ["Lionel Messi 17'", "Lionel Messi 60'", "Lionel Messi 76'"],
+    notes: ["200th Argentina cap for Messi per Guardian report", "Algeria's first finals appearance since 2014", "Official result cross-checked against FIFA results and standings pages"],
+    highlightUrl: "https://www.youtube.com/results?search_query=Argentina+Algeria+2026+World+Cup+highlights",
+    source: sourceArgentina,
+    detailSource: sourceStandings,
+    modelPick: { teamA: 69, draw: 19, teamB: 12 },
+    highlightVideos: [
+      {
+        title: "Argentina v Algeria highlights",
+        channel: "YouTube search",
+        type: "highlight",
+        url: "https://www.youtube.com/results?search_query=Argentina+Algeria+2026+World+Cup+highlights",
+        duration: "candidate",
+        meta: "official upload candidate"
+      }
+    ]
+  });
+
+  upsertMatch({
+    id: "group-i-ira-nor-2026-06-16",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group I",
+    competition: "FIFA World Cup 2026",
+    teamA: "iraq",
+    teamB: "norway",
+    score: "Iraq 1-4 Norway",
+    dateLabel: "2026-06-17 KST",
+    localTimeLabel: "2026-06-16 Boston local",
+    venue: "Boston Stadium",
+    city: "Foxborough",
+    headline: "Haaland's debut double puts Norway on top of Iraq",
+    recap: "Aymen Hussein equalised before half-time, but Erling Haaland restored Norway's lead and the Europeans added a Leo Ostigard header plus a late own goal.",
+    scorers: ["Erling Haaland 29'", "Aymen Hussein 39'", "Erling Haaland 45+1'", "Leo Ostigard 76'", "Iraq own goal 90+6'"],
+    notes: ["Guardian live blog recorded the final as 4-1", "Iraq created multiple late first-half chances despite the scoreline", "Official result cross-checked against FIFA results and standings pages"],
+    highlightUrl: "https://www.youtube.com/results?search_query=Iraq+Norway+2026+World+Cup+highlights",
+    source: sourceIraq,
+    detailSource: sourceSchedule,
+    modelPick: { teamA: 17, draw: 21, teamB: 62 },
+    highlightVideos: [
+      {
+        title: "Iraq v Norway highlights",
+        channel: "YouTube search",
+        type: "highlight",
+        url: "https://www.youtube.com/results?search_query=Iraq+Norway+2026+World+Cup+highlights",
+        duration: "candidate",
+        meta: "official upload candidate"
+      }
+    ]
+  });
+
+  upsertSectionItem("matches", {
+    id: "group-l-eng-cro-2026-06-17",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group L final",
+    competition: "FIFA World Cup 2026",
+    teamA: "england",
+    teamB: "croatia",
+    dateLabel: "2026-06-18 KST",
+    score: "4-2",
+    headline: "England vs Croatia",
+    summary: "Kane scored twice before Bellingham and Rashford finished a chaotic opener.",
+    source: sourceEngland
+  });
+
+  upsertSectionItem("matches", {
+    id: "group-k-por-cod-2026-06-17",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group K final",
+    competition: "FIFA World Cup 2026",
+    teamA: "portugal",
+    teamB: "dr-congo",
+    dateLabel: "2026-06-18 KST",
+    score: "1-1",
+    headline: "Portugal vs DR Congo",
+    summary: "Wissa's stoppage-time equaliser gave DR Congo a historic first point.",
+    source: sourcePortugal
+  });
+
+  upsertSectionItem("matches", {
+    id: "group-j-arg-alg-2026-06-16",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group J final",
+    competition: "FIFA World Cup 2026",
+    teamA: "argentina",
+    teamB: "algeria",
+    dateLabel: "2026-06-17 KST",
+    score: "3-0",
+    headline: "Argentina vs Algeria",
+    summary: "Messi's hat-trick drew him level with the all-time World Cup scoring record.",
+    source: sourceArgentina
+  });
+
+  upsertSectionItem("matches", {
+    id: "group-i-ira-nor-2026-06-16",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group I final",
+    competition: "FIFA World Cup 2026",
+    teamA: "iraq",
+    teamB: "norway",
+    dateLabel: "2026-06-17 KST",
+    score: "1-4",
+    headline: "Iraq vs Norway",
+    summary: "Haaland struck twice and Norway finished strongly after Iraq's equaliser.",
+    source: sourceIraq
+  });
+
+  upsertVideo({
+    id: "video-eng-cro-candidate",
+    type: "video",
+    headline: "England vs Croatia highlights candidate",
+    summary: "Official or broadcaster upload not pinned at cutoff, so a YouTube candidate search is stored.",
+    url: "https://www.youtube.com/results?search_query=England+Croatia+2026+World+Cup+highlights",
+    source: {
+      label: "YouTube search",
+      url: "https://www.youtube.com/results?search_query=England+Croatia+2026+World+Cup+highlights",
+      checkedAt: "2026-06-18",
+      reliability: "curated"
+    }
+  });
+
+  upsertVideo({
+    id: "video-por-cod-candidate",
+    type: "video",
+    headline: "Portugal vs DR Congo highlights candidate",
+    summary: "Stored as a candidate link until a stable official highlight URL is pinned.",
+    url: "https://www.youtube.com/results?search_query=Portugal+DR+Congo+2026+World+Cup+highlights",
+    source: {
+      label: "YouTube search",
+      url: "https://www.youtube.com/results?search_query=Portugal+DR+Congo+2026+World+Cup+highlights",
+      checkedAt: "2026-06-18",
+      reliability: "curated"
+    }
+  });
+
+  upsertVideo({
+    id: "video-arg-alg-candidate",
+    type: "video",
+    headline: "Argentina vs Algeria highlights candidate",
+    summary: "Stored as a candidate link until a stable official highlight URL is pinned.",
+    url: "https://www.youtube.com/results?search_query=Argentina+Algeria+2026+World+Cup+highlights",
+    source: {
+      label: "YouTube search",
+      url: "https://www.youtube.com/results?search_query=Argentina+Algeria+2026+World+Cup+highlights",
+      checkedAt: "2026-06-18",
+      reliability: "curated"
+    }
+  });
+
+  if (hub.archive) {
+    hub.archive.officialResultsCheckedAt = "2026-06-18";
+    hub.archive.source = sourceSchedule;
+  }
+})();
+
 (function extendDailyMatchHubJune14() {
   const data = window.WORLD_CUP_DATA;
   const hub = data?.dailyMatchHub;
@@ -666,10 +1001,10 @@
     reliability: "trusted"
   };
 
-  hub.updatedAt = "2026-06-17";
-  hub.summary = "2026-06-17 KST 08:45 기준 전날과 당일 종료 경기 가운데 공식 결과와 신뢰 가능한 매치 리포트를 확보한 경기들을 허브에 반영했습니다.";
-  hub.sourceNote = "결과 확인은 FIFA 공식 일정/결과 페이지를 기준으로 유지했고, 세부 맥락과 주요 장면은 Guardian match report와 Reuters 전재 기사로 교차 확인했습니다. 공식 하이라이트가 바로 확인되지 않은 경기는 YouTube 검색 후보를 유지합니다.";
-  hub.featuredMatchId = "group-i-fra-sen-2026-06-17";
+  hub.updatedAt = "2026-06-18";
+  hub.summary = "Cutoff kept at 2026-06-18 07:00 KST. Official FIFA results/standings were rechecked and the latest completed matches before the cutoff were merged with trusted match reports.";
+  hub.sourceNote = "FIFA schedule/results and standings remain the official reference. Guardian match reports and live blogs were used only for scorers, lineup context, substitutions, and headline stats before the 07:00 KST automation cutoff.";
+  hub.featuredMatchId = "group-l-eng-cro-2026-06-17";
 
   const upsertMatch = (match) => {
     const index = hub.matches.findIndex((item) => item.id === match.id);
@@ -926,7 +1261,12 @@
   });
 
   if (hub.archive) {
-    hub.archive.officialResultsCheckedAt = "2026-06-17";
-    hub.archive.source = sourceSchedule;
+    hub.archive.officialResultsCheckedAt = "2026-06-18";
+    hub.archive.source = {
+      label: "FIFA schedule/results",
+      url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/match-schedule-fixtures-results-teams-stadiums",
+      checkedAt: "2026-06-18",
+      reliability: "official"
+    };
   }
 })();

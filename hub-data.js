@@ -120,6 +120,100 @@
   };
 })();
 
+(function finalizeWorldCupHubDataJune18() {
+  const data = window.WORLD_CUP_DATA;
+  if (!data) return;
+
+  data.tournament.updatedAt = "2026-06-18";
+  data.tournament.scenarioNote = "At the 2026-06-18 07:00 KST automation cutoff, FIFA official results and standings were rechecked and the scenario data was brought forward through the completed Group I, J, K and L openers available before the cutoff. Later matches on 2026-06-18 KST were intentionally left out of this run.";
+
+  data.statsCenter = {
+    updatedAt: "2026-06-18",
+    playerStats: [
+      { label: "Lionel Messi", value: "hat-trick vs Algeria" },
+      { label: "Erling Haaland", value: "2 goals vs Iraq" },
+      { label: "Harry Kane", value: "2 goals vs Croatia" },
+      { label: "Yoane Wissa", value: "45+5' equaliser vs Portugal" },
+      { label: "Jude Bellingham", value: "go-ahead goal in England opener" }
+    ],
+    teamStats: [
+      { label: "Group I", value: "France and Norway lead after opening wins" },
+      { label: "Group J", value: "Argentina 3-0 Algeria, Austria 3-1 Jordan" },
+      { label: "Group K", value: "Portugal and DR Congo share points before Colombia opener" },
+      { label: "Group L", value: "England open with a 4-2 win; later matches were outside cutoff" },
+      { label: "Cutoff note", value: "Only matches finished before 07:00 KST were merged in this run" }
+    ],
+    emptyState: "Latest official results available before the automation cutoff are reflected here."
+  };
+})();
+
+(function extendWorldCupHubDataJune18() {
+  const data = window.WORLD_CUP_DATA;
+  if (!data) return;
+
+  data.tournament.updatedAt = "2026-06-18";
+  data.tournament.scenarioNote = "At the 2026-06-18 07:00 KST automation cutoff, FIFA official results and standings were rechecked and the scenario data was brought forward through the completed Group I, J, K and L openers available before the cutoff. Later matches on 2026-06-18 KST were intentionally left out of this run.";
+
+  const upsertSource = (source) => {
+    const index = data.sources.findIndex((item) => item.id === source.id);
+    if (index >= 0) {
+      data.sources[index] = source;
+      return;
+    }
+    data.sources.push(source);
+  };
+
+  upsertSource({
+    id: "fifa-results-2026-06-18",
+    title: "FIFA World Cup 2026 schedule and results",
+    publisher: "FIFA",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/match-schedule-fixtures-results-teams-stadiums",
+    checkedAt: "2026-06-18",
+    reliability: "official"
+  });
+
+  upsertSource({
+    id: "fifa-standings-2026-06-18",
+    title: "FIFA World Cup 2026 standings",
+    publisher: "FIFA",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/standings",
+    checkedAt: "2026-06-18",
+    reliability: "official"
+  });
+
+  upsertSource({
+    id: "guardian-match-reports-2026-06-18",
+    title: "Guardian World Cup 2026 match reports and live blogs",
+    publisher: "The Guardian",
+    url: "https://www.theguardian.com/football/2026/jun/17/england-croatia-world-cup-2026-group-l-match-report",
+    checkedAt: "2026-06-18",
+    reliability: "trusted"
+  });
+
+  if (data.openingCeremony) {
+    data.openingCeremony.updatedAt = "2026-06-18";
+  }
+
+  data.statsCenter = {
+    updatedAt: "2026-06-18",
+    playerStats: [
+      { label: "Lionel Messi", value: "hat-trick vs Algeria" },
+      { label: "Erling Haaland", value: "2 goals vs Iraq" },
+      { label: "Harry Kane", value: "2 goals vs Croatia" },
+      { label: "Yoane Wissa", value: "45+5' equaliser vs Portugal" },
+      { label: "Jude Bellingham", value: "go-ahead goal in England opener" }
+    ],
+    teamStats: [
+      { label: "Group I", value: "France +2 and Norway +3 lead after opening wins" },
+      { label: "Group J", value: "Argentina 3-0 Algeria, Austria 3-1 Jordan" },
+      { label: "Group K", value: "Portugal and DR Congo share points before Colombia opener" },
+      { label: "Group L", value: "England open with a 4-2 win; Ghana and Panama were outside cutoff" },
+      { label: "Cutoff note", value: "Only matches finished before 07:00 KST were merged in this run" }
+    ],
+    emptyState: "Latest official results available before the automation cutoff are reflected here."
+  };
+})();
+
 (function extendWorldCupHubDataJune14() {
   const data = window.WORLD_CUP_DATA;
   if (!data) return;
@@ -190,7 +284,7 @@
   const data = window.WORLD_CUP_DATA;
   if (!data) return;
 
-  data.tournament.updatedAt = "2026-06-17";
+  data.tournament.updatedAt = "2026-06-18";
   data.tournament.scenarioNote = "2026-06-17 KST 기준 FIFA 공식 일정/결과 페이지와 최근 매치 리포트를 대조해 6월 15일~17일 종료 경기 결과를 반영했습니다. 일부 승률/전력 평가는 여전히 UI 검증용 시나리오입니다.";
 
   const upsertSource = (source) => {
@@ -207,7 +301,7 @@
     title: "FIFA World Cup 2026 일정·결과",
     publisher: "FIFA",
     url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/match-schedule-fixtures-results-teams-stadiums",
-    checkedAt: "2026-06-17",
+    checkedAt: "2026-06-18",
     reliability: "official"
   });
 
@@ -216,7 +310,7 @@
     title: "FIFA World Cup 2026 조별 순위",
     publisher: "FIFA",
     url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/standings",
-    checkedAt: "2026-06-17",
+    checkedAt: "2026-06-18",
     reliability: "official"
   });
 
@@ -225,16 +319,16 @@
     title: "Guardian World Cup 2026 match reports",
     publisher: "The Guardian",
     url: "https://www.theguardian.com/football/2026/jun/16/france-senegal-world-cup-group-i-match-report",
-    checkedAt: "2026-06-17",
+    checkedAt: "2026-06-18",
     reliability: "trusted"
   });
 
   if (data.openingCeremony) {
-    data.openingCeremony.updatedAt = "2026-06-17";
+    data.openingCeremony.updatedAt = "2026-06-18";
   }
 
   data.statsCenter = {
-    updatedAt: "2026-06-17",
+    updatedAt: "2026-06-18",
     playerStats: [
       { label: "킬리안 음바페", value: "세네갈전 2골" },
       { label: "다이치 가마다", value: "네덜란드전 89분 동점골" },
