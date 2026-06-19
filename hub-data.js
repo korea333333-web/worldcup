@@ -346,3 +346,70 @@
     emptyState: "공식 경기 결과와 주요 스탯을 최신 확인 시점 기준으로 반영했습니다."
   };
 })();
+
+(function extendWorldCupHubDataJune19() {
+  const data = window.WORLD_CUP_DATA;
+  if (!data) return;
+
+  data.tournament.updatedAt = "2026-06-19";
+  data.tournament.scenarioNote = "At the 2026-06-19 07:00 KST automation cutoff, FIFA official results and standings were rechecked and the scenario data was brought forward through both completed Group A second-matchday finals from 2026-06-18 local time.";
+
+  const upsertSource = (source) => {
+    const index = data.sources.findIndex((item) => item.id === source.id);
+    if (index >= 0) {
+      data.sources[index] = source;
+      return;
+    }
+    data.sources.push(source);
+  };
+
+  upsertSource({
+    id: "fifa-results-2026-06-19",
+    title: "FIFA World Cup 2026 schedule and results",
+    publisher: "FIFA",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/match-schedule-fixtures-results-teams-stadiums",
+    checkedAt: "2026-06-19",
+    reliability: "official"
+  });
+
+  upsertSource({
+    id: "fifa-standings-2026-06-19",
+    title: "FIFA World Cup 2026 standings",
+    publisher: "FIFA",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/standings",
+    checkedAt: "2026-06-19",
+    reliability: "official"
+  });
+
+  upsertSource({
+    id: "guardian-match-reports-2026-06-19",
+    title: "Guardian World Cup 2026 Group A live reports",
+    publisher: "The Guardian",
+    url: "https://www.theguardian.com/football/live/2026/jun/19/fifa-world-cup-2026-live-mexico-v-south-korea-updates-mex-vs-kor-group-a-match-score-latest",
+    checkedAt: "2026-06-19",
+    reliability: "trusted"
+  });
+
+  if (data.openingCeremony) {
+    data.openingCeremony.updatedAt = "2026-06-19";
+  }
+
+  data.statsCenter = {
+    updatedAt: "2026-06-19",
+    playerStats: [
+      { label: "Luis Romo", value: "50' winner vs Korea Republic" },
+      { label: "Raul Rangel", value: "late double save to seal Mexico win" },
+      { label: "Teboho Mokoena", value: "83' penalty vs Czechia" },
+      { label: "Michal Sadilek", value: "5' opener for Czechia" },
+      { label: "Group A note", value: "Lee Kang-in and Paik Seung-ho both booked vs Mexico" }
+    ],
+    teamStats: [
+      { label: "Group A leaders", value: "Mexico 6 points, 2 wins, 2 clean sheets" },
+      { label: "Korea Republic", value: "3 points after two matches; final match decides qualification" },
+      { label: "Czechia and South Africa", value: "both move to 1 point after the 1-1 draw" },
+      { label: "Scenario delta", value: "Match 8 and 9 changed from scheduled placeholders to final results" },
+      { label: "Cutoff note", value: "Group C and D second-matchday games were outside this 07:00 KST run" }
+    ],
+    emptyState: "Latest official results available before the automation cutoff are reflected here."
+  };
+})();

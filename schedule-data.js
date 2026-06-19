@@ -446,3 +446,62 @@
     return a.kstDateTime.localeCompare(b.kstDateTime);
   });
 })();
+
+(function extendWorldCupScheduleJune19() {
+  const data = window.WORLD_CUP_DATA;
+  const schedule = data?.matchSchedule;
+  if (!schedule) return;
+
+  schedule.updatedAt = "2026-06-19";
+  schedule.sourceNote = "FIFA official results and standings were rechecked at the 2026-06-19 07:00 KST automation cutoff. Group A second-matchday finals available by the cutoff were written back into the scenario schedule, with trusted live reports used only for scorer and match-context notes.";
+
+  (schedule.sources || []).forEach((source) => {
+    source.checkedAt = "2026-06-19";
+  });
+
+  const upsertMatchByDateTeams = (match) => {
+    const index = schedule.matches.findIndex((item) =>
+      item.date === match.date &&
+      item.teamA === match.teamA &&
+      item.teamB === match.teamB
+    );
+
+    if (index >= 0) {
+      schedule.matches[index] = { ...schedule.matches[index], ...match };
+      return;
+    }
+
+    schedule.matches.push(match);
+  };
+
+  upsertMatchByDateTeams({
+    number: 8,
+    stage: "Group A",
+    date: "2026-06-18",
+    localTime: "19:00",
+    kstDateTime: "2026-06-19 10:00",
+    venueId: "guadalajara",
+    teamA: "mexico",
+    teamB: "korea",
+    status: "official",
+    note: "Final: Mexico 1-0 Korea Republic"
+  });
+
+  upsertMatchByDateTeams({
+    number: 9,
+    stage: "Group A",
+    date: "2026-06-18",
+    localTime: "12:00",
+    kstDateTime: "2026-06-19 01:00",
+    venueId: "atlanta",
+    teamA: "czechia",
+    teamB: "south-africa",
+    status: "official",
+    note: "Final: Czechia 1-1 South Africa"
+  });
+
+  schedule.matches.sort((a, b) => {
+    if (a.kstDateTime === b.kstDateTime) return a.number - b.number;
+    return a.kstDateTime.localeCompare(b.kstDateTime);
+  });
+})();

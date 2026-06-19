@@ -1270,3 +1270,203 @@
     };
   }
 })();
+
+(function extendDailyMatchHubJune19() {
+  const data = window.WORLD_CUP_DATA;
+  const hub = data?.dailyMatchHub;
+  if (!hub) return;
+
+  const sourceSchedule = {
+    label: "FIFA schedule/results",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/match-schedule-fixtures-results-teams-stadiums",
+    checkedAt: "2026-06-19",
+    reliability: "official"
+  };
+
+  const sourceStandings = {
+    label: "FIFA standings",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/standings",
+    checkedAt: "2026-06-19",
+    reliability: "official"
+  };
+
+  const sourceMexicoKorea = {
+    label: "Guardian Mexico v South Korea live report",
+    url: "https://www.theguardian.com/football/live/2026/jun/19/fifa-world-cup-2026-live-mexico-v-south-korea-updates-mex-vs-kor-group-a-match-score-latest",
+    checkedAt: "2026-06-19",
+    reliability: "trusted"
+  };
+
+  const sourceCzechiaSouthAfrica = {
+    label: "Guardian Czechia v South Africa live report",
+    url: "https://www.theguardian.com/football/live/2026/jun/18/czechia-v-south-africa-world-cup-live",
+    checkedAt: "2026-06-19",
+    reliability: "trusted"
+  };
+
+  hub.updatedAt = "2026-06-19";
+  hub.summary = "2026-06-19 07:00 KST cutoff advanced Group A through both second-matchday finals, keeping FIFA schedule/results and standings as the official reference.";
+  hub.sourceNote = "FIFA schedule/results and standings remain the official reference. Guardian live reports were used only for scorer timing, lineup context, substitutions, cards, and late-match chances where the FIFA match report page was not yet pinned.";
+  hub.featuredMatchId = "group-a-mex-kor-2026-06-18";
+
+  const upsertMatch = (match) => {
+    const index = hub.matches.findIndex((item) => item.id === match.id);
+    if (index >= 0) {
+      hub.matches[index] = match;
+      return;
+    }
+    hub.matches.push(match);
+  };
+
+  const upsertSectionItem = (sectionId, item) => {
+    const section = hub.sections.find((entry) => entry.id === sectionId);
+    if (!section) return;
+    const index = section.items.findIndex((entry) => entry.id === item.id);
+    if (index >= 0) {
+      section.items[index] = item;
+      return;
+    }
+    section.items.push(item);
+  };
+
+  const upsertVideo = (item) => upsertSectionItem("videos", item);
+
+  upsertMatch({
+    id: "group-a-mex-kor-2026-06-18",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group A",
+    competition: "FIFA World Cup 2026",
+    teamA: "mexico",
+    teamB: "korea",
+    score: "Mexico 1-0 Korea Republic",
+    dateLabel: "2026-06-19 KST",
+    localTimeLabel: "2026-06-18 Guadalajara local",
+    venue: "Guadalajara Stadium",
+    city: "Guadalajara",
+    headline: "Mexico clinch Group A with a narrow win over South Korea",
+    recap: "Luis Romo punished a spilled catch in the 50th minute, and Raul Rangel preserved the result with a double save from Cho Gue-sung late on.",
+    scorers: ["Luis Romo 50'"],
+    notes: [
+      "Official result cross-checked against FIFA results and standings pages",
+      "Guardian pre-match note said South Korea made one change, bringing in Kim Moon-hwan at left wing-back",
+      "South Korea changed Son Heung-min and Lee Jae-sung for Hwang Hee-chan and Oh Hyeon-gyu in the 57th minute",
+      "Lee Kang-in was booked early and Paik Seung-ho was booked after the hour"
+    ],
+    highlightUrl: "https://www.youtube.com/results?search_query=Mexico+South+Korea+2026+World+Cup+highlights",
+    source: sourceMexicoKorea,
+    detailSource: sourceStandings,
+    modelPick: { teamA: 54, draw: 24, teamB: 22 },
+    highlightVideos: [
+      {
+        title: "Mexico v South Korea highlights",
+        channel: "YouTube search",
+        type: "highlight",
+        url: "https://www.youtube.com/results?search_query=Mexico+South+Korea+2026+World+Cup+highlights",
+        duration: "candidate",
+        meta: "official upload candidate"
+      }
+    ]
+  });
+
+  upsertMatch({
+    id: "group-a-cze-rsa-2026-06-18",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group A",
+    competition: "FIFA World Cup 2026",
+    teamA: "czechia",
+    teamB: "south-africa",
+    score: "Czechia 1-1 South Africa",
+    dateLabel: "2026-06-19 KST",
+    localTimeLabel: "2026-06-18 Atlanta local",
+    venue: "Atlanta Stadium",
+    city: "Atlanta",
+    headline: "Mokoena's late penalty rescues South Africa against Czechia",
+    recap: "Michal Sadilek put Czechia ahead inside five minutes, but Teboho Mokoena converted an 83rd-minute penalty after a handball decision on Pavel Sulc.",
+    scorers: ["Michal Sadilek 5'", "Teboho Mokoena 83' (pen)"],
+    notes: [
+      "Official result cross-checked against FIFA results and standings pages",
+      "Guardian team news said Czechia switched to a 3-5-2 while South Africa moved to a 4-3-3",
+      "Czechia introduced Zeleny and Sulc on 55', then Soucek and Provod on 66'",
+      "Krejci was booked for flattening Maseko before the late penalty sequence"
+    ],
+    highlightUrl: "https://www.youtube.com/results?search_query=Czechia+South+Africa+2026+World+Cup+highlights",
+    source: sourceCzechiaSouthAfrica,
+    detailSource: sourceSchedule,
+    modelPick: { teamA: 39, draw: 30, teamB: 31 },
+    highlightVideos: [
+      {
+        title: "Czechia v South Africa highlights",
+        channel: "YouTube search",
+        type: "highlight",
+        url: "https://www.youtube.com/results?search_query=Czechia+South+Africa+2026+World+Cup+highlights",
+        duration: "candidate",
+        meta: "official upload candidate"
+      }
+    ]
+  });
+
+  upsertSectionItem("matches", {
+    id: "group-a-mex-kor-2026-06-18",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group A final",
+    competition: "FIFA World Cup 2026",
+    teamA: "mexico",
+    teamB: "korea",
+    dateLabel: "2026-06-19 KST",
+    score: "1-0",
+    headline: "Mexico vs South Korea",
+    summary: "Romo scored after a goalkeeping spill and Rangel saved Mexico late.",
+    source: sourceMexicoKorea
+  });
+
+  upsertSectionItem("matches", {
+    id: "group-a-cze-rsa-2026-06-18",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group A final",
+    competition: "FIFA World Cup 2026",
+    teamA: "czechia",
+    teamB: "south-africa",
+    dateLabel: "2026-06-19 KST",
+    score: "1-1",
+    headline: "Czechia vs South Africa",
+    summary: "Sadilek struck early before Mokoena's late penalty kept both teams alive.",
+    source: sourceCzechiaSouthAfrica
+  });
+
+  upsertVideo({
+    id: "video-mex-kor-candidate",
+    type: "video",
+    headline: "Mexico vs South Korea highlights candidate",
+    summary: "Stored as a candidate link until a stable FIFA or broadcaster highlight URL is pinned.",
+    url: "https://www.youtube.com/results?search_query=Mexico+South+Korea+2026+World+Cup+highlights",
+    source: {
+      label: "YouTube search",
+      url: "https://www.youtube.com/results?search_query=Mexico+South+Korea+2026+World+Cup+highlights",
+      checkedAt: "2026-06-19",
+      reliability: "curated"
+    }
+  });
+
+  upsertVideo({
+    id: "video-cze-rsa-candidate",
+    type: "video",
+    headline: "Czechia vs South Africa highlights candidate",
+    summary: "Stored as a candidate link until a stable FIFA or broadcaster highlight URL is pinned.",
+    url: "https://www.youtube.com/results?search_query=Czechia+South+Africa+2026+World+Cup+highlights",
+    source: {
+      label: "YouTube search",
+      url: "https://www.youtube.com/results?search_query=Czechia+South+Africa+2026+World+Cup+highlights",
+      checkedAt: "2026-06-19",
+      reliability: "curated"
+    }
+  });
+
+  if (hub.archive) {
+    hub.archive.officialResultsCheckedAt = "2026-06-19";
+    hub.archive.source = sourceSchedule;
+  }
+})();
