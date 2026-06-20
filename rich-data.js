@@ -609,3 +609,128 @@
     ]
   });
 })();
+
+(function extendRichWorldCupDataJune21() {
+  const data = window.WORLD_CUP_DATA;
+  if (!data?.teams) return;
+
+  const applyRecord = (teamId, patch) => {
+    const team = data.teams[teamId];
+    if (!team) return;
+    Object.assign(team, patch);
+  };
+
+  applyRecord("scotland", {
+    lastChecked: "2026-06-21",
+    matchRecords: [
+      {
+        status: "played",
+        matchLabel: "Scotland Group C second match vs Morocco",
+        score: "Scotland 0-1 Morocco",
+        startingXI: [],
+        substitutions: [
+          "Kieran Tierney went off in the second half; Steve Clarke later described the issue as cramp",
+          "Ben Gannon-Doak's introduction lifted Scotland during the late push",
+          "Two Scotland penalty appeals were waved away in the second half"
+        ],
+        stats: { shots: "trusted report summary", possession: "Scotland grew into the second half after being overrun early", xg: "not pinned at cutoff" },
+        mom: "Ismael Saibari"
+      }
+    ]
+  });
+
+  applyRecord("morocco", {
+    lastChecked: "2026-06-21",
+    matchRecords: [
+      {
+        status: "played",
+        matchLabel: "Morocco Group C second match vs Scotland",
+        score: "Morocco 1-0 Scotland",
+        startingXI: [],
+        substitutions: [
+          "Ismael Saibari scored after 71 seconds",
+          "Morocco created the better chances but did not add the second goal",
+          "The win moved Morocco to four points before the Haiti match"
+        ],
+        stats: { shots: "trusted report summary", possession: "Morocco controlled most of the first half", xg: "not pinned at cutoff" },
+        mom: "Ismael Saibari"
+      }
+    ]
+  });
+
+  applyRecord("brazil", {
+    lastChecked: "2026-06-21",
+    matchRecords: [
+      {
+        status: "played",
+        matchLabel: "Brazil Group C second match vs Haiti",
+        score: "Brazil 3-0 Haiti",
+        startingXI: [],
+        substitutions: [
+          "Raphinha went off early and was later reported as a doubt for the next match",
+          "Matheus Cunha scored twice before Vinicius Junior made it 3-0 in first-half stoppage time",
+          "Brazil managed the game conservatively after the break"
+        ],
+        stats: { shots: "trusted report summary", possession: "Brazil controlled the ball but never fully convinced", xg: "not pinned at cutoff" },
+        mom: "Matheus Cunha"
+      }
+    ]
+  });
+
+  applyRecord("haiti", {
+    lastChecked: "2026-06-21",
+    matchRecords: [
+      {
+        status: "played",
+        matchLabel: "Haiti Group C second match vs Brazil",
+        score: "Haiti 0-3 Brazil",
+        startingXI: [],
+        substitutions: [
+          "Haiti trailed 3-0 by half-time and could not turn their second-half spirit into a comeback",
+          "Jean-Ricner Bellegarde and the substitute forwards provided Haiti's best moments",
+          "The defeat left Haiti on 0 points before meeting Morocco"
+        ],
+        stats: { shots: "trusted report summary", possession: "Haiti spent long stretches without the ball", xg: "not pinned at cutoff" },
+        mom: "Matheus Cunha"
+      }
+    ]
+  });
+
+  applyRecord("turkiye", {
+    lastChecked: "2026-06-21",
+    matchRecords: [
+      {
+        status: "played",
+        matchLabel: "Turkiye Group D second match vs Paraguay",
+        score: "Turkiye 0-1 Paraguay",
+        startingXI: [],
+        substitutions: [
+          "Turkiye conceded after 65 seconds and still could not score despite 32 shots",
+          "Paraguay's Miguel Almiron was sent off late under the new mouth-covering dissent rule",
+          "The defeat eliminated Turkiye before the final group match"
+        ],
+        stats: { shots: "32 / on target not pinned at cutoff", possession: "nearly 80% in the trusted report summary", xg: "not pinned at cutoff" },
+        mom: "Matias Galarza"
+      }
+    ]
+  });
+
+  applyRecord("paraguay", {
+    lastChecked: "2026-06-21",
+    matchRecords: [
+      {
+        status: "played",
+        matchLabel: "Paraguay Group D second match vs Turkiye",
+        score: "Paraguay 1-0 Turkiye",
+        startingXI: [],
+        substitutions: [
+          "Matias Galarza scored after 65 seconds",
+          "Miguel Almiron was sent off, leaving Paraguay to defend with 10 men",
+          "The win kept Paraguay alive on three points ahead of the Australia match"
+        ],
+        stats: { shots: "trusted report summary", possession: "Paraguay defended deep for most of the match", xg: "not pinned at cutoff" },
+        mom: "Matias Galarza"
+      }
+    ]
+  });
+})();

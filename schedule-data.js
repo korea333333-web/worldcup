@@ -562,3 +562,72 @@
     return a.kstDateTime.localeCompare(b.kstDateTime);
   });
 })();
+
+(function extendWorldCupScheduleJune21() {
+  const data = window.WORLD_CUP_DATA;
+  const schedule = data?.matchSchedule;
+  if (!schedule) return;
+
+  schedule.updatedAt = "2026-06-21";
+  schedule.sourceNote = "FIFA official results and standings were rechecked at the 2026-06-21 07:00 KST automation cutoff. Completed Group C and Group D matches before that cutoff were written back into the scenario schedule, while fixtures kicking off at or after the cutoff were left for the next run.";
+
+  (schedule.sources || []).forEach((source) => {
+    source.checkedAt = "2026-06-21";
+  });
+
+  const upsertMatchByDateTeams = (match) => {
+    const index = schedule.matches.findIndex((item) =>
+      item.date === match.date &&
+      item.teamA === match.teamA &&
+      item.teamB === match.teamB
+    );
+
+    if (index >= 0) {
+      schedule.matches[index] = { ...schedule.matches[index], ...match };
+      return;
+    }
+
+    schedule.matches.push(match);
+  };
+
+  upsertMatchByDateTeams({
+    stage: "Group C",
+    date: "2026-06-19",
+    localTime: "18:00",
+    kstDateTime: "2026-06-20 07:00",
+    venueId: "boston",
+    teamA: "scotland",
+    teamB: "morocco",
+    status: "official",
+    note: "Final: Scotland 0-1 Morocco"
+  });
+
+  upsertMatchByDateTeams({
+    stage: "Group C",
+    date: "2026-06-19",
+    localTime: "20:30",
+    kstDateTime: "2026-06-20 09:30",
+    venueId: "philadelphia",
+    teamA: "brazil",
+    teamB: "haiti",
+    status: "official",
+    note: "Final: Brazil 3-0 Haiti"
+  });
+
+  upsertMatchByDateTeams({
+    stage: "Group D",
+    date: "2026-06-19",
+    localTime: "20:00",
+    kstDateTime: "2026-06-20 12:00",
+    venueId: "san-francisco-bay-area",
+    teamA: "turkiye",
+    teamB: "paraguay",
+    status: "official",
+    note: "Final: Turkiye 0-1 Paraguay"
+  });
+
+  schedule.matches.sort((a, b) => {
+    if (a.kstDateTime === b.kstDateTime) return (a.number ?? 0) - (b.number ?? 0);
+    return a.kstDateTime.localeCompare(b.kstDateTime);
+  });
+})();

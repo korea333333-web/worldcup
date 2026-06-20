@@ -1670,3 +1670,277 @@
     hub.archive.source = sourceSchedule;
   }
 })();
+
+(function extendDailyMatchHubJune21() {
+  const data = window.WORLD_CUP_DATA;
+  const hub = data?.dailyMatchHub;
+  if (!hub) return;
+
+  const sourceSchedule = {
+    label: "FIFA schedule/results",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/match-schedule-fixtures-results-teams-stadiums",
+    checkedAt: "2026-06-21",
+    reliability: "official"
+  };
+
+  const sourceStandings = {
+    label: "FIFA standings",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/standings",
+    checkedAt: "2026-06-21",
+    reliability: "official"
+  };
+
+  const sourceScotlandMorocco = {
+    label: "Guardian Scotland v Morocco match report",
+    url: "https://www.theguardian.com/football/2026/jun/20/scotland-morocco-world-cup-match-report",
+    checkedAt: "2026-06-21",
+    reliability: "trusted"
+  };
+
+  const sourceBrazilHaiti = {
+    label: "Guardian Brazil v Haiti live report",
+    url: "https://www.theguardian.com/football/live/2026/jun/20/fifa-world-cup-2026-live-brazil-v-haiti-updates-bra-vs-hai-group-c-match-score-latest",
+    checkedAt: "2026-06-21",
+    reliability: "trusted"
+  };
+
+  const sourceTurkiyeParaguay = {
+    label: "Guardian Turkiye v Paraguay live report",
+    url: "https://www.theguardian.com/football/live/2026/jun/20/fifa-world-cup-2026-live-turkey-v-paraguay-updates-tur-vs-par-group-d-match-score-latest",
+    checkedAt: "2026-06-21",
+    reliability: "trusted"
+  };
+
+  hub.updatedAt = "2026-06-21";
+  hub.summary = "2026-06-21 07:00 KST cutoff advanced the scenario through Morocco's win over Scotland, Brazil's win over Haiti and Paraguay's upset of Turkiye. Matches kicking off at or after the cutoff remain for the next run.";
+  hub.sourceNote = "FIFA schedule/results and standings remain the official reference. Guardian reports and live blogs were used only for scorer order, disciplinary notes, injury context and standout match stats where the official match-report pages were not yet pinned.";
+  hub.featuredMatchId = "group-c-sco-mar-2026-06-19";
+
+  const upsertMatch = (match) => {
+    const index = hub.matches.findIndex((item) => item.id === match.id);
+    if (index >= 0) {
+      hub.matches[index] = match;
+      return;
+    }
+    hub.matches.push(match);
+  };
+
+  const upsertSectionItem = (sectionId, item) => {
+    const section = hub.sections.find((entry) => entry.id === sectionId);
+    if (!section) return;
+    const index = section.items.findIndex((entry) => entry.id === item.id);
+    if (index >= 0) {
+      section.items[index] = item;
+      return;
+    }
+    section.items.push(item);
+  };
+
+  const upsertVideo = (item) => upsertSectionItem("videos", item);
+
+  upsertMatch({
+    id: "group-c-sco-mar-2026-06-19",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group C",
+    competition: "FIFA World Cup 2026",
+    teamA: "scotland",
+    teamB: "morocco",
+    score: "Scotland 0-1 Morocco",
+    dateLabel: "2026-06-20 KST",
+    localTimeLabel: "2026-06-19 18:00 local",
+    venue: "Boston Stadium",
+    city: "Foxborough",
+    headline: "Morocco land an early blow and leave Scotland's path hanging on the Brazil finale",
+    recap: "Ismael Saibari scored after 71 seconds, Morocco stayed on the front foot for most of the first half, and Scotland's late pressure was not enough to earn a point.",
+    scorers: ["Ismael Saibari 2'"],
+    notes: [
+      "Official result cross-checked against FIFA results and standings pages",
+      "Scotland had two second-half penalty appeals waved away",
+      "Kieran Tierney went off in the second half, but Steve Clarke later described it as cramp",
+      "Morocco moved to four points, while Scotland stayed on three before facing Brazil"
+    ],
+    highlightUrl: "https://www.youtube.com/results?search_query=Scotland+Morocco+2026+World+Cup+highlights",
+    source: sourceScotlandMorocco,
+    detailSource: sourceStandings,
+    modelPick: { teamA: 31, draw: 28, teamB: 41 },
+    highlightVideos: [
+      {
+        title: "Scotland v Morocco highlights",
+        channel: "YouTube search",
+        type: "highlight",
+        url: "https://www.youtube.com/results?search_query=Scotland+Morocco+2026+World+Cup+highlights",
+        duration: "candidate",
+        meta: "official upload candidate"
+      }
+    ]
+  });
+
+  upsertMatch({
+    id: "group-c-bra-hai-2026-06-19",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group C",
+    competition: "FIFA World Cup 2026",
+    teamA: "brazil",
+    teamB: "haiti",
+    score: "Brazil 3-0 Haiti",
+    dateLabel: "2026-06-20 KST",
+    localTimeLabel: "2026-06-19 20:30 local",
+    venue: "Philadelphia Stadium",
+    city: "Philadelphia",
+    headline: "Brazil do enough before half-time as Haiti fade after Raphinha's early injury",
+    recap: "Matheus Cunha struck twice before Vinicius Junior added a stoppage-time third, giving Brazil a controlled but not especially fluent win over Haiti.",
+    scorers: ["Matheus Cunha 18'", "Matheus Cunha 36'", "Vinicius Junior 45+2'"],
+    notes: [
+      "Official result cross-checked against FIFA results and standings pages",
+      "Raphinha went off early and was later reported as a doubt for Brazil's next match",
+      "Brazil eased off in the second half after building the three-goal lead before the break",
+      "The win moved Brazil level with Morocco on four points in Group C"
+    ],
+    highlightUrl: "https://www.youtube.com/results?search_query=Brazil+Haiti+2026+World+Cup+highlights",
+    source: sourceBrazilHaiti,
+    detailSource: sourceStandings,
+    modelPick: { teamA: 72, draw: 18, teamB: 10 },
+    highlightVideos: [
+      {
+        title: "Brazil v Haiti highlights",
+        channel: "YouTube search",
+        type: "highlight",
+        url: "https://www.youtube.com/results?search_query=Brazil+Haiti+2026+World+Cup+highlights",
+        duration: "candidate",
+        meta: "official upload candidate"
+      }
+    ]
+  });
+
+  upsertMatch({
+    id: "group-d-tur-par-2026-06-19",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group D",
+    competition: "FIFA World Cup 2026",
+    teamA: "turkiye",
+    teamB: "paraguay",
+    score: "Turkiye 0-1 Paraguay",
+    dateLabel: "2026-06-20 KST",
+    localTimeLabel: "2026-06-19 20:00 local",
+    venue: "San Francisco Bay Area Stadium",
+    city: "Santa Clara",
+    headline: "Paraguay survive with 10 men and send Turkiye out despite a shot avalanche",
+    recap: "Matias Galarza scored after 65 seconds, Paraguay lost Miguel Almiron to a straight red under the new dissent rule, and Turkiye still could not find a way past the blockade.",
+    scorers: ["Matias Galarza 2'"],
+    notes: [
+      "Official result cross-checked against FIFA results and standings pages",
+      "Paraguay played the closing stages with 10 men after Miguel Almiron's red card",
+      "Turkiye dominated the ball and finished with 32 shots and 12 corners in the trusted report summary",
+      "Turkiye were eliminated, while Paraguay stayed alive on three points ahead of the Australia match"
+    ],
+    highlightUrl: "https://www.youtube.com/results?search_query=Turkiye+Paraguay+2026+World+Cup+highlights",
+    source: sourceTurkiyeParaguay,
+    detailSource: sourceStandings,
+    modelPick: { teamA: 45, draw: 30, teamB: 25 },
+    highlightVideos: [
+      {
+        title: "Turkiye v Paraguay highlights",
+        channel: "YouTube search",
+        type: "highlight",
+        url: "https://www.youtube.com/results?search_query=Turkiye+Paraguay+2026+World+Cup+highlights",
+        duration: "candidate",
+        meta: "official upload candidate"
+      }
+    ]
+  });
+
+  upsertSectionItem("matches", {
+    id: "group-c-sco-mar-2026-06-19",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group C final",
+    competition: "FIFA World Cup 2026",
+    teamA: "scotland",
+    teamB: "morocco",
+    dateLabel: "2026-06-20 KST",
+    score: "0-1",
+    headline: "Scotland vs Morocco",
+    summary: "Saibari's 71-second strike held up as Morocco tightened the Group C race.",
+    source: sourceScotlandMorocco
+  });
+
+  upsertSectionItem("matches", {
+    id: "group-c-bra-hai-2026-06-19",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group C final",
+    competition: "FIFA World Cup 2026",
+    teamA: "brazil",
+    teamB: "haiti",
+    dateLabel: "2026-06-20 KST",
+    score: "3-0",
+    headline: "Brazil vs Haiti",
+    summary: "Cunha's first-half brace and Vinicius's third gave Brazil a needed win.",
+    source: sourceBrazilHaiti
+  });
+
+  upsertSectionItem("matches", {
+    id: "group-d-tur-par-2026-06-19",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group D final",
+    competition: "FIFA World Cup 2026",
+    teamA: "turkiye",
+    teamB: "paraguay",
+    dateLabel: "2026-06-20 KST",
+    score: "0-1",
+    headline: "Turkiye vs Paraguay",
+    summary: "Galarza scored early and Paraguay held on with 10 men to stay alive.",
+    source: sourceTurkiyeParaguay
+  });
+
+  upsertVideo({
+    id: "video-sco-mar-candidate",
+    type: "video",
+    headline: "Scotland vs Morocco highlights candidate",
+    summary: "Stored as a candidate link until a stable FIFA or broadcaster highlight URL is pinned.",
+    url: "https://www.youtube.com/results?search_query=Scotland+Morocco+2026+World+Cup+highlights",
+    source: {
+      label: "YouTube search",
+      url: "https://www.youtube.com/results?search_query=Scotland+Morocco+2026+World+Cup+highlights",
+      checkedAt: "2026-06-21",
+      reliability: "curated"
+    }
+  });
+
+  upsertVideo({
+    id: "video-bra-hai-candidate",
+    type: "video",
+    headline: "Brazil vs Haiti highlights candidate",
+    summary: "Stored as a candidate link until a stable FIFA or broadcaster highlight URL is pinned.",
+    url: "https://www.youtube.com/results?search_query=Brazil+Haiti+2026+World+Cup+highlights",
+    source: {
+      label: "YouTube search",
+      url: "https://www.youtube.com/results?search_query=Brazil+Haiti+2026+World+Cup+highlights",
+      checkedAt: "2026-06-21",
+      reliability: "curated"
+    }
+  });
+
+  upsertVideo({
+    id: "video-tur-par-candidate",
+    type: "video",
+    headline: "Turkiye vs Paraguay highlights candidate",
+    summary: "Stored as a candidate link until a stable FIFA or broadcaster highlight URL is pinned.",
+    url: "https://www.youtube.com/results?search_query=Turkiye+Paraguay+2026+World+Cup+highlights",
+    source: {
+      label: "YouTube search",
+      url: "https://www.youtube.com/results?search_query=Turkiye+Paraguay+2026+World+Cup+highlights",
+      checkedAt: "2026-06-21",
+      reliability: "curated"
+    }
+  });
+
+  if (hub.archive) {
+    hub.archive.officialResultsCheckedAt = "2026-06-21";
+    hub.archive.source = sourceSchedule;
+  }
+})();

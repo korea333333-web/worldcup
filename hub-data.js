@@ -480,3 +480,70 @@
     emptyState: "Latest official results available before the automation cutoff are reflected here."
   };
 })();
+
+(function extendWorldCupHubDataJune21() {
+  const data = window.WORLD_CUP_DATA;
+  if (!data) return;
+
+  data.tournament.updatedAt = "2026-06-21";
+  data.tournament.scenarioNote = "At the 2026-06-21 07:00 KST automation cutoff, FIFA official results and standings were rechecked and the scenario data was brought forward through Morocco's win over Scotland, Brazil's win over Haiti and Paraguay's win over Turkiye. Matches kicking off at or after the cutoff remain for the next run.";
+
+  const upsertSource = (source) => {
+    const index = data.sources.findIndex((item) => item.id === source.id);
+    if (index >= 0) {
+      data.sources[index] = source;
+      return;
+    }
+    data.sources.push(source);
+  };
+
+  upsertSource({
+    id: "fifa-results-2026-06-21",
+    title: "FIFA World Cup 2026 schedule and results",
+    publisher: "FIFA",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/match-schedule-fixtures-results-teams-stadiums",
+    checkedAt: "2026-06-21",
+    reliability: "official"
+  });
+
+  upsertSource({
+    id: "fifa-standings-2026-06-21",
+    title: "FIFA World Cup 2026 standings",
+    publisher: "FIFA",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/standings",
+    checkedAt: "2026-06-21",
+    reliability: "official"
+  });
+
+  upsertSource({
+    id: "guardian-match-reports-2026-06-21",
+    title: "Guardian World Cup 2026 Group C and D reports",
+    publisher: "The Guardian",
+    url: "https://www.theguardian.com/football/2026/jun/20/scotland-morocco-world-cup-match-report",
+    checkedAt: "2026-06-21",
+    reliability: "trusted"
+  });
+
+  if (data.openingCeremony) {
+    data.openingCeremony.updatedAt = "2026-06-21";
+  }
+
+  data.statsCenter = {
+    updatedAt: "2026-06-21",
+    playerStats: [
+      { label: "Ismael Saibari", value: "71-second winner vs Scotland" },
+      { label: "Matheus Cunha", value: "brace vs Haiti" },
+      { label: "Vinicius Junior", value: "sealed Brazil's 3-0 win before half-time" },
+      { label: "Matias Galarza", value: "65-second opener vs Turkiye" },
+      { label: "Miguel Almiron", value: "red card in Paraguay's win" }
+    ],
+    teamStats: [
+      { label: "Group C leaders", value: "Brazil and Morocco move to 4 points, Scotland stay on 3" },
+      { label: "Group D table", value: "USA lead with 6 points; Australia and Paraguay have 3 each" },
+      { label: "Turkiye", value: "0 points from 2 matches and eliminated before facing the USA" },
+      { label: "Scenario delta", value: "Scotland-Morocco, Brazil-Haiti and Turkiye-Paraguay changed from future fixtures to final results" },
+      { label: "Cutoff note", value: "Netherlands-Sweden and later fixtures kicked off at or after the 07:00 KST cutoff" }
+    ],
+    emptyState: "Latest official results available before the automation cutoff are reflected here."
+  };
+})();
