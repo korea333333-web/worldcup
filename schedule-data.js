@@ -505,3 +505,60 @@
     return a.kstDateTime.localeCompare(b.kstDateTime);
   });
 })();
+
+(function extendWorldCupScheduleJune20() {
+  const data = window.WORLD_CUP_DATA;
+  const schedule = data?.matchSchedule;
+  if (!schedule) return;
+
+  schedule.updatedAt = "2026-06-20";
+  schedule.sourceNote = "FIFA official results and standings were rechecked at the 2026-06-20 07:00 KST automation cutoff. Completed Group B and Group D matches available by that cutoff were written back into the scenario schedule, with trusted match reports used only for scorer, card and injury context.";
+
+  (schedule.sources || []).forEach((source) => {
+    source.checkedAt = "2026-06-20";
+  });
+
+  const upsertMatchByDateTeams = (match) => {
+    const index = schedule.matches.findIndex((item) =>
+      item.date === match.date &&
+      item.teamA === match.teamA &&
+      item.teamB === match.teamB
+    );
+
+    if (index >= 0) {
+      schedule.matches[index] = { ...schedule.matches[index], ...match };
+      return;
+    }
+
+    schedule.matches.push(match);
+  };
+
+  upsertMatchByDateTeams({
+    stage: "Group B",
+    date: "2026-06-18",
+    localTime: "15:00",
+    kstDateTime: "2026-06-19 07:00",
+    venueId: "vancouver",
+    teamA: "canada",
+    teamB: "qatar",
+    status: "official",
+    note: "Final: Canada 6-0 Qatar"
+  });
+
+  upsertMatchByDateTeams({
+    stage: "Group D",
+    date: "2026-06-19",
+    localTime: "12:00",
+    kstDateTime: "2026-06-20 04:00",
+    venueId: "seattle",
+    teamA: "usa",
+    teamB: "australia",
+    status: "official",
+    note: "Final: USA 2-0 Australia"
+  });
+
+  schedule.matches.sort((a, b) => {
+    if (a.kstDateTime === b.kstDateTime) return (a.number ?? 0) - (b.number ?? 0);
+    return a.kstDateTime.localeCompare(b.kstDateTime);
+  });
+})();

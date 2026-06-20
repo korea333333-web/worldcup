@@ -413,3 +413,70 @@
     emptyState: "Latest official results available before the automation cutoff are reflected here."
   };
 })();
+
+(function extendWorldCupHubDataJune20() {
+  const data = window.WORLD_CUP_DATA;
+  if (!data) return;
+
+  data.tournament.updatedAt = "2026-06-20";
+  data.tournament.scenarioNote = "At the 2026-06-20 07:00 KST automation cutoff, FIFA official results and standings were rechecked and the scenario data was brought forward through Canada's Group B win over Qatar and the USA's Group D win over Australia. Matches that kicked off at or after the cutoff remain for the next run.";
+
+  const upsertSource = (source) => {
+    const index = data.sources.findIndex((item) => item.id === source.id);
+    if (index >= 0) {
+      data.sources[index] = source;
+      return;
+    }
+    data.sources.push(source);
+  };
+
+  upsertSource({
+    id: "fifa-results-2026-06-20",
+    title: "FIFA World Cup 2026 schedule and results",
+    publisher: "FIFA",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/match-schedule-fixtures-results-teams-stadiums",
+    checkedAt: "2026-06-20",
+    reliability: "official"
+  });
+
+  upsertSource({
+    id: "fifa-standings-2026-06-20",
+    title: "FIFA World Cup 2026 standings",
+    publisher: "FIFA",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/standings",
+    checkedAt: "2026-06-20",
+    reliability: "official"
+  });
+
+  upsertSource({
+    id: "guardian-match-reports-2026-06-20",
+    title: "Guardian World Cup 2026 Canada and USA match reports",
+    publisher: "The Guardian",
+    url: "https://www.theguardian.com/football/2026/jun/19/usa-australia-world-cup-2026-group-d-match-report",
+    checkedAt: "2026-06-20",
+    reliability: "trusted"
+  });
+
+  if (data.openingCeremony) {
+    data.openingCeremony.updatedAt = "2026-06-20";
+  }
+
+  data.statsCenter = {
+    updatedAt: "2026-06-20",
+    playerStats: [
+      { label: "Jonathan David", value: "hat-trick vs Qatar" },
+      { label: "Alex Freeman", value: "43' goal vs Australia" },
+      { label: "Cyle Larin", value: "opened Canada's 6-0 win" },
+      { label: "Nathan Saliba", value: "64' free-kick tribute after Kone injury" },
+      { label: "Cameron Burgess", value: "11' own goal under US pressure" }
+    ],
+    teamStats: [
+      { label: "Group B leaders", value: "Canada move top on goal difference after a 6-0 win" },
+      { label: "Group D leaders", value: "USA reach 6 points and secure a knockout berth" },
+      { label: "Qatar discipline", value: "Homam Ahmed and Assim Madibo both saw red cards" },
+      { label: "Scenario delta", value: "Canada-Qatar and USA-Australia changed from future fixtures to final results" },
+      { label: "Cutoff note", value: "Scotland-Morocco and later 2026-06-20 KST kickoffs were outside this run" }
+    ],
+    emptyState: "Latest official results available before the automation cutoff are reflected here."
+  };
+})();

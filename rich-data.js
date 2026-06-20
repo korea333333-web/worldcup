@@ -522,3 +522,90 @@
     ]
   });
 })();
+
+(function extendRichWorldCupDataJune20() {
+  const data = window.WORLD_CUP_DATA;
+  if (!data?.teams) return;
+
+  const applyRecord = (teamId, patch) => {
+    const team = data.teams[teamId];
+    if (!team) return;
+    Object.assign(team, patch);
+  };
+
+  applyRecord("canada", {
+    lastChecked: "2026-06-20",
+    matchRecords: [
+      {
+        status: "played",
+        matchLabel: "Canada Group B second match vs Qatar",
+        score: "Canada 6-0 Qatar",
+        startingXI: [],
+        substitutions: [
+          "Nathan Saliba replaced the injured Ismael Kone and scored from a direct free-kick",
+          "Alphonso Davies stayed on the bench despite being available after his hamstring issue",
+          "Canada finished against nine-man Qatar after red cards to Homam Ahmed and Assim Madibo"
+        ],
+        stats: { shots: "trusted report summary", possession: "Canada pinned Qatar back for long stretches", xg: "not pinned at cutoff" },
+        mom: "Jonathan David"
+      }
+    ]
+  });
+
+  applyRecord("qatar", {
+    lastChecked: "2026-06-20",
+    matchRecords: [
+      {
+        status: "played",
+        matchLabel: "Qatar Group B second match vs Canada",
+        score: "Qatar 0-6 Canada",
+        startingXI: [],
+        substitutions: [
+          "Homam Ahmed saw a straight red for denying a goalscoring opportunity",
+          "Assim Madibo was sent off after the tackle that injured Ismael Kone",
+          "Akram Afif cleared one off the line before the scoreline got away"
+        ],
+        stats: { shots: "trusted report summary", possession: "Qatar were pinned back after the early Canada pressure", xg: "not pinned at cutoff" },
+        mom: "Jonathan David"
+      }
+    ]
+  });
+
+  applyRecord("usa", {
+    lastChecked: "2026-06-20",
+    matchRecords: [
+      {
+        status: "played",
+        matchLabel: "USA Group D second match vs Australia",
+        score: "USA 2-0 Australia",
+        startingXI: [],
+        substitutions: [
+          "Christian Pulisic was unavailable for selection",
+          "Alex Freeman's finish was confirmed after a VAR review before half-time",
+          "The USA saw out a physical second half and clinched a knockout-round place"
+        ],
+        stats: { shots: "trusted report summary", possession: "USA controlled the first half", xg: "not pinned at cutoff" },
+        mom: "Alex Freeman"
+      }
+    ]
+  });
+
+  applyRecord("australia", {
+    lastChecked: "2026-06-20",
+    matchRecords: [
+      {
+        status: "played",
+        matchLabel: "Australia Group D second match vs USA",
+        score: "Australia 0-2 USA",
+        startingXI: [],
+        substitutions: [
+          "Jordan Bos and Alessandro Circati were booked before half-time",
+          "Australia improved after the break but could not overturn the two-goal deficit",
+          "Seven yellow cards were shown across the match"
+        ],
+        stats: { shots: "trusted report summary", possession: "Australia chased the game for most of the afternoon", xg: "not pinned at cutoff" },
+        mom: "Alex Freeman"
+      }
+    ]
+  });
+})();

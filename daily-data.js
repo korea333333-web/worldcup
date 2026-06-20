@@ -1470,3 +1470,203 @@
     hub.archive.source = sourceSchedule;
   }
 })();
+
+(function extendDailyMatchHubJune20() {
+  const data = window.WORLD_CUP_DATA;
+  const hub = data?.dailyMatchHub;
+  if (!hub) return;
+
+  const sourceSchedule = {
+    label: "FIFA schedule/results",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/match-schedule-fixtures-results-teams-stadiums",
+    checkedAt: "2026-06-20",
+    reliability: "official"
+  };
+
+  const sourceStandings = {
+    label: "FIFA standings",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/standings",
+    checkedAt: "2026-06-20",
+    reliability: "official"
+  };
+
+  const sourceCanadaQatar = {
+    label: "Guardian Canada v Qatar match report",
+    url: "https://www.theguardian.com/football/2026/jun/18/canada-qatar-world-cup-2026-group-b-match-report",
+    checkedAt: "2026-06-20",
+    reliability: "trusted"
+  };
+
+  const sourceUsaAustralia = {
+    label: "Guardian USA v Australia match report",
+    url: "https://www.theguardian.com/football/2026/jun/19/usa-australia-world-cup-2026-group-d-match-report",
+    checkedAt: "2026-06-20",
+    reliability: "trusted"
+  };
+
+  hub.updatedAt = "2026-06-20";
+  hub.summary = "2026-06-20 07:00 KST cutoff advanced the scenario through Canada's 6-0 win over Qatar and the USA's 2-0 win over Australia, while later 2026-06-20 KST kickoffs were left for the next run.";
+  hub.sourceNote = "FIFA schedule/results and standings remain the official reference. Guardian match reports and live blogs were used only for scorer order, cards, lineup context and the Ismael Kone injury aftermath where the FIFA match-report pages were not yet pinned.";
+  hub.featuredMatchId = "group-d-usa-aus-2026-06-19";
+
+  const upsertMatch = (match) => {
+    const index = hub.matches.findIndex((item) => item.id === match.id);
+    if (index >= 0) {
+      hub.matches[index] = match;
+      return;
+    }
+    hub.matches.push(match);
+  };
+
+  const upsertSectionItem = (sectionId, item) => {
+    const section = hub.sections.find((entry) => entry.id === sectionId);
+    if (!section) return;
+    const index = section.items.findIndex((entry) => entry.id === item.id);
+    if (index >= 0) {
+      section.items[index] = item;
+      return;
+    }
+    section.items.push(item);
+  };
+
+  const upsertVideo = (item) => upsertSectionItem("videos", item);
+
+  upsertMatch({
+    id: "group-b-can-qat-2026-06-18",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group B",
+    competition: "FIFA World Cup 2026",
+    teamA: "canada",
+    teamB: "qatar",
+    score: "Canada 6-0 Qatar",
+    dateLabel: "2026-06-19 KST",
+    localTimeLabel: "2026-06-18 15:00 local",
+    venue: "Vancouver Stadium (BC Place)",
+    city: "Vancouver",
+    headline: "Canada overwhelm nine-man Qatar for a first men's World Cup win",
+    recap: "Cyle Larin opened the scoring, Jonathan David hit a hat-trick, Nathan Saliba curled in a tribute free-kick after Ismael Kone's injury, and Qatar collapsed after two red cards.",
+    scorers: ["Cyle Larin 16'", "Jonathan David 29'", "Jonathan David 45+3'", "Nathan Saliba 64'", "Mohammad Al-Mannai 75' (OG)", "Jonathan David 90+2'"],
+    notes: [
+      "Official result cross-checked against FIFA results and standings pages",
+      "Homam Ahmed was sent off on 33' for denying Tajon Buchanan a goalscoring opportunity",
+      "Assim Madibo was sent off after VAR review following the tackle that caused Ismael Kone's leg injury",
+      "Canada's first-ever men's World Cup win put the co-hosts on top of Group B on goal difference"
+    ],
+    highlightUrl: "https://www.youtube.com/results?search_query=Canada+Qatar+2026+World+Cup+highlights",
+    source: sourceCanadaQatar,
+    detailSource: sourceStandings,
+    modelPick: { teamA: 48, draw: 28, teamB: 24 },
+    highlightVideos: [
+      {
+        title: "Canada v Qatar highlights",
+        channel: "YouTube search",
+        type: "highlight",
+        url: "https://www.youtube.com/results?search_query=Canada+Qatar+2026+World+Cup+highlights",
+        duration: "candidate",
+        meta: "official upload candidate"
+      }
+    ]
+  });
+
+  upsertMatch({
+    id: "group-d-usa-aus-2026-06-19",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group D",
+    competition: "FIFA World Cup 2026",
+    teamA: "usa",
+    teamB: "australia",
+    score: "USA 2-0 Australia",
+    dateLabel: "2026-06-20 KST",
+    localTimeLabel: "2026-06-19 12:00 local",
+    venue: "Seattle Stadium",
+    city: "Seattle",
+    headline: "USA reach the knockout stage with a composed win over Australia",
+    recap: "A Cameron Burgess own goal set the tone before Alex Freeman's finish was confirmed after a VAR review, giving the United States six points from two matches.",
+    scorers: ["Cameron Burgess 11' (OG)", "Alex Freeman 43'"],
+    notes: [
+      "Official result cross-checked against FIFA results and standings pages",
+      "Christian Pulisic was unavailable for selection",
+      "Australia's Jordan Bos and Alessandro Circati were booked in the first half, and the match finished with seven yellow cards",
+      "The win secured the United States a knockout-round place with one group game to spare"
+    ],
+    highlightUrl: "https://www.youtube.com/results?search_query=USA+Australia+2026+World+Cup+highlights",
+    source: sourceUsaAustralia,
+    detailSource: sourceStandings,
+    modelPick: { teamA: 56, draw: 24, teamB: 20 },
+    highlightVideos: [
+      {
+        title: "USA v Australia highlights",
+        channel: "YouTube search",
+        type: "highlight",
+        url: "https://www.youtube.com/results?search_query=USA+Australia+2026+World+Cup+highlights",
+        duration: "candidate",
+        meta: "official upload candidate"
+      }
+    ]
+  });
+
+  upsertSectionItem("matches", {
+    id: "group-d-usa-aus-2026-06-19",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group D final",
+    competition: "FIFA World Cup 2026",
+    teamA: "usa",
+    teamB: "australia",
+    dateLabel: "2026-06-20 KST",
+    score: "2-0",
+    headline: "USA vs Australia",
+    summary: "Burgess turned one in early and Freeman sealed a US knockout berth before half-time.",
+    source: sourceUsaAustralia
+  });
+
+  upsertSectionItem("matches", {
+    id: "group-b-can-qat-2026-06-18",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group B final",
+    competition: "FIFA World Cup 2026",
+    teamA: "canada",
+    teamB: "qatar",
+    dateLabel: "2026-06-19 KST",
+    score: "6-0",
+    headline: "Canada vs Qatar",
+    summary: "David hit a hat-trick as Canada overwhelmed nine-man Qatar in Vancouver.",
+    source: sourceCanadaQatar
+  });
+
+  upsertVideo({
+    id: "video-usa-aus-candidate",
+    type: "video",
+    headline: "USA vs Australia highlights candidate",
+    summary: "Stored as a candidate link until a stable FIFA or broadcaster highlight URL is pinned.",
+    url: "https://www.youtube.com/results?search_query=USA+Australia+2026+World+Cup+highlights",
+    source: {
+      label: "YouTube search",
+      url: "https://www.youtube.com/results?search_query=USA+Australia+2026+World+Cup+highlights",
+      checkedAt: "2026-06-20",
+      reliability: "curated"
+    }
+  });
+
+  upsertVideo({
+    id: "video-can-qat-candidate",
+    type: "video",
+    headline: "Canada vs Qatar highlights candidate",
+    summary: "Stored as a candidate link until a stable FIFA or broadcaster highlight URL is pinned.",
+    url: "https://www.youtube.com/results?search_query=Canada+Qatar+2026+World+Cup+highlights",
+    source: {
+      label: "YouTube search",
+      url: "https://www.youtube.com/results?search_query=Canada+Qatar+2026+World+Cup+highlights",
+      checkedAt: "2026-06-20",
+      reliability: "curated"
+    }
+  });
+
+  if (hub.archive) {
+    hub.archive.officialResultsCheckedAt = "2026-06-20";
+    hub.archive.source = sourceSchedule;
+  }
+})();
