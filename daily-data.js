@@ -1944,3 +1944,203 @@
     hub.archive.source = sourceSchedule;
   }
 })();
+
+(function extendDailyMatchHubJune26() {
+  const data = window.WORLD_CUP_DATA;
+  const hub = data?.dailyMatchHub;
+  if (!hub) return;
+
+  const sourceSchedule = {
+    label: "FIFA schedule/results",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/match-schedule-fixtures-results-teams-stadiums",
+    checkedAt: "2026-06-26",
+    reliability: "official"
+  };
+
+  const sourceStandings = {
+    label: "FIFA standings",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/standings",
+    checkedAt: "2026-06-26",
+    reliability: "official"
+  };
+
+  const sourceSouthAfricaKorea = {
+    label: "Guardian South Africa v South Korea live report",
+    url: "https://www.theguardian.com/football/live/2026/jun/24/south-africa-v-south-korea-world-cup-2026-live",
+    checkedAt: "2026-06-26",
+    reliability: "trusted"
+  };
+
+  const sourceMexicoCzechia = {
+    label: "Guardian Czechia v Mexico live report",
+    url: "https://www.theguardian.com/football/live/2026/jun/24/czechia-v-mexico-world-cup-2026-live",
+    checkedAt: "2026-06-26",
+    reliability: "trusted"
+  };
+
+  hub.updatedAt = "2026-06-26";
+  hub.summary = "2026-06-26 07:00 KST cutoff advanced Group A through the two final-matchday results, leaving later groups for the next run.";
+  hub.sourceNote = "FIFA schedule/results and standings remain the official reference. Guardian live coverage was used only for lineup context, substitutions, disciplinary notes and standout match details where the official match-report pages were not yet pinned.";
+  hub.featuredMatchId = "group-a-rsa-kor-2026-06-24";
+
+  const upsertMatch = (match) => {
+    const index = hub.matches.findIndex((item) => item.id === match.id);
+    if (index >= 0) {
+      hub.matches[index] = match;
+      return;
+    }
+    hub.matches.push(match);
+  };
+
+  const upsertSectionItem = (sectionId, item) => {
+    const section = hub.sections.find((entry) => entry.id === sectionId);
+    if (!section) return;
+    const index = section.items.findIndex((entry) => entry.id === item.id);
+    if (index >= 0) {
+      section.items[index] = item;
+      return;
+    }
+    section.items.push(item);
+  };
+
+  const upsertVideo = (item) => upsertSectionItem("videos", item);
+
+  upsertMatch({
+    id: "group-a-rsa-kor-2026-06-24",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group A",
+    competition: "FIFA World Cup 2026",
+    teamA: "south-africa",
+    teamB: "korea",
+    score: "South Africa 1-0 South Korea",
+    dateLabel: "2026-06-25 KST",
+    localTimeLabel: "2026-06-24 19:00 local",
+    venue: "Monterrey Stadium",
+    city: "Monterrey",
+    headline: "South Africa shut out South Korea and reach the knockout rounds for the first time",
+    recap: "Thapelo Maseko scored in the 63rd minute, South Korea chased the game after Son Heung-min began on the bench, and Bafana Bafana held on to secure second place in Group A.",
+    scorers: ["Thapelo Maseko 63'"],
+    notes: [
+      "Official result cross-checked against FIFA results and standings pages",
+      "Son Heung-min started on the bench in the trusted live report",
+      "Cho Gue-sung was booked late as South Korea pushed for an equaliser",
+      "South Korea finished with 3 points and a -1 goal difference and had to wait on the third-place table"
+    ],
+    highlightUrl: "https://www.youtube.com/results?search_query=South+Africa+South+Korea+2026+World+Cup+highlights",
+    source: sourceSouthAfricaKorea,
+    detailSource: sourceStandings,
+    modelPick: { teamA: 26, draw: 30, teamB: 44 },
+    highlightVideos: [
+      {
+        title: "South Africa v South Korea highlights",
+        channel: "YouTube search",
+        type: "highlight",
+        url: "https://www.youtube.com/results?search_query=South+Africa+South+Korea+2026+World+Cup+highlights",
+        duration: "candidate",
+        meta: "official upload candidate"
+      }
+    ]
+  });
+
+  upsertMatch({
+    id: "group-a-cze-mex-2026-06-24",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group A",
+    competition: "FIFA World Cup 2026",
+    teamA: "czechia",
+    teamB: "mexico",
+    score: "Czechia 0-3 Mexico",
+    dateLabel: "2026-06-25 KST",
+    localTimeLabel: "2026-06-24 19:00 local",
+    venue: "Mexico City Stadium",
+    city: "Mexico City",
+    headline: "Mexico finish Group A perfect as Czechia fade out of the tournament",
+    recap: "Mateo Chavez broke the game open, Julian Quinones doubled the lead, and Alvaro Fidalgo capped the night after Guillermo Ochoa's late cameo in Mexico City's 3-0 win.",
+    scorers: ["Mateo Chavez 54'", "Julian Quinones 61'", "Alvaro Fidalgo 90+4'"],
+    notes: [
+      "Official result cross-checked against FIFA results and standings pages",
+      "Mexico closed Group A with 9 points, +6 goal difference and no goals conceded",
+      "Guillermo Ochoa made his 154th Mexico appearance and helped start the final goal move",
+      "Fidalgo's stoppage-time finish was his first international goal in the trusted live report"
+    ],
+    highlightUrl: "https://www.youtube.com/results?search_query=Czechia+Mexico+2026+World+Cup+highlights",
+    source: sourceMexicoCzechia,
+    detailSource: sourceStandings,
+    modelPick: { teamA: 17, draw: 24, teamB: 59 },
+    highlightVideos: [
+      {
+        title: "Czechia v Mexico highlights",
+        channel: "YouTube search",
+        type: "highlight",
+        url: "https://www.youtube.com/results?search_query=Czechia+Mexico+2026+World+Cup+highlights",
+        duration: "candidate",
+        meta: "official upload candidate"
+      }
+    ]
+  });
+
+  upsertSectionItem("matches", {
+    id: "group-a-rsa-kor-2026-06-24",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group A final",
+    competition: "FIFA World Cup 2026",
+    teamA: "south-africa",
+    teamB: "korea",
+    dateLabel: "2026-06-25 KST",
+    score: "1-0",
+    headline: "South Africa vs South Korea",
+    summary: "Maseko's strike sent South Africa through and left South Korea waiting on third-place math.",
+    source: sourceSouthAfricaKorea
+  });
+
+  upsertSectionItem("matches", {
+    id: "group-a-cze-mex-2026-06-24",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group A final",
+    competition: "FIFA World Cup 2026",
+    teamA: "czechia",
+    teamB: "mexico",
+    dateLabel: "2026-06-25 KST",
+    score: "0-3",
+    headline: "Czechia vs Mexico",
+    summary: "Mexico completed a perfect group stage and kept a third straight clean sheet.",
+    source: sourceMexicoCzechia
+  });
+
+  upsertVideo({
+    id: "video-rsa-kor-candidate",
+    type: "video",
+    headline: "South Africa vs South Korea highlights candidate",
+    summary: "Stored as a candidate link until a stable FIFA or broadcaster highlight URL is pinned.",
+    url: "https://www.youtube.com/results?search_query=South+Africa+South+Korea+2026+World+Cup+highlights",
+    source: {
+      label: "YouTube search",
+      url: "https://www.youtube.com/results?search_query=South+Africa+South+Korea+2026+World+Cup+highlights",
+      checkedAt: "2026-06-26",
+      reliability: "curated"
+    }
+  });
+
+  upsertVideo({
+    id: "video-cze-mex-candidate",
+    type: "video",
+    headline: "Czechia vs Mexico highlights candidate",
+    summary: "Stored as a candidate link until a stable FIFA or broadcaster highlight URL is pinned.",
+    url: "https://www.youtube.com/results?search_query=Czechia+Mexico+2026+World+Cup+highlights",
+    source: {
+      label: "YouTube search",
+      url: "https://www.youtube.com/results?search_query=Czechia+Mexico+2026+World+Cup+highlights",
+      checkedAt: "2026-06-26",
+      reliability: "curated"
+    }
+  });
+
+  if (hub.archive) {
+    hub.archive.officialResultsCheckedAt = "2026-06-26";
+    hub.archive.source = sourceSchedule;
+  }
+})();

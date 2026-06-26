@@ -547,3 +547,70 @@
     emptyState: "Latest official results available before the automation cutoff are reflected here."
   };
 })();
+
+(function extendWorldCupHubDataJune26() {
+  const data = window.WORLD_CUP_DATA;
+  if (!data) return;
+
+  data.tournament.updatedAt = "2026-06-26";
+  data.tournament.scenarioNote = "At the 2026-06-26 07:00 KST automation cutoff, FIFA official results and standings were rechecked and the scenario data was brought forward through both completed Group A final-matchday fixtures from 2026-06-24 local time.";
+
+  const upsertSource = (source) => {
+    const index = data.sources.findIndex((item) => item.id === source.id);
+    if (index >= 0) {
+      data.sources[index] = source;
+      return;
+    }
+    data.sources.push(source);
+  };
+
+  upsertSource({
+    id: "fifa-results-2026-06-26",
+    title: "FIFA World Cup 2026 schedule and results",
+    publisher: "FIFA",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/match-schedule-fixtures-results-teams-stadiums",
+    checkedAt: "2026-06-26",
+    reliability: "official"
+  });
+
+  upsertSource({
+    id: "fifa-standings-2026-06-26",
+    title: "FIFA World Cup 2026 standings",
+    publisher: "FIFA",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/standings",
+    checkedAt: "2026-06-26",
+    reliability: "official"
+  });
+
+  upsertSource({
+    id: "guardian-match-reports-2026-06-26",
+    title: "Guardian World Cup 2026 Group A final-matchday reports",
+    publisher: "The Guardian",
+    url: "https://www.theguardian.com/football/live/2026/jun/24/south-africa-v-south-korea-world-cup-2026-live",
+    checkedAt: "2026-06-26",
+    reliability: "trusted"
+  });
+
+  if (data.openingCeremony) {
+    data.openingCeremony.updatedAt = "2026-06-26";
+  }
+
+  data.statsCenter = {
+    updatedAt: "2026-06-26",
+    playerStats: [
+      { label: "Thapelo Maseko", value: "63' winner vs South Korea" },
+      { label: "Mateo Chavez", value: "first Mexico goal vs Czechia" },
+      { label: "Julian Quinones", value: "61' insurance goal vs Czechia" },
+      { label: "Alvaro Fidalgo", value: "first international goal at 90+4'" },
+      { label: "Guillermo Ochoa", value: "154th Mexico cap in late cameo" }
+    ],
+    teamStats: [
+      { label: "Group A winners", value: "Mexico finished first with 9 points and three clean sheets" },
+      { label: "Group A runners-up", value: "South Africa reached 4 points and advanced in second place" },
+      { label: "South Korea", value: "3 points and -1 goal difference after the final-matchday defeat" },
+      { label: "Scenario delta", value: "South Africa-South Korea and Czechia-Mexico changed from scheduled fixtures to final results" },
+      { label: "Cutoff note", value: "Only matches completed before the 2026-06-26 07:00 KST cutoff were merged in this run" }
+    ],
+    emptyState: "Latest official results available before the automation cutoff are reflected here."
+  };
+})();
