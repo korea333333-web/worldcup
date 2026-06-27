@@ -120,6 +120,140 @@
   };
 })();
 
+(function finalizeWorldCupHubDataJune27() {
+  const data = window.WORLD_CUP_DATA;
+  if (!data) return;
+
+  data.tournament.updatedAt = "2026-06-27";
+  data.tournament.scenarioNote = "At the 2026-06-27 07:00 KST automation cutoff, FIFA official results and standings were rechecked and the live scenario surfaces were advanced through the latest completed Group D, E and F finales available before the run.";
+
+  const upsertSource = (source) => {
+    const index = data.sources.findIndex((item) => item.id === source.id);
+    if (index >= 0) {
+      data.sources[index] = source;
+      return;
+    }
+    data.sources.push(source);
+  };
+
+  upsertSource({
+    id: "fifa-results-2026-06-27",
+    title: "FIFA World Cup 2026 schedule and results",
+    publisher: "FIFA",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/match-schedule-fixtures-results-teams-stadiums",
+    checkedAt: "2026-06-27",
+    reliability: "official"
+  });
+
+  upsertSource({
+    id: "fifa-standings-2026-06-27",
+    title: "FIFA World Cup 2026 standings",
+    publisher: "FIFA",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/standings",
+    checkedAt: "2026-06-27",
+    reliability: "official"
+  });
+
+  upsertSource({
+    id: "guardian-match-reports-2026-06-27",
+    title: "Guardian World Cup 2026 Group D, E and F final-day reports",
+    publisher: "The Guardian",
+    url: "https://www.theguardian.com/football/live/2026/jun/25/germany-v-ecuador-world-cup-2026-live",
+    checkedAt: "2026-06-27",
+    reliability: "trusted"
+  });
+
+  if (data.openingCeremony) {
+    data.openingCeremony.updatedAt = "2026-06-27";
+  }
+
+  data.statsCenter = {
+    updatedAt: "2026-06-27",
+    playerStats: [
+      { label: "Gonzalo Plata", value: "77' winner vs Germany" },
+      { label: "Jose Angulo", value: "quick equaliser in Ecuador's comeback" },
+      { label: "Sebastian Berhalter", value: "goal and assist vs Turkiye" },
+      { label: "Daizen Maeda", value: "opened Japan's qualification-clinching draw" },
+      { label: "Anthony Elanga", value: "61' reply that sent Sweden through" }
+    ],
+    teamStats: [
+      { label: "Group D", value: "USA still finished first on 6 points; Australia advanced in second after a 0-0 draw with Paraguay" },
+      { label: "Group E", value: "Germany stayed top despite losing 2-1, while Ecuador surged into the last 32" },
+      { label: "Group F", value: "Netherlands won the group; Japan progressed second and Sweden advanced from third" },
+      { label: "Scenario delta", value: "USA-Turkiye, Paraguay-Australia, Ecuador-Germany and Japan-Sweden changed from future-state watch items to final results" },
+      { label: "Cutoff note", value: "Only matches completed before the 2026-06-27 07:00 KST cutoff were merged in this run" }
+    ],
+    emptyState: "Latest official results available before the automation cutoff are reflected here."
+  };
+})();
+
+(function extendWorldCupHubDataJune27() {
+  const data = window.WORLD_CUP_DATA;
+  if (!data) return;
+
+  data.tournament.updatedAt = "2026-06-27";
+  data.tournament.scenarioNote = "At the 2026-06-27 07:00 KST automation cutoff, FIFA official results and standings were rechecked and the live scenario surfaces were advanced through the latest completed Group D, E and F finales available before the run.";
+
+  const upsertSource = (source) => {
+    const index = data.sources.findIndex((item) => item.id === source.id);
+    if (index >= 0) {
+      data.sources[index] = source;
+      return;
+    }
+    data.sources.push(source);
+  };
+
+  upsertSource({
+    id: "fifa-results-2026-06-27",
+    title: "FIFA World Cup 2026 schedule and results",
+    publisher: "FIFA",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/match-schedule-fixtures-results-teams-stadiums",
+    checkedAt: "2026-06-27",
+    reliability: "official"
+  });
+
+  upsertSource({
+    id: "fifa-standings-2026-06-27",
+    title: "FIFA World Cup 2026 standings",
+    publisher: "FIFA",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/standings",
+    checkedAt: "2026-06-27",
+    reliability: "official"
+  });
+
+  upsertSource({
+    id: "guardian-match-reports-2026-06-27",
+    title: "Guardian World Cup 2026 Group D, E and F final-day reports",
+    publisher: "The Guardian",
+    url: "https://www.theguardian.com/football/live/2026/jun/25/germany-v-ecuador-world-cup-2026-live",
+    checkedAt: "2026-06-27",
+    reliability: "trusted"
+  });
+
+  if (data.openingCeremony) {
+    data.openingCeremony.updatedAt = "2026-06-27";
+  }
+
+  data.statsCenter = {
+    updatedAt: "2026-06-27",
+    playerStats: [
+      { label: "Gonzalo Plata", value: "77' winner vs Germany" },
+      { label: "Jose Angulo", value: "quick equaliser in Ecuador's comeback" },
+      { label: "Sebastian Berhalter", value: "goal and assist vs Turkiye" },
+      { label: "Daizen Maeda", value: "opened Japan's qualification-clinching draw" },
+      { label: "Anthony Elanga", value: "61' reply that sent Sweden through" }
+    ],
+    teamStats: [
+      { label: "Group D", value: "USA still finished first on 6 points; Australia advanced in second after a 0-0 draw with Paraguay" },
+      { label: "Group E", value: "Germany stayed top despite losing 2-1, while Ecuador surged into the last 32" },
+      { label: "Group F", value: "Netherlands won the group; Japan progressed second and Sweden advanced from third" },
+      { label: "Scenario delta", value: "USA-Turkiye, Paraguay-Australia, Ecuador-Germany and Japan-Sweden changed from future-state watch items to final results" },
+      { label: "Cutoff note", value: "Only matches completed before the 2026-06-27 07:00 KST cutoff were merged in this run" }
+    ],
+    emptyState: "Latest official results available before the automation cutoff are reflected here."
+  };
+})();
+
 (function finalizeWorldCupHubDataJune18() {
   const data = window.WORLD_CUP_DATA;
   if (!data) return;
@@ -610,6 +744,73 @@
       { label: "South Korea", value: "3 points and -1 goal difference after the final-matchday defeat" },
       { label: "Scenario delta", value: "South Africa-South Korea and Czechia-Mexico changed from scheduled fixtures to final results" },
       { label: "Cutoff note", value: "Only matches completed before the 2026-06-26 07:00 KST cutoff were merged in this run" }
+    ],
+    emptyState: "Latest official results available before the automation cutoff are reflected here."
+  };
+})();
+
+(function finalizeWorldCupHubDataJune27() {
+  const data = window.WORLD_CUP_DATA;
+  if (!data) return;
+
+  data.tournament.updatedAt = "2026-06-27";
+  data.tournament.scenarioNote = "At the 2026-06-27 07:00 KST automation cutoff, FIFA official results and standings were rechecked and the live scenario surfaces were advanced through the latest completed Group D, E and F finales available before the run.";
+
+  const upsertSource = (source) => {
+    const index = data.sources.findIndex((item) => item.id === source.id);
+    if (index >= 0) {
+      data.sources[index] = source;
+      return;
+    }
+    data.sources.push(source);
+  };
+
+  upsertSource({
+    id: "fifa-results-2026-06-27",
+    title: "FIFA World Cup 2026 schedule and results",
+    publisher: "FIFA",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/match-schedule-fixtures-results-teams-stadiums",
+    checkedAt: "2026-06-27",
+    reliability: "official"
+  });
+
+  upsertSource({
+    id: "fifa-standings-2026-06-27",
+    title: "FIFA World Cup 2026 standings",
+    publisher: "FIFA",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/standings",
+    checkedAt: "2026-06-27",
+    reliability: "official"
+  });
+
+  upsertSource({
+    id: "guardian-match-reports-2026-06-27",
+    title: "Guardian World Cup 2026 Group D, E and F final-day reports",
+    publisher: "The Guardian",
+    url: "https://www.theguardian.com/football/live/2026/jun/25/germany-v-ecuador-world-cup-2026-live",
+    checkedAt: "2026-06-27",
+    reliability: "trusted"
+  });
+
+  if (data.openingCeremony) {
+    data.openingCeremony.updatedAt = "2026-06-27";
+  }
+
+  data.statsCenter = {
+    updatedAt: "2026-06-27",
+    playerStats: [
+      { label: "Gonzalo Plata", value: "77' winner vs Germany" },
+      { label: "Jose Angulo", value: "quick equaliser in Ecuador's comeback" },
+      { label: "Sebastian Berhalter", value: "goal and assist vs Turkiye" },
+      { label: "Daizen Maeda", value: "opened Japan's qualification-clinching draw" },
+      { label: "Anthony Elanga", value: "61' reply that sent Sweden through" }
+    ],
+    teamStats: [
+      { label: "Group D", value: "USA still finished first on 6 points; Australia advanced in second after a 0-0 draw with Paraguay" },
+      { label: "Group E", value: "Germany stayed top despite losing 2-1, while Ecuador surged into the last 32" },
+      { label: "Group F", value: "Netherlands won the group; Japan progressed second and Sweden advanced from third" },
+      { label: "Scenario delta", value: "USA-Turkiye, Paraguay-Australia, Ecuador-Germany and Japan-Sweden changed from future-state watch items to final results" },
+      { label: "Cutoff note", value: "Only matches completed before the 2026-06-27 07:00 KST cutoff were merged in this run" }
     ],
     emptyState: "Latest official results available before the automation cutoff are reflected here."
   };

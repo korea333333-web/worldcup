@@ -70,6 +70,32 @@
   }
 })();
 
+(function finalizeWorldCupScheduleJune27() {
+  const data = window.WORLD_CUP_DATA;
+  const schedule = data?.matchSchedule;
+  if (!schedule) return;
+
+  schedule.updatedAt = "2026-06-27";
+  schedule.sourceNote = "FIFA official results and standings were rechecked at the 2026-06-27 07:00 KST automation cutoff. This compact scenario schedule remains intentionally partial, while the latest completed Group D, E and F finale details were moved into the live-hub surfaces for richer reporting.";
+
+  (schedule.sources || []).forEach((source) => {
+    source.checkedAt = "2026-06-27";
+  });
+})();
+
+(function extendWorldCupScheduleJune27() {
+  const data = window.WORLD_CUP_DATA;
+  const schedule = data?.matchSchedule;
+  if (!schedule) return;
+
+  schedule.updatedAt = "2026-06-27";
+  schedule.sourceNote = "FIFA official results and standings were rechecked at the 2026-06-27 07:00 KST automation cutoff. This compact scenario schedule remains intentionally partial, while the latest completed Group D, E and F finale details were moved into the live-hub surfaces for richer reporting.";
+
+  (schedule.sources || []).forEach((source) => {
+    source.checkedAt = "2026-06-27";
+  });
+})();
+
 (function finalizeWorldCupScheduleJune18() {
   const data = window.WORLD_CUP_DATA;
   const schedule = data?.matchSchedule;
@@ -563,6 +589,32 @@
   });
 })();
 
+(function applyWorldCupScheduleJune27Cutoff() {
+  const data = window.WORLD_CUP_DATA;
+  const schedule = data?.matchSchedule;
+  if (!schedule) return;
+
+  schedule.updatedAt = "2026-06-27";
+  schedule.sourceNote = "FIFA official results and standings were rechecked at the 2026-06-27 07:00 KST automation cutoff. This compact scenario schedule remains intentionally partial, while the latest completed Group D, E and F finale details were moved into the live-hub surfaces for richer reporting.";
+
+  (schedule.sources || []).forEach((source) => {
+    source.checkedAt = "2026-06-27";
+  });
+})();
+
+(function finalizeWorldCupScheduleJune27() {
+  const data = window.WORLD_CUP_DATA;
+  const schedule = data?.matchSchedule;
+  if (!schedule) return;
+
+  schedule.updatedAt = "2026-06-27";
+  schedule.sourceNote = "FIFA official results and standings were rechecked at the 2026-06-27 07:00 KST automation cutoff. This compact scenario schedule remains intentionally partial, while the latest completed Group D, E and F finale details were moved into the live-hub surfaces for richer reporting.";
+
+  (schedule.sources || []).forEach((source) => {
+    source.checkedAt = "2026-06-27";
+  });
+})();
+
 (function extendWorldCupScheduleJune21() {
   const data = window.WORLD_CUP_DATA;
   const schedule = data?.matchSchedule;
@@ -688,5 +740,18 @@
   schedule.matches.sort((a, b) => {
     if (a.kstDateTime === b.kstDateTime) return (a.number ?? 0) - (b.number ?? 0);
     return a.kstDateTime.localeCompare(b.kstDateTime);
+  });
+})();
+
+(function applyWorldCupScheduleJune27Cutoff() {
+  const data = window.WORLD_CUP_DATA;
+  const schedule = data?.matchSchedule;
+  if (!schedule) return;
+
+  schedule.updatedAt = "2026-06-27";
+  schedule.sourceNote = "FIFA official results and standings were rechecked at the 2026-06-27 07:00 KST automation cutoff. This compact scenario schedule remains intentionally partial, while the latest completed Group D, E and F finale details were moved into the live-hub surfaces for richer reporting.";
+
+  (schedule.sources || []).forEach((source) => {
+    source.checkedAt = "2026-06-27";
   });
 })();

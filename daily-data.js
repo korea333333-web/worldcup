@@ -386,6 +386,702 @@
   };
 })();
 
+(function finalizeDailyMatchHubJune27() {
+  const data = window?.WORLD_CUP_DATA;
+  const hub = data?.dailyMatchHub;
+  if (!hub) return;
+
+  const sourceSchedule = {
+    label: "FIFA schedule/results",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/match-schedule-fixtures-results-teams-stadiums",
+    checkedAt: "2026-06-27",
+    reliability: "official"
+  };
+
+  const sourceStandings = {
+    label: "FIFA standings",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/standings",
+    checkedAt: "2026-06-27",
+    reliability: "official"
+  };
+
+  const sourceUsaTurkiye = {
+    label: "Guardian USA 2-3 Turkiye report",
+    url: "https://www.theguardian.com/football/2026/jun/26/usmnt-turkey-momentum",
+    checkedAt: "2026-06-27",
+    reliability: "trusted"
+  };
+
+  const sourceAustraliaParaguay = {
+    label: "Guardian Paraguay 0-0 Australia live report",
+    url: "https://www.theguardian.com/football/live/2026/jun/26/fifa-world-cup-2026-live-paraguay-v-australia-socceroos-updates-par-vs-aus-group-d-match-score-latest",
+    checkedAt: "2026-06-27",
+    reliability: "trusted"
+  };
+
+  const sourceEcuadorGermany = {
+    label: "Guardian Ecuador 2-1 Germany live report",
+    url: "https://www.theguardian.com/football/live/2026/jun/25/germany-v-ecuador-world-cup-2026-live",
+    checkedAt: "2026-06-27",
+    reliability: "trusted"
+  };
+
+  const sourceJapanSweden = {
+    label: "Guardian Japan 1-1 Sweden live report",
+    url: "https://www.theguardian.com/football/live/2026/jun/25/japan-v-sweden-world-cup-2026-live",
+    checkedAt: "2026-06-27",
+    reliability: "trusted"
+  };
+
+  hub.updatedAt = "2026-06-27";
+  hub.summary = "2026-06-27 07:00 KST cutoff advanced the live hub through the latest completed Group D, E and F finales available before the run.";
+  hub.sourceNote = "FIFA schedule/results and standings remained the official reference at the 2026-06-27 07:00 KST cutoff. Guardian live reports were used only for scorer order, lineup rotation context, cards, standout stats and knockout-clinching details where FIFA's richer match pages were not directly pinned.";
+  hub.featuredMatchId = "group-e-ecu-ger-2026-06-25";
+
+  const upsertMatch = (match) => {
+    const index = hub.matches.findIndex((item) => item.id === match.id);
+    if (index >= 0) {
+      hub.matches[index] = match;
+      return;
+    }
+    hub.matches.push(match);
+  };
+
+  const upsertSectionItem = (sectionId, item) => {
+    const section = hub.sections.find((entry) => entry.id === sectionId);
+    if (!section) return;
+    const index = section.items.findIndex((entry) => entry.id === item.id);
+    if (index >= 0) {
+      section.items[index] = item;
+      return;
+    }
+    section.items.push(item);
+  };
+
+  const upsertVideo = (item) => upsertSectionItem("videos", item);
+
+  upsertMatch({
+    id: "group-e-ecu-ger-2026-06-25",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group E final",
+    competition: "FIFA World Cup 2026",
+    teamA: "ecuador",
+    teamB: "germany",
+    score: "Ecuador 2-1 Germany",
+    dateLabel: "2026-06-26 KST",
+    localTimeLabel: "2026-06-25 local",
+    venue: "New York New Jersey Stadium",
+    city: "New York / New Jersey",
+    headline: "Ecuador storm back against Germany and book a knockout place",
+    recap: "Germany scored in the second minute through Leroy Sane, but Ecuador replied quickly through Angulo and found the late winner through Gonzalo Plata to seal a historic last-32 berth.",
+    scorers: ["Leroy Sane 2'", "Jose Angulo 9'", "Gonzalo Plata 77'"],
+    notes: [
+      "Official result cross-checked against FIFA results and standings pages",
+      "Germany had already secured first place but lost their final group match",
+      "Ecuador advanced with the comeback win and eliminated some third-place hopefuls",
+      "Guardian report described the winner as a well-worked corner routine finish"
+    ],
+    highlightUrl: "https://www.youtube.com/results?search_query=Ecuador+Germany+2026+World+Cup+highlights",
+    source: sourceEcuadorGermany,
+    detailSource: sourceStandings,
+    modelPick: { teamA: 29, draw: 23, teamB: 48 },
+    highlightVideos: [
+      {
+        title: "Ecuador vs Germany highlights",
+        channel: "YouTube search",
+        type: "highlight",
+        url: "https://www.youtube.com/results?search_query=Ecuador+Germany+2026+World+Cup+highlights",
+        duration: "candidate",
+        meta: "official upload candidate"
+      }
+    ]
+  });
+
+  upsertMatch({
+    id: "group-d-usa-tur-2026-06-26",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group D final",
+    competition: "FIFA World Cup 2026",
+    teamA: "usa",
+    teamB: "turkiye",
+    score: "USA 2-3 Turkiye",
+    dateLabel: "2026-06-27 KST",
+    localTimeLabel: "2026-06-26 local",
+    venue: "official FIFA schedule slot",
+    city: "USA host venue",
+    headline: "Turkiye spoil the USA's perfect finish, but the hosts still win Group D",
+    recap: "A rotated US side led twice through Auston Trusty and Sebastian Berhalter contributions, yet Turkiye took their chances and handed Mauricio Pochettino's team a narrow defeat without denying first place.",
+    scorers: ["Auston Trusty", "Sebastian Berhalter"],
+    notes: [
+      "Official result cross-checked against FIFA results and standings pages",
+      "Guardian coverage said the USA had already qualified and still topped Group D",
+      "Berhalter supplied a goal and an assist in the trusted report",
+      "Christian Pulisic and Sergino Dest were used as second-half game changers"
+    ],
+    highlightUrl: "https://www.youtube.com/results?search_query=USA+Turkiye+2026+World+Cup+highlights",
+    source: sourceUsaTurkiye,
+    detailSource: sourceStandings,
+    modelPick: { teamA: 51, draw: 24, teamB: 25 },
+    highlightVideos: [
+      {
+        title: "USA vs Turkiye highlights",
+        channel: "YouTube search",
+        type: "highlight",
+        url: "https://www.youtube.com/results?search_query=USA+Turkiye+2026+World+Cup+highlights",
+        duration: "candidate",
+        meta: "official upload candidate"
+      }
+    ]
+  });
+
+  upsertMatch({
+    id: "group-d-par-aus-2026-06-26",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group D final",
+    competition: "FIFA World Cup 2026",
+    teamA: "paraguay",
+    teamB: "australia",
+    score: "Paraguay 0-0 Australia",
+    dateLabel: "2026-06-27 KST",
+    localTimeLabel: "2026-06-26 local",
+    venue: "San Francisco Bay Area Stadium",
+    city: "San Francisco Bay Area",
+    headline: "Australia hold Paraguay and take second place in Group D",
+    recap: "The Socceroos changed shape after the USA defeat, Patrick Beach preserved the clean sheet, and a disciplined 0-0 was enough to send Australia through with Paraguay likely following as a best third-placed side.",
+    scorers: [],
+    notes: [
+      "Official result cross-checked against FIFA results and standings pages",
+      "Guardian report said Australia finished second while Paraguay stayed in the best-third-place race",
+      "Aiden O'Neill was highlighted as player of the match in trusted coverage",
+      "Jordy Bos repeatedly created the best Australian openings from right-back"
+    ],
+    highlightUrl: "https://www.youtube.com/results?search_query=Paraguay+Australia+2026+World+Cup+highlights",
+    source: sourceAustraliaParaguay,
+    detailSource: sourceStandings,
+    modelPick: { teamA: 31, draw: 30, teamB: 39 },
+    highlightVideos: [
+      {
+        title: "Paraguay vs Australia highlights",
+        channel: "YouTube search",
+        type: "highlight",
+        url: "https://www.youtube.com/results?search_query=Paraguay+Australia+2026+World+Cup+highlights",
+        duration: "candidate",
+        meta: "official upload candidate"
+      }
+    ]
+  });
+
+  upsertMatch({
+    id: "group-f-jpn-swe-2026-06-25",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group F final",
+    competition: "FIFA World Cup 2026",
+    teamA: "japan",
+    teamB: "sweden",
+    score: "Japan 1-1 Sweden",
+    dateLabel: "2026-06-26 KST",
+    localTimeLabel: "2026-06-25 local",
+    venue: "Dallas Stadium",
+    city: "Dallas",
+    headline: "Japan and Sweden both advance after a tense draw in Dallas",
+    recap: "Daizen Maeda put Japan ahead with a flowing move, Anthony Elanga answered five minutes later, and Zion Suzuki's late saves protected a draw that sent both teams into the knockout bracket.",
+    scorers: ["Daizen Maeda 56'", "Anthony Elanga 61'"],
+    notes: [
+      "Official result cross-checked against FIFA results and standings pages",
+      "Guardian coverage said Japan advanced as Group F runners-up",
+      "Sweden progressed from third place after surviving late pressure",
+      "Netherlands finished first in the group after beating Tunisia"
+    ],
+    highlightUrl: "https://www.youtube.com/results?search_query=Japan+Sweden+2026+World+Cup+highlights",
+    source: sourceJapanSweden,
+    detailSource: sourceStandings,
+    modelPick: { teamA: 40, draw: 29, teamB: 31 },
+    highlightVideos: [
+      {
+        title: "Japan vs Sweden highlights",
+        channel: "YouTube search",
+        type: "highlight",
+        url: "https://www.youtube.com/results?search_query=Japan+Sweden+2026+World+Cup+highlights",
+        duration: "candidate",
+        meta: "official upload candidate"
+      }
+    ]
+  });
+
+  upsertSectionItem("matches", {
+    id: "group-e-ecu-ger-2026-06-25",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group E final",
+    competition: "FIFA World Cup 2026",
+    teamA: "ecuador",
+    teamB: "germany",
+    dateLabel: "2026-06-26 KST",
+    score: "2-1",
+    headline: "Ecuador vs Germany",
+    summary: "Angulo and Plata flipped the match and sent Ecuador into the knockout round.",
+    source: sourceEcuadorGermany
+  });
+
+  upsertSectionItem("matches", {
+    id: "group-d-usa-tur-2026-06-26",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group D final",
+    competition: "FIFA World Cup 2026",
+    teamA: "usa",
+    teamB: "turkiye",
+    dateLabel: "2026-06-27 KST",
+    score: "2-3",
+    headline: "USA vs Turkiye",
+    summary: "The USA lost the match but still closed Group D in first place.",
+    source: sourceUsaTurkiye
+  });
+
+  upsertSectionItem("matches", {
+    id: "group-d-par-aus-2026-06-26",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group D final",
+    competition: "FIFA World Cup 2026",
+    teamA: "paraguay",
+    teamB: "australia",
+    dateLabel: "2026-06-27 KST",
+    score: "0-0",
+    headline: "Paraguay vs Australia",
+    summary: "Australia's clean sheet was enough for second place and a last-32 ticket.",
+    source: sourceAustraliaParaguay
+  });
+
+  upsertSectionItem("matches", {
+    id: "group-f-jpn-swe-2026-06-25",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group F final",
+    competition: "FIFA World Cup 2026",
+    teamA: "japan",
+    teamB: "sweden",
+    dateLabel: "2026-06-26 KST",
+    score: "1-1",
+    headline: "Japan vs Sweden",
+    summary: "Maeda and Elanga traded goals before both sides held onto qualification.",
+    source: sourceJapanSweden
+  });
+
+  upsertVideo({
+    id: "video-ecu-ger-candidate",
+    type: "video",
+    headline: "Ecuador vs Germany highlights candidate",
+    summary: "Stored as a candidate link until a stable FIFA or broadcaster highlight URL is pinned.",
+    url: "https://www.youtube.com/results?search_query=Ecuador+Germany+2026+World+Cup+highlights",
+    source: {
+      label: "YouTube search",
+      url: "https://www.youtube.com/results?search_query=Ecuador+Germany+2026+World+Cup+highlights",
+      checkedAt: "2026-06-27",
+      reliability: "curated"
+    }
+  });
+
+  upsertVideo({
+    id: "video-usa-tur-candidate",
+    type: "video",
+    headline: "USA vs Turkiye highlights candidate",
+    summary: "Stored as a candidate link until a stable FIFA or broadcaster highlight URL is pinned.",
+    url: "https://www.youtube.com/results?search_query=USA+Turkiye+2026+World+Cup+highlights",
+    source: {
+      label: "YouTube search",
+      url: "https://www.youtube.com/results?search_query=USA+Turkiye+2026+World+Cup+highlights",
+      checkedAt: "2026-06-27",
+      reliability: "curated"
+    }
+  });
+
+  upsertVideo({
+    id: "video-par-aus-candidate",
+    type: "video",
+    headline: "Paraguay vs Australia highlights candidate",
+    summary: "Stored as a candidate link until a stable FIFA or broadcaster highlight URL is pinned.",
+    url: "https://www.youtube.com/results?search_query=Paraguay+Australia+2026+World+Cup+highlights",
+    source: {
+      label: "YouTube search",
+      url: "https://www.youtube.com/results?search_query=Paraguay+Australia+2026+World+Cup+highlights",
+      checkedAt: "2026-06-27",
+      reliability: "curated"
+    }
+  });
+
+  upsertVideo({
+    id: "video-jpn-swe-candidate",
+    type: "video",
+    headline: "Japan vs Sweden highlights candidate",
+    summary: "Stored as a candidate link until a stable FIFA or broadcaster highlight URL is pinned.",
+    url: "https://www.youtube.com/results?search_query=Japan+Sweden+2026+World+Cup+highlights",
+    source: {
+      label: "YouTube search",
+      url: "https://www.youtube.com/results?search_query=Japan+Sweden+2026+World+Cup+highlights",
+      checkedAt: "2026-06-27",
+      reliability: "curated"
+    }
+  });
+
+  if (hub.archive) {
+    hub.archive.officialResultsCheckedAt = "2026-06-27";
+    hub.archive.source = sourceSchedule;
+  }
+})();
+
+(function extendDailyMatchHubJune27() {
+  const data = window?.WORLD_CUP_DATA;
+  const hub = data?.dailyMatchHub;
+  if (!hub) return;
+
+  const sourceSchedule = {
+    label: "FIFA schedule/results",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/match-schedule-fixtures-results-teams-stadiums",
+    checkedAt: "2026-06-27",
+    reliability: "official"
+  };
+
+  const sourceStandings = {
+    label: "FIFA standings",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/standings",
+    checkedAt: "2026-06-27",
+    reliability: "official"
+  };
+
+  const sourceUsaTurkiye = {
+    label: "Guardian USA 2-3 Turkiye report",
+    url: "https://www.theguardian.com/football/2026/jun/26/usmnt-turkey-momentum",
+    checkedAt: "2026-06-27",
+    reliability: "trusted"
+  };
+
+  const sourceAustraliaParaguay = {
+    label: "Guardian Paraguay 0-0 Australia live report",
+    url: "https://www.theguardian.com/football/live/2026/jun/26/fifa-world-cup-2026-live-paraguay-v-australia-socceroos-updates-par-vs-aus-group-d-match-score-latest",
+    checkedAt: "2026-06-27",
+    reliability: "trusted"
+  };
+
+  const sourceEcuadorGermany = {
+    label: "Guardian Ecuador 2-1 Germany live report",
+    url: "https://www.theguardian.com/football/live/2026/jun/25/germany-v-ecuador-world-cup-2026-live",
+    checkedAt: "2026-06-27",
+    reliability: "trusted"
+  };
+
+  const sourceJapanSweden = {
+    label: "Guardian Japan 1-1 Sweden live report",
+    url: "https://www.theguardian.com/football/live/2026/jun/25/japan-v-sweden-world-cup-2026-live",
+    checkedAt: "2026-06-27",
+    reliability: "trusted"
+  };
+
+  hub.updatedAt = "2026-06-27";
+  hub.summary = "2026-06-27 07:00 KST cutoff advanced the live hub through the latest completed Group D, E and F finales available before the run.";
+  hub.sourceNote = "FIFA schedule/results and standings remained the official reference at the 2026-06-27 07:00 KST cutoff. Guardian live reports were used only for scorer order, lineup rotation context, cards, standout stats and knockout-clinching details where FIFA's richer match pages were not directly pinned.";
+  hub.featuredMatchId = "group-e-ecu-ger-2026-06-25";
+
+  const upsertMatch = (match) => {
+    const index = hub.matches.findIndex((item) => item.id === match.id);
+    if (index >= 0) {
+      hub.matches[index] = match;
+      return;
+    }
+    hub.matches.push(match);
+  };
+
+  const upsertSectionItem = (sectionId, item) => {
+    const section = hub.sections.find((entry) => entry.id === sectionId);
+    if (!section) return;
+    const index = section.items.findIndex((entry) => entry.id === item.id);
+    if (index >= 0) {
+      section.items[index] = item;
+      return;
+    }
+    section.items.push(item);
+  };
+
+  const upsertVideo = (item) => upsertSectionItem("videos", item);
+
+  upsertMatch({
+    id: "group-e-ecu-ger-2026-06-25",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group E final",
+    competition: "FIFA World Cup 2026",
+    teamA: "ecuador",
+    teamB: "germany",
+    score: "Ecuador 2-1 Germany",
+    dateLabel: "2026-06-26 KST",
+    localTimeLabel: "2026-06-25 local",
+    venue: "New York New Jersey Stadium",
+    city: "New York / New Jersey",
+    headline: "Ecuador storm back against Germany and book a knockout place",
+    recap: "Germany scored in the second minute through Leroy Sane, but Ecuador replied quickly through Angulo and found the late winner through Gonzalo Plata to seal a historic last-32 berth.",
+    scorers: ["Leroy Sane 2'", "Jose Angulo 9'", "Gonzalo Plata 77'"],
+    notes: [
+      "Official result cross-checked against FIFA results and standings pages",
+      "Germany had already secured first place but lost their final group match",
+      "Ecuador advanced with the comeback win and eliminated some third-place hopefuls",
+      "Guardian report described the winner as a well-worked corner routine finish"
+    ],
+    highlightUrl: "https://www.youtube.com/results?search_query=Ecuador+Germany+2026+World+Cup+highlights",
+    source: sourceEcuadorGermany,
+    detailSource: sourceStandings,
+    modelPick: { teamA: 29, draw: 23, teamB: 48 },
+    highlightVideos: [
+      {
+        title: "Ecuador vs Germany highlights",
+        channel: "YouTube search",
+        type: "highlight",
+        url: "https://www.youtube.com/results?search_query=Ecuador+Germany+2026+World+Cup+highlights",
+        duration: "candidate",
+        meta: "official upload candidate"
+      }
+    ]
+  });
+
+  upsertMatch({
+    id: "group-d-usa-tur-2026-06-26",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group D final",
+    competition: "FIFA World Cup 2026",
+    teamA: "usa",
+    teamB: "turkiye",
+    score: "USA 2-3 Turkiye",
+    dateLabel: "2026-06-27 KST",
+    localTimeLabel: "2026-06-26 local",
+    venue: "official FIFA schedule slot",
+    city: "USA host venue",
+    headline: "Turkiye spoil the USA's perfect finish, but the hosts still win Group D",
+    recap: "A rotated US side led twice through Auston Trusty and Sebastian Berhalter contributions, yet Turkiye took their chances and handed Mauricio Pochettino's team a narrow defeat without denying first place.",
+    scorers: ["Auston Trusty", "Sebastian Berhalter"],
+    notes: [
+      "Official result cross-checked against FIFA results and standings pages",
+      "Guardian coverage said the USA had already qualified and still topped Group D",
+      "Berhalter supplied a goal and an assist in the trusted report",
+      "Christian Pulisic and Sergino Dest were used as second-half game changers"
+    ],
+    highlightUrl: "https://www.youtube.com/results?search_query=USA+Turkiye+2026+World+Cup+highlights",
+    source: sourceUsaTurkiye,
+    detailSource: sourceStandings,
+    modelPick: { teamA: 51, draw: 24, teamB: 25 },
+    highlightVideos: [
+      {
+        title: "USA vs Turkiye highlights",
+        channel: "YouTube search",
+        type: "highlight",
+        url: "https://www.youtube.com/results?search_query=USA+Turkiye+2026+World+Cup+highlights",
+        duration: "candidate",
+        meta: "official upload candidate"
+      }
+    ]
+  });
+
+  upsertMatch({
+    id: "group-d-par-aus-2026-06-26",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group D final",
+    competition: "FIFA World Cup 2026",
+    teamA: "paraguay",
+    teamB: "australia",
+    score: "Paraguay 0-0 Australia",
+    dateLabel: "2026-06-27 KST",
+    localTimeLabel: "2026-06-26 local",
+    venue: "San Francisco Bay Area Stadium",
+    city: "San Francisco Bay Area",
+    headline: "Australia hold Paraguay and take second place in Group D",
+    recap: "The Socceroos changed shape after the USA defeat, Patrick Beach preserved the clean sheet, and a disciplined 0-0 was enough to send Australia through with Paraguay likely following as a best third-placed side.",
+    scorers: [],
+    notes: [
+      "Official result cross-checked against FIFA results and standings pages",
+      "Guardian report said Australia finished second while Paraguay stayed in the best-third-place race",
+      "Aiden O'Neill was highlighted as player of the match in trusted coverage",
+      "Jordy Bos repeatedly created the best Australian openings from right-back"
+    ],
+    highlightUrl: "https://www.youtube.com/results?search_query=Paraguay+Australia+2026+World+Cup+highlights",
+    source: sourceAustraliaParaguay,
+    detailSource: sourceStandings,
+    modelPick: { teamA: 31, draw: 30, teamB: 39 },
+    highlightVideos: [
+      {
+        title: "Paraguay vs Australia highlights",
+        channel: "YouTube search",
+        type: "highlight",
+        url: "https://www.youtube.com/results?search_query=Paraguay+Australia+2026+World+Cup+highlights",
+        duration: "candidate",
+        meta: "official upload candidate"
+      }
+    ]
+  });
+
+  upsertMatch({
+    id: "group-f-jpn-swe-2026-06-25",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group F final",
+    competition: "FIFA World Cup 2026",
+    teamA: "japan",
+    teamB: "sweden",
+    score: "Japan 1-1 Sweden",
+    dateLabel: "2026-06-26 KST",
+    localTimeLabel: "2026-06-25 local",
+    venue: "Dallas Stadium",
+    city: "Dallas",
+    headline: "Japan and Sweden both advance after a tense draw in Dallas",
+    recap: "Daizen Maeda put Japan ahead with a flowing move, Anthony Elanga answered five minutes later, and Zion Suzuki's late saves protected a draw that sent both teams into the knockout bracket.",
+    scorers: ["Daizen Maeda 56'", "Anthony Elanga 61'"],
+    notes: [
+      "Official result cross-checked against FIFA results and standings pages",
+      "Guardian coverage said Japan advanced as Group F runners-up",
+      "Sweden progressed from third place after surviving late pressure",
+      "Netherlands finished first in the group after beating Tunisia"
+    ],
+    highlightUrl: "https://www.youtube.com/results?search_query=Japan+Sweden+2026+World+Cup+highlights",
+    source: sourceJapanSweden,
+    detailSource: sourceStandings,
+    modelPick: { teamA: 40, draw: 29, teamB: 31 },
+    highlightVideos: [
+      {
+        title: "Japan vs Sweden highlights",
+        channel: "YouTube search",
+        type: "highlight",
+        url: "https://www.youtube.com/results?search_query=Japan+Sweden+2026+World+Cup+highlights",
+        duration: "candidate",
+        meta: "official upload candidate"
+      }
+    ]
+  });
+
+  upsertSectionItem("matches", {
+    id: "group-e-ecu-ger-2026-06-25",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group E final",
+    competition: "FIFA World Cup 2026",
+    teamA: "ecuador",
+    teamB: "germany",
+    dateLabel: "2026-06-26 KST",
+    score: "2-1",
+    headline: "Ecuador vs Germany",
+    summary: "Angulo and Plata flipped the match and sent Ecuador into the knockout round.",
+    source: sourceEcuadorGermany
+  });
+
+  upsertSectionItem("matches", {
+    id: "group-d-usa-tur-2026-06-26",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group D final",
+    competition: "FIFA World Cup 2026",
+    teamA: "usa",
+    teamB: "turkiye",
+    dateLabel: "2026-06-27 KST",
+    score: "2-3",
+    headline: "USA vs Turkiye",
+    summary: "The USA lost the match but still closed Group D in first place.",
+    source: sourceUsaTurkiye
+  });
+
+  upsertSectionItem("matches", {
+    id: "group-d-par-aus-2026-06-26",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group D final",
+    competition: "FIFA World Cup 2026",
+    teamA: "paraguay",
+    teamB: "australia",
+    dateLabel: "2026-06-27 KST",
+    score: "0-0",
+    headline: "Paraguay vs Australia",
+    summary: "Australia's clean sheet was enough for second place and a last-32 ticket.",
+    source: sourceAustraliaParaguay
+  });
+
+  upsertSectionItem("matches", {
+    id: "group-f-jpn-swe-2026-06-25",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group F final",
+    competition: "FIFA World Cup 2026",
+    teamA: "japan",
+    teamB: "sweden",
+    dateLabel: "2026-06-26 KST",
+    score: "1-1",
+    headline: "Japan vs Sweden",
+    summary: "Maeda and Elanga traded goals before both sides held onto qualification.",
+    source: sourceJapanSweden
+  });
+
+  upsertVideo({
+    id: "video-ecu-ger-candidate",
+    type: "video",
+    headline: "Ecuador vs Germany highlights candidate",
+    summary: "Stored as a candidate link until a stable FIFA or broadcaster highlight URL is pinned.",
+    url: "https://www.youtube.com/results?search_query=Ecuador+Germany+2026+World+Cup+highlights",
+    source: {
+      label: "YouTube search",
+      url: "https://www.youtube.com/results?search_query=Ecuador+Germany+2026+World+Cup+highlights",
+      checkedAt: "2026-06-27",
+      reliability: "curated"
+    }
+  });
+
+  upsertVideo({
+    id: "video-usa-tur-candidate",
+    type: "video",
+    headline: "USA vs Turkiye highlights candidate",
+    summary: "Stored as a candidate link until a stable FIFA or broadcaster highlight URL is pinned.",
+    url: "https://www.youtube.com/results?search_query=USA+Turkiye+2026+World+Cup+highlights",
+    source: {
+      label: "YouTube search",
+      url: "https://www.youtube.com/results?search_query=USA+Turkiye+2026+World+Cup+highlights",
+      checkedAt: "2026-06-27",
+      reliability: "curated"
+    }
+  });
+
+  upsertVideo({
+    id: "video-par-aus-candidate",
+    type: "video",
+    headline: "Paraguay vs Australia highlights candidate",
+    summary: "Stored as a candidate link until a stable FIFA or broadcaster highlight URL is pinned.",
+    url: "https://www.youtube.com/results?search_query=Paraguay+Australia+2026+World+Cup+highlights",
+    source: {
+      label: "YouTube search",
+      url: "https://www.youtube.com/results?search_query=Paraguay+Australia+2026+World+Cup+highlights",
+      checkedAt: "2026-06-27",
+      reliability: "curated"
+    }
+  });
+
+  upsertVideo({
+    id: "video-jpn-swe-candidate",
+    type: "video",
+    headline: "Japan vs Sweden highlights candidate",
+    summary: "Stored as a candidate link until a stable FIFA or broadcaster highlight URL is pinned.",
+    url: "https://www.youtube.com/results?search_query=Japan+Sweden+2026+World+Cup+highlights",
+    source: {
+      label: "YouTube search",
+      url: "https://www.youtube.com/results?search_query=Japan+Sweden+2026+World+Cup+highlights",
+      checkedAt: "2026-06-27",
+      reliability: "curated"
+    }
+  });
+
+  if (hub.archive) {
+    hub.archive.officialResultsCheckedAt = "2026-06-27";
+    hub.archive.source = sourceSchedule;
+  }
+})();
+
 (function finalizeDailyMatchHubJune18() {
   const data = window.WORLD_CUP_DATA;
   const hub = data?.dailyMatchHub;
@@ -2141,6 +2837,354 @@
 
   if (hub.archive) {
     hub.archive.officialResultsCheckedAt = "2026-06-26";
+    hub.archive.source = sourceSchedule;
+  }
+})();
+
+(function finalizeDailyMatchHubJune27() {
+  const data = window?.WORLD_CUP_DATA;
+  const hub = data?.dailyMatchHub;
+  if (!hub) return;
+
+  const sourceSchedule = {
+    label: "FIFA schedule/results",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/match-schedule-fixtures-results-teams-stadiums",
+    checkedAt: "2026-06-27",
+    reliability: "official"
+  };
+
+  const sourceStandings = {
+    label: "FIFA standings",
+    url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/standings",
+    checkedAt: "2026-06-27",
+    reliability: "official"
+  };
+
+  const sourceUsaTurkiye = {
+    label: "Guardian USA 2-3 Turkiye report",
+    url: "https://www.theguardian.com/football/2026/jun/26/usmnt-turkey-momentum",
+    checkedAt: "2026-06-27",
+    reliability: "trusted"
+  };
+
+  const sourceAustraliaParaguay = {
+    label: "Guardian Paraguay 0-0 Australia live report",
+    url: "https://www.theguardian.com/football/live/2026/jun/26/fifa-world-cup-2026-live-paraguay-v-australia-socceroos-updates-par-vs-aus-group-d-match-score-latest",
+    checkedAt: "2026-06-27",
+    reliability: "trusted"
+  };
+
+  const sourceEcuadorGermany = {
+    label: "Guardian Ecuador 2-1 Germany live report",
+    url: "https://www.theguardian.com/football/live/2026/jun/25/germany-v-ecuador-world-cup-2026-live",
+    checkedAt: "2026-06-27",
+    reliability: "trusted"
+  };
+
+  const sourceJapanSweden = {
+    label: "Guardian Japan 1-1 Sweden live report",
+    url: "https://www.theguardian.com/football/live/2026/jun/25/japan-v-sweden-world-cup-2026-live",
+    checkedAt: "2026-06-27",
+    reliability: "trusted"
+  };
+
+  hub.updatedAt = "2026-06-27";
+  hub.summary = "2026-06-27 07:00 KST cutoff advanced the live hub through the latest completed Group D, E and F finales available before the run.";
+  hub.sourceNote = "FIFA schedule/results and standings remained the official reference at the 2026-06-27 07:00 KST cutoff. Guardian live reports were used only for scorer order, lineup rotation context, cards, standout stats and knockout-clinching details where FIFA's richer match pages were not directly pinned.";
+  hub.featuredMatchId = "group-e-ecu-ger-2026-06-25";
+
+  const upsertMatch = (match) => {
+    const index = hub.matches.findIndex((item) => item.id === match.id);
+    if (index >= 0) {
+      hub.matches[index] = match;
+      return;
+    }
+    hub.matches.push(match);
+  };
+
+  const upsertSectionItem = (sectionId, item) => {
+    const section = hub.sections.find((entry) => entry.id === sectionId);
+    if (!section) return;
+    const index = section.items.findIndex((entry) => entry.id === item.id);
+    if (index >= 0) {
+      section.items[index] = item;
+      return;
+    }
+    section.items.push(item);
+  };
+
+  const upsertVideo = (item) => upsertSectionItem("videos", item);
+
+  upsertMatch({
+    id: "group-e-ecu-ger-2026-06-25",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group E final",
+    competition: "FIFA World Cup 2026",
+    teamA: "ecuador",
+    teamB: "germany",
+    score: "Ecuador 2-1 Germany",
+    dateLabel: "2026-06-26 KST",
+    localTimeLabel: "2026-06-25 local",
+    venue: "New York New Jersey Stadium",
+    city: "New York / New Jersey",
+    headline: "Ecuador storm back against Germany and book a knockout place",
+    recap: "Germany scored in the second minute through Leroy Sane, but Ecuador replied quickly through Angulo and found the late winner through Gonzalo Plata to seal a historic last-32 berth.",
+    scorers: ["Leroy Sane 2'", "Jose Angulo 9'", "Gonzalo Plata 77'"],
+    notes: [
+      "Official result cross-checked against FIFA results and standings pages",
+      "Germany had already secured first place but lost their final group match",
+      "Ecuador advanced with the comeback win and eliminated some third-place hopefuls",
+      "Guardian report described the winner as a well-worked corner routine finish"
+    ],
+    highlightUrl: "https://www.youtube.com/results?search_query=Ecuador+Germany+2026+World+Cup+highlights",
+    source: sourceEcuadorGermany,
+    detailSource: sourceStandings,
+    modelPick: { teamA: 29, draw: 23, teamB: 48 },
+    highlightVideos: [
+      {
+        title: "Ecuador vs Germany highlights",
+        channel: "YouTube search",
+        type: "highlight",
+        url: "https://www.youtube.com/results?search_query=Ecuador+Germany+2026+World+Cup+highlights",
+        duration: "candidate",
+        meta: "official upload candidate"
+      }
+    ]
+  });
+
+  upsertMatch({
+    id: "group-d-usa-tur-2026-06-26",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group D final",
+    competition: "FIFA World Cup 2026",
+    teamA: "usa",
+    teamB: "turkiye",
+    score: "USA 2-3 Turkiye",
+    dateLabel: "2026-06-27 KST",
+    localTimeLabel: "2026-06-26 local",
+    venue: "official FIFA schedule slot",
+    city: "USA host venue",
+    headline: "Turkiye spoil the USA's perfect finish, but the hosts still win Group D",
+    recap: "A rotated US side led twice through Auston Trusty and Sebastian Berhalter contributions, yet Turkiye took their chances and handed Mauricio Pochettino's team a narrow defeat without denying first place.",
+    scorers: ["Auston Trusty", "Sebastian Berhalter"],
+    notes: [
+      "Official result cross-checked against FIFA results and standings pages",
+      "Guardian coverage said the USA had already qualified and still topped Group D",
+      "Berhalter supplied a goal and an assist in the trusted report",
+      "Christian Pulisic and Sergino Dest were used as second-half game changers"
+    ],
+    highlightUrl: "https://www.youtube.com/results?search_query=USA+Turkiye+2026+World+Cup+highlights",
+    source: sourceUsaTurkiye,
+    detailSource: sourceStandings,
+    modelPick: { teamA: 51, draw: 24, teamB: 25 },
+    highlightVideos: [
+      {
+        title: "USA vs Turkiye highlights",
+        channel: "YouTube search",
+        type: "highlight",
+        url: "https://www.youtube.com/results?search_query=USA+Turkiye+2026+World+Cup+highlights",
+        duration: "candidate",
+        meta: "official upload candidate"
+      }
+    ]
+  });
+
+  upsertMatch({
+    id: "group-d-par-aus-2026-06-26",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group D final",
+    competition: "FIFA World Cup 2026",
+    teamA: "paraguay",
+    teamB: "australia",
+    score: "Paraguay 0-0 Australia",
+    dateLabel: "2026-06-27 KST",
+    localTimeLabel: "2026-06-26 local",
+    venue: "San Francisco Bay Area Stadium",
+    city: "San Francisco Bay Area",
+    headline: "Australia hold Paraguay and take second place in Group D",
+    recap: "The Socceroos changed shape after the USA defeat, Patrick Beach preserved the clean sheet, and a disciplined 0-0 was enough to send Australia through with Paraguay likely following as a best third-placed side.",
+    scorers: [],
+    notes: [
+      "Official result cross-checked against FIFA results and standings pages",
+      "Guardian report said Australia finished second while Paraguay stayed in the best-third-place race",
+      "Aiden O'Neill was highlighted as player of the match in trusted coverage",
+      "Jordy Bos repeatedly created the best Australian openings from right-back"
+    ],
+    highlightUrl: "https://www.youtube.com/results?search_query=Paraguay+Australia+2026+World+Cup+highlights",
+    source: sourceAustraliaParaguay,
+    detailSource: sourceStandings,
+    modelPick: { teamA: 31, draw: 30, teamB: 39 },
+    highlightVideos: [
+      {
+        title: "Paraguay vs Australia highlights",
+        channel: "YouTube search",
+        type: "highlight",
+        url: "https://www.youtube.com/results?search_query=Paraguay+Australia+2026+World+Cup+highlights",
+        duration: "candidate",
+        meta: "official upload candidate"
+      }
+    ]
+  });
+
+  upsertMatch({
+    id: "group-f-jpn-swe-2026-06-25",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group F final",
+    competition: "FIFA World Cup 2026",
+    teamA: "japan",
+    teamB: "sweden",
+    score: "Japan 1-1 Sweden",
+    dateLabel: "2026-06-26 KST",
+    localTimeLabel: "2026-06-25 local",
+    venue: "Dallas Stadium",
+    city: "Dallas",
+    headline: "Japan and Sweden both advance after a tense draw in Dallas",
+    recap: "Daizen Maeda put Japan ahead with a flowing move, Anthony Elanga answered five minutes later, and Zion Suzuki's late saves protected a draw that sent both teams into the knockout bracket.",
+    scorers: ["Daizen Maeda 56'", "Anthony Elanga 61'"],
+    notes: [
+      "Official result cross-checked against FIFA results and standings pages",
+      "Guardian coverage said Japan advanced as Group F runners-up",
+      "Sweden progressed from third place after surviving late pressure",
+      "Netherlands finished first in the group after beating Tunisia"
+    ],
+    highlightUrl: "https://www.youtube.com/results?search_query=Japan+Sweden+2026+World+Cup+highlights",
+    source: sourceJapanSweden,
+    detailSource: sourceStandings,
+    modelPick: { teamA: 40, draw: 29, teamB: 31 },
+    highlightVideos: [
+      {
+        title: "Japan vs Sweden highlights",
+        channel: "YouTube search",
+        type: "highlight",
+        url: "https://www.youtube.com/results?search_query=Japan+Sweden+2026+World+Cup+highlights",
+        duration: "candidate",
+        meta: "official upload candidate"
+      }
+    ]
+  });
+
+  upsertSectionItem("matches", {
+    id: "group-e-ecu-ger-2026-06-25",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group E final",
+    competition: "FIFA World Cup 2026",
+    teamA: "ecuador",
+    teamB: "germany",
+    dateLabel: "2026-06-26 KST",
+    score: "2-1",
+    headline: "Ecuador vs Germany",
+    summary: "Angulo and Plata flipped the match and sent Ecuador into the knockout round.",
+    source: sourceEcuadorGermany
+  });
+
+  upsertSectionItem("matches", {
+    id: "group-d-usa-tur-2026-06-26",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group D final",
+    competition: "FIFA World Cup 2026",
+    teamA: "usa",
+    teamB: "turkiye",
+    dateLabel: "2026-06-27 KST",
+    score: "2-3",
+    headline: "USA vs Turkiye",
+    summary: "The USA lost the match but still closed Group D in first place.",
+    source: sourceUsaTurkiye
+  });
+
+  upsertSectionItem("matches", {
+    id: "group-d-par-aus-2026-06-26",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group D final",
+    competition: "FIFA World Cup 2026",
+    teamA: "paraguay",
+    teamB: "australia",
+    dateLabel: "2026-06-27 KST",
+    score: "0-0",
+    headline: "Paraguay vs Australia",
+    summary: "Australia's clean sheet was enough for second place and a last-32 ticket.",
+    source: sourceAustraliaParaguay
+  });
+
+  upsertSectionItem("matches", {
+    id: "group-f-jpn-swe-2026-06-25",
+    type: "match",
+    status: "final",
+    phaseLabel: "Group F final",
+    competition: "FIFA World Cup 2026",
+    teamA: "japan",
+    teamB: "sweden",
+    dateLabel: "2026-06-26 KST",
+    score: "1-1",
+    headline: "Japan vs Sweden",
+    summary: "Maeda and Elanga traded goals before both sides held onto qualification.",
+    source: sourceJapanSweden
+  });
+
+  upsertVideo({
+    id: "video-ecu-ger-candidate",
+    type: "video",
+    headline: "Ecuador vs Germany highlights candidate",
+    summary: "Stored as a candidate link until a stable FIFA or broadcaster highlight URL is pinned.",
+    url: "https://www.youtube.com/results?search_query=Ecuador+Germany+2026+World+Cup+highlights",
+    source: {
+      label: "YouTube search",
+      url: "https://www.youtube.com/results?search_query=Ecuador+Germany+2026+World+Cup+highlights",
+      checkedAt: "2026-06-27",
+      reliability: "curated"
+    }
+  });
+
+  upsertVideo({
+    id: "video-usa-tur-candidate",
+    type: "video",
+    headline: "USA vs Turkiye highlights candidate",
+    summary: "Stored as a candidate link until a stable FIFA or broadcaster highlight URL is pinned.",
+    url: "https://www.youtube.com/results?search_query=USA+Turkiye+2026+World+Cup+highlights",
+    source: {
+      label: "YouTube search",
+      url: "https://www.youtube.com/results?search_query=USA+Turkiye+2026+World+Cup+highlights",
+      checkedAt: "2026-06-27",
+      reliability: "curated"
+    }
+  });
+
+  upsertVideo({
+    id: "video-par-aus-candidate",
+    type: "video",
+    headline: "Paraguay vs Australia highlights candidate",
+    summary: "Stored as a candidate link until a stable FIFA or broadcaster highlight URL is pinned.",
+    url: "https://www.youtube.com/results?search_query=Paraguay+Australia+2026+World+Cup+highlights",
+    source: {
+      label: "YouTube search",
+      url: "https://www.youtube.com/results?search_query=Paraguay+Australia+2026+World+Cup+highlights",
+      checkedAt: "2026-06-27",
+      reliability: "curated"
+    }
+  });
+
+  upsertVideo({
+    id: "video-jpn-swe-candidate",
+    type: "video",
+    headline: "Japan vs Sweden highlights candidate",
+    summary: "Stored as a candidate link until a stable FIFA or broadcaster highlight URL is pinned.",
+    url: "https://www.youtube.com/results?search_query=Japan+Sweden+2026+World+Cup+highlights",
+    source: {
+      label: "YouTube search",
+      url: "https://www.youtube.com/results?search_query=Japan+Sweden+2026+World+Cup+highlights",
+      checkedAt: "2026-06-27",
+      reliability: "curated"
+    }
+  });
+
+  if (hub.archive) {
+    hub.archive.officialResultsCheckedAt = "2026-06-27";
     hub.archive.source = sourceSchedule;
   }
 })();
